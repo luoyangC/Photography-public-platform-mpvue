@@ -27,9 +27,9 @@ const pagesEntry = getEntry(resolve('./src'), 'pages/**/main.js')
 const entry = Object.assign({}, appEntry, pagesEntry)
 
 module.exports = {
-  // 如果要自定义生成的 dist 目录里面的文件路径，
+  // 如果要自定义生成的 iview 目录里面的文件路径，
   // 可以将 entry 写成 {'toPath': 'fromPath'} 的形式，
-  // toPath 为相对于 dist 的路径, 例：index/demo，则生成的文件地址为 dist/index/demo.js
+  // toPath 为相对于 iview 的路径, 例：index/demo，则生成的文件地址为 iview/index/demo.js
   entry,
   target: require('mpvue-webpack-target'),
   output: {
@@ -115,7 +115,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
-        to: path.resolve(__dirname, '../dist/static'),
+        to: path.resolve(__dirname, '../iview/static'),
         ignore: ['.*']
       }
     ])

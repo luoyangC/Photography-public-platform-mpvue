@@ -1,4 +1,5 @@
-import Vue from 'vue';
+/* eslint-disable */
+import Vue from "vue";
 import App from './index';
 
 const app = new Vue(App);

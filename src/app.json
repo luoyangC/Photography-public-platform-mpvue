@@ -1,13 +1,39 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/logs/main",
-    "pages/counter/main"
+    "pages/activity/main",
+    "pages/explore/main",
+    "pages/user/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle": "black"
+    "navigationBarTitleText": "摄影公共平台",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "selectedColor": "#EA5149",
+    "list": [{
+      "pagePath": "pages/index/main",
+      "text": "主页",
+      "iconPath": "static/img/index.png",
+      "selectedIconPath": "static/img/index.png"
+    }, {
+      "pagePath": "pages/activity/main",
+      "text": "动态",
+      "iconPath": "static/img/activity.png",
+      "selectedIconPath": "static/img/activity.png"
+    }, {
+      "pagePath": "pages/explore/main",
+      "text": "发现",
+      "iconPath": "static/img/explore.png",
+      "selectedIconPath": "static/img/explore.png"
+    }, {
+      "pagePath": "pages/user/main",
+      "text": "用户",
+      "iconPath": "static/img/user.png",
+      "selectedIconPath": "static/img/user.png"
+    }]
   }
 }
