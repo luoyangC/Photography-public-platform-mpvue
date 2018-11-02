@@ -2,22 +2,22 @@
   <div>
     <div class="nav-bar">
       <block v-for="(item, index) in tabs" :key="index">
-        <div :id="index" :class="{'nav-bar-item-on':activeIndex == index}" class="nav-bar-item" @click="tabClick">
-          <div class="nav-bar-title">{{item.name}}</div>
+        <div :id="index" class="nav-bar-item" @click="tabClick">
+          <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==index}">{{item.name}}</div>
         </div>
       </block>
       <div class="nav-bar-slider" :class="navBarSliderClass"></div>
     </div>
     <div class="swiper-content">
-      <swiper class="content" duration="100" :style="'height:'+contentHeight" :current="currentTab" @change="swiperChange" @animationfinish="onAnimationFinish">
+      <swiper class="content" duration="500" :style="{height:contentHeight}" :current="currentTab" @change="swiperChange" @animationfinish="onAnimationFinish">
         <swiper-item>
-          <index-attention></index-attention>
+          <index-attention :winHeight="winHeight"></index-attention>
         </swiper-item>
         <swiper-item>
-          <index-recommend></index-recommend>
+          <index-recommend :winHeight="winHeight"></index-recommend>
         </swiper-item>
         <swiper-item>
-          <index-approximately></index-approximately>
+          <index-approximately :winHeight="winHeight"></index-approximately>
         </swiper-item>
       </swiper>
     </div>
@@ -38,9 +38,6 @@ export default {
   },
   data() {
     return {
-      swiperOption: {
-        pagination: '.swiper-pagination'
-      },
       tabs: [
         { name: '关注', type: 1, checked: true },
         { name: '推荐', type: 2, checked: true },
@@ -53,6 +50,7 @@ export default {
     };
   },
   computed: {
+    // 动态绑定导航栏滚动条的样式
     navBarSliderClass() {
       if (this.activeIndex == 0) {
         return "nav-bar-slider-0";
@@ -64,35 +62,38 @@ export default {
         return "nav-bar-slider-2";
       }
     },
+    // 动态设置滑动区域的高度
     contentHeight() {
       return this.winHeight + "px";
     },
   },
   methods: {
+    // 获取系统信息，主要是获取窗口的高度
+    getSystemInfo() {
+      let that = this;
+      wx.getSystemInfo({
+        success(res) {
+          that.winHeight = res.windowHeight;
+        }
+      })
+    },
+    // 导航栏点击的回调函数
     tabClick(e) {
       this.activeIndex = e.currentTarget.id;
-      console.log(this.activeIndex);
+      this.currentTab = this.activeIndex;
     },
+    // 左右滑动的回调函数
     swiperChange(e) {
       this.currentTab = e.mp.detail.current;
       this.activeIndex = this.currentTab;
     },
+    // 滑动完成的回调函数
     onAnimationFinish() {
       console.log("滑动完成.....")
     },
-    onPullDownRefresh:function() {
-      wx.showNavigationBarLoading();
-      setTimeout(function()
-      {
-        wx.hideNavigationBarLoading();
-        wx.stopPullDownRefresh()
-      },1500);
-    },
   },
   onLoad() {
-    let res = wx.getSystemInfoSync();
-    this.winWidth = res.windowWidth;
-    this.winHeight = res.windowHeight;
+    this.getSystemInfo();
   },
 };
 </script>
@@ -107,7 +108,7 @@ export default {
     top: 0;
     height: 50px;
     width: 100%;
-    border-bottom: 1rpx solid #ccc;
+    box-shadow: 0 1rpx 6rpx #ccc;
   }
   .nav-bar-item {
     position: relative;
@@ -131,13 +132,16 @@ export default {
     white-space: nowrap;
     word-wrap: normal;
   }
+  .nav-bar-on {
+    color: #89c5de;
+  }
 
   .nav-bar-slider {
     position: absolute;
     content: " ";
     left: 0;
     bottom: 0;
-    width: 6em;
+    width: 100rpx;
     height: 3px;
     background-color: #89c5de;
     -webkit-transition: -webkit-transform 0.1s;
@@ -146,17 +150,17 @@ export default {
   }
 
   .nav-bar-slider-0 {
-    left: 29rpx;
+    left: 75rpx;
     transform: translateX(0);
   }
 
   .nav-bar-slider-1 {
-    left: 29rpx;
+    left: 75rpx;
     transform: translateX(250rpx);
   }
 
   .nav-bar-slider-2 {
-    left: 29rpx;
+    left: 75rpx;
     transform: translateX(500rpx);
   }
 
@@ -165,17 +169,5 @@ export default {
     padding-top: 50px;
     background-color: #f9f9f9;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .controls {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    position: fixed;
-    text-align: center;
-    z-index: 8888;
-    top: 80px;
-    height: 50px;
-    width: 100%;
   }
 </style>

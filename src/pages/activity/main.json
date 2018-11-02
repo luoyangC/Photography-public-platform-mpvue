@@ -1,4 +1,5 @@
 {
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "i-input": "../../../static/iview/input/index",
     "i-card": "../../../static/iview/card/index"

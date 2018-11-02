@@ -19,6 +19,14 @@ export default {
       cardList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     };
   },
+  onPullDownRefresh() {
+    wx.showNavigationBarLoading();
+    console.log('下拉');
+    setTimeout(function() {
+      wx.hideNavigationBarLoading();
+      wx.stopPullDownRefresh()
+    },1000);
+  },
 };
 </script>
 

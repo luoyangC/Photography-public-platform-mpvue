@@ -1,6 +1,6 @@
 <template>
   <div>
-    <scroll-view scroll-y style="height: 596px;">
+    <scroll-view scroll-y :style="{height:contentHeight}">
       <a @click="getTest">getTest</a>
       <a @click="addTest">addTest</a>
       <a @click="delTest">delTest</a>
@@ -13,10 +13,18 @@
 
 export default {
   name: 'recommend',
+  props: {
+    winHeight: Number
+  },
   data() {
     return {
       test: 'test',
     };
+  },
+  computed: {
+    contentHeight() {
+      return this.winHeight - 50 + "px";
+    },
   },
   methods: {
     getTest() {
