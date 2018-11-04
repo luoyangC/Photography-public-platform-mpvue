@@ -17,7 +17,7 @@
           <index-recommend :winHeight="winHeight"></index-recommend>
         </swiper-item>
         <swiper-item>
-          <index-approximately :winHeight="winHeight"></index-approximately>
+          <index-agreement :winHeight="winHeight"></index-agreement>
         </swiper-item>
       </swiper>
     </div>
@@ -26,13 +26,13 @@
 
 <script>
 /* eslint-disable */
-import IndexApproximately from './components/approximately'
+import IndexAgreement from './components/agreement'
 import IndexAttention from './components/attention'
 import IndexRecommend from './components/recommend'
 
 export default {
   components: {
-    IndexApproximately,
+    IndexAgreement,
     IndexAttention,
     IndexRecommend,
   },

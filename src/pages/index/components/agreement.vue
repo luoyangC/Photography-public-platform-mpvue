@@ -1,5 +1,5 @@
 <template>
-  <div class="approximately">
+  <div class="agreement">
     <scroll-view scroll-y :style="{height:contentHeight}">
       <i-card class="card-item" v-for="(item,index) in cardList" :key="index" full="true" title="Title" :extra="item">
         <div style="height: 100px" slot="content">约拍</div>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'approximately',
+  name: 'agreement',
   props: {
     winHeight: Number
   },

@@ -6,8 +6,11 @@ export default {
     const logs = wx.getStorageSync('logs') || [];
     logs.unshift(Date.now());
     wx.setStorageSync('logs', logs);
-
     console.log('app created and cache logs by setStorageSync');
+    // 获取token信息，写入vuex
+    const token = wx.getStorageSync('token') || '';
+    const user = wx.getStorageSync('user') || '';
+    this.$store.commit('SET_INFO', {token:token, user:user})
   },
 };
 </script>
