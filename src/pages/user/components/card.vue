@@ -3,7 +3,7 @@
     <div class="a-card-content">
       <image class="a-card-thumb" :src="user.image" model="aspectFit"></image>
       <div class="a-card-title">
-        <p>{{user.nick_name}}</p>
+        <p>{{user.nick_name}}<i-tag :color="tagType.color">{{tagType.text}}</i-tag></p>
         <span>查看或编辑个人信息</span>
       </div>
     </div>
@@ -23,7 +23,21 @@ export default {
     return {
       user: null,
     }
-  }
+  },
+  computed: {
+    tagType() {
+      let approve = this.user.approve;
+      if (approve == 'general') {
+        return {color: 'default', text: '普通用户'}
+      }
+      if (approve == 'photographer') {
+        return {color: 'yellow', text: '认证摄影'}
+      }
+      if (approve == 'model') {
+        return {color: 'yellow', text: '认证模特'}
+      }
+    }
+  },
 }
 </script>
 
@@ -62,7 +76,7 @@ export default {
     color:#1c2438;
   }
   .a-card-title span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .a-card-extra {
     flex:none;

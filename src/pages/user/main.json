@@ -1,6 +1,8 @@
 {
   "usingComponents": {
     "i-icon": "../../../static/iview/icon/index",
+    "i-switch": "../../../static/iview/switch/index",
+    "i-tag": "../../../static/iview/tag/index",
     "i-avatar": "../../../static/iview/avatar/index",
     "i-modal": "../../../static/iview/modal/index",
     "i-button": "../../../static/iview/button/index",

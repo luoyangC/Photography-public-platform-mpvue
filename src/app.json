@@ -12,27 +12,28 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "color": "#666",
     "selectedColor": "#EA5149",
     "list": [{
       "pagePath": "pages/index/main",
       "text": "主页",
-      "iconPath": "static/img/index.png",
-      "selectedIconPath": "static/img/index.png"
+      "iconPath": "static/img/home-page.png",
+      "selectedIconPath": "static/img/home-page-filled.png"
     }, {
       "pagePath": "pages/activity/main",
       "text": "动态",
-      "iconPath": "static/img/activity.png",
-      "selectedIconPath": "static/img/activity.png"
+      "iconPath": "static/img/activity-history.png",
+      "selectedIconPath": "static/img/activity-history-filled.png"
     }, {
       "pagePath": "pages/explore/main",
       "text": "发现",
-      "iconPath": "static/img/explore.png",
-      "selectedIconPath": "static/img/explore.png"
+      "iconPath": "static/img/compass.png",
+      "selectedIconPath": "static/img/compass-filled.png"
     }, {
       "pagePath": "pages/user/main",
       "text": "用户",
-      "iconPath": "static/img/user.png",
-      "selectedIconPath": "static/img/user.png"
+      "iconPath": "static/img/customer.png",
+      "selectedIconPath": "static/img/customer-filled.png"
     }]
   }
 }
