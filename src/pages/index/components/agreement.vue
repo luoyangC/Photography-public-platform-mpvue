@@ -1,23 +1,25 @@
 <template>
   <div class="agreement">
     <scroll-view scroll-y :style="{height:contentHeight}">
-      <i-card class="card-item" v-for="(item,index) in cardList" :key="index" full="true" title="Title" :extra="item">
-        <div style="height: 100px" slot="content">约拍</div>
-        <div slot="footer">尾部内容</div>
-      </i-card>
+      <agreement-card v-for="item in agreementList" :key="item.id" :agreement="item"></agreement-card>
     </scroll-view>
   </div>
 </template>
 
 <script>
+import AgreementCard from "@/components/agreement-card"
+import { getAgreement } from "@/api/api"
 export default {
   name: 'agreement',
   props: {
     winHeight: Number
   },
+  components: {
+    AgreementCard,
+  },
   data() {
     return {
-      cardList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      agreementList: [],
     };
   },
   computed: {
@@ -25,6 +27,19 @@ export default {
       return this.winHeight - 50 + "px";
     },
   },
+  methods: {
+    getAgreement() {
+      getAgreement().then((res) => {
+        console.log(res);
+        this.agreementList = res.data
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  },
+  created() {
+    this.getAgreement()
+  }
 };
 </script>
 

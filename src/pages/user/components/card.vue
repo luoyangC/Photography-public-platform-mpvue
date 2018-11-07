@@ -45,11 +45,8 @@ export default {
   .a-card {
     display: flex;
     align-items: center;
-    margin:0 16px;
     font-size:14px;
-    background:#fff;
-    border:1rpx solid #dddee1;
-    border-radius:5px;
+    background-color: rgba(255,255,255,0);
   }
   .a-card-content {
     flex:auto;

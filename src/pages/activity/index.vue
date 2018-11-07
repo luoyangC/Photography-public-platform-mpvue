@@ -1,23 +1,44 @@
 <template>
-  <div>
-    <div>
-      <i-input title="发表" autofocus placeholder="新的动态" />
+  <div class="activity">
+    <div @click="handleNewActivity" class="activity-input">
+      <image class="activity-input-user-image" :src="user.image" mode="scaleToFill"></image>
+      <div class="activity-input-content">
+        <p>发表动态...</p>
+      </div>
     </div>
     <div class="approximately">
-      <i-card class="card-item" v-for="(item,index) in cardList" :key="index" full="true" title="Title" :extra="item">
-        <div slot="content">内容不错</div>
-        <div slot="footer">尾部内容</div>
-      </i-card>
+      <activity-card v-for="item in activityList" :key="item.id" :activity="item"></activity-card>
     </div>
   </div>
 </template>
 
 <script>
+import ActivityCard from "../../components/activity-card";
+import { getActivity } from "../../api/api";
 export default {
+  components: {
+    ActivityCard,
+  },
   data() {
     return {
-      cardList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      activityList: [],
+      user: this.$store.state.userInfo.user,
     };
+  },
+  methods: {
+    handleNewActivity () {
+      console.log('new activity')
+    },
+    getActivity() {
+      getActivity()
+        .then((res) => {
+          console.log(res);
+          this.activityList = res.data
+        })
+    }
+  },
+  created() {
+    this.getActivity()
   },
   onPullDownRefresh() {
     wx.showNavigationBarLoading();
@@ -31,4 +52,23 @@ export default {
 </script>
 
 <style scoped>
+  .activity-input {
+    display: flex;
+    align-items: center;
+    padding:15px;
+    background-color: white;
+  }
+  .activity-input:active {
+    background-color: #f9f9f9;
+  }
+  .activity-input-user-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    margin-right: 8px;
+  }
+  .activity-input-content {
+    flex: auto;
+    font-size: 12px;
+  }
 </style>

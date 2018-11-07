@@ -1,10 +1,10 @@
 <template>
   <div class="user-page">
     <div class="user-info">
-      <div v-if="user">
-        <user-card :user="user"></user-card>
+      <div v-if="user" class="user-info-card" @click="handleUserInfo">
+        <user-card :user="user" ></user-card>
       </div>
-      <div v-else>
+      <div v-else class="user-info-button">
         <i-button type="primary" open-type="getUserInfo" @click="handleOpen">授权登录</i-button>
         <i-modal :visible="visible" @ok="handleClose" @cancel="handleClose">
           <view>确认授权</view>
@@ -36,7 +36,7 @@
       </div>
       <div class="cell-group">
         <i-cell-group>
-          <i-cell title="关联账号">
+          <i-cell title="账户设置">
             <i slot="icon" class="iconfont">&#xe61d;</i>
           </i-cell>
           <i-cell title="开启认证">
@@ -68,6 +68,9 @@ export default {
     }
   },
   methods: {
+    handleUserInfo() {
+      console.log('userInfo')
+    },
     onNight() {
       this.night = !this.night
     },
@@ -109,9 +112,17 @@ export default {
     background-color: #f9f9f9;
   }
   .user-info {
-    padding-top: 20px;
+    padding-top: 10px;
   }
   .cell-group {
-    margin-top: 20px;
+    margin-top: 10px;
+  }
+  .user-info-card {
+    background-color: white;
+    margin:0 15px;
+    border-radius:6px;
+  }
+  .user-info-card:active {
+    background-color: #f9f9f9;
   }
 </style>
