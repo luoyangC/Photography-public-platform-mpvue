@@ -15,8 +15,22 @@
     <div class="a-card-content">
       <text class="mui-ellipsis-5">{{activity.content}}</text>
       <image-list :images="activity.images"></image-list>
+      <div class="a-card-share" v-if="activity.source">
+        <div class="share-text">
+          <a ref="#">@{{activity.source.user.nick_name}}：</a>
+          <text class="mui-ellipsis-5">{{activity.source.content}}</text>
+        </div>
+        <div class="share-info">
+          <span>点赞{{activity.like_nums}} | </span>
+          <span>评论{{activity.comment_nums}} | </span>
+          <span>转发{{activity.share_nums}}</span>
+        </div>
+        <div class="share-image">
+          <image-list :images="activity.source.images"></image-list>
+        </div>
+      </div>
     </div>
-    <div class="a-card-tag">
+    <div class="a-card-tag" v-if="activity.topic.title">
       <span># {{activity.topic.title}}</span>
     </div>
     <div class="a-card-footer">
@@ -41,7 +55,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .a-card {
     display: flex;
     flex-direction: column;
@@ -74,7 +88,23 @@ export default {
     padding: 0 15px 0 55px;
     color:#495060;
     font-size:14px;
-
+  }
+  .a-card-share {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    background-color: #f9f9f9;
+    .share-text {
+      a {
+        color: #0084ff;
+      }
+    }
+    .share-info {
+      span {
+        color:#80848f;
+        font-size:11px;
+      }
+    }
   }
   .a-card-tag {
     padding: 8px 15px 0 55px;

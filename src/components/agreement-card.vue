@@ -23,8 +23,8 @@
     <hr>
     <div class="a-card-footer">
       <span><i class="iconfont">&#xe610;</i>&nbsp;{{agreement.address.city}}</span>
-      <span><i class="iconfont">&#xe70c;</i>&nbsp;0</span>
-      <span><i class="iconfont">&#xe614;</i>&nbsp;0</span>
+      <span><i class="iconfont">&#xe70c;</i>&nbsp;{{agreement.comment_nums}}</span>
+      <span><i class="iconfont">&#xe614;</i>&nbsp;{{agreement.send_nums}}</span>
       <span><i class="iconfont">&#xe710;</i></span>
     </div>
   </div>
