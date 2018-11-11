@@ -1,14 +1,15 @@
 import Vue from 'vue';
 import App from '@/App';
+import '../static/css/WeUi.css'
 
-import fly from './api/request';
 import store from './store/store'
+// import mpvueToastRegistry from 'mptoast'
+//
+// mpvueToastRegistry(Vue);
 
 Vue.config.productionTip = false;
 
 Vue.prototype.$store=store;
-
-Vue.prototype.$fly = fly;
 
 App.mpType = 'app';
 

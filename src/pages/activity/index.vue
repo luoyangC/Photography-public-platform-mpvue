@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import ActivityCard from "../../components/activity-card";
-import { getActivity } from "../../api/api";
+import ActivityCard from "../../common/activity-card";
+import { getActivity } from "../../api/index";
 export default {
   components: {
     ActivityCard,
@@ -37,7 +37,7 @@ export default {
         })
     }
   },
-  created() {
+  onShow() {
     this.getActivity()
   },
   onPullDownRefresh() {
@@ -51,7 +51,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .activity-input {
     display: flex;
     align-items: center;

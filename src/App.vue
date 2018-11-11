@@ -15,7 +15,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .container {
   height: 100%;
   display: flex;

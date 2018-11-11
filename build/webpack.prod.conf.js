@@ -41,7 +41,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: utils.assetsPath('[name].wxss')
     }),
     // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different components can be deduped.
+    // duplicated CSS from different common can be deduped.
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
         safe: true
@@ -64,7 +64,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     //   // necessary to consistently work with multiple chunks via CommonsChunkPlugin
     //   chunksSortMode: 'dependency'
     // }),
-    // keep module.id stable when vender modules does not change
+    // my-keeps module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({

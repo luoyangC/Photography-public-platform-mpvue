@@ -3,7 +3,17 @@
     "pages/index/main",
     "pages/activity/main",
     "pages/explore/main",
-    "pages/user/main"
+    "pages/user/main",
+    "pages/account/main",
+    "pages/detail/main",
+    "pages/help/main",
+    "pages/info/main",
+    "pages/email/main",
+    "pages/my-activities/main",
+    "pages/my-follows/main",
+    "pages/my-keeps/main",
+    "pages/my-messages/main",
+    "pages/my-replies/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -34,9 +34,9 @@
       <span># {{activity.topic.title}}</span>
     </div>
     <div class="a-card-footer">
-      <span><i class="iconfont">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
-      <span><i class="iconfont">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
-      <span><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
+      <span :class="{'active-operate': activity.is_like}"><i class="iconfont">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
+      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
+      <span :class="{'active-operate': activity.is_share}"><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
       <span><i class="iconfont">&#xe72a;</i></span>
     </div>
   </div>
@@ -51,11 +51,14 @@ export default {
   },
   components: {
     ImageList,
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+  .active-operate {
+    color: #EA5149;
+  }
   .a-card {
     display: flex;
     flex-direction: column;

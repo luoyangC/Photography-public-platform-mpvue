@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import AgreementCard from "@/components/agreement-card"
-import { getAgreement } from "@/api/api"
+import AgreementCard from "@/common/agreement-card"
+import { getAgreement } from "@/api/index"
 export default {
   name: 'agreement',
   props: {
@@ -38,6 +38,9 @@ export default {
     }
   },
   created() {
+    this.getAgreement()
+  },
+  onShow() {
     this.getAgreement()
   }
 };

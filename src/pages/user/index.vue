@@ -2,41 +2,43 @@
   <div class="user-page">
     <div class="user-info">
       <div v-if="user" class="user-info-card" @click="handleUserInfo">
-        <user-card :user="user" ></user-card>
+        <navigator url="/pages/info/main" hover-class="navigator-hover">
+          <user-card :user="user" ></user-card>
+        </navigator>
       </div>
       <div v-else class="user-info-button">
-        <i-button type="primary" open-type="getUserInfo" @click="handleOpen">授权登录</i-button>
-        <i-modal :visible="visible" @ok="handleClose" @cancel="handleClose">
-          <view>确认授权</view>
+        <i-button type="primary" open-type="getUserInfo" @click="handleOpen">注册登录</i-button>
+        <i-modal :visible="visible" ok-text="微信登录" cancel-text="邮箱登录" @ok="handleClick" @cancel="handleClick">
+          <view>登录方式</view>
         </i-modal>
       </div>
     </div>
     <div>
       <div class="cell-group">
         <i-cell-group>
-          <i-cell title="关注主题">
+          <i-cell title="关注主题" is-link url="/pages/my-keeps/main">
             <i slot="icon" class="iconfont">&#xe6db;</i>
           </i-cell>
-          <i-cell title="我的收藏">
+          <i-cell title="我的收藏" is-link url="/pages/my-follows/main">
             <i slot="icon" class="iconfont">&#xe6ca;</i>
           </i-cell>
-          <i-cell title="我的动态">
+          <i-cell title="我的动态" is-link url="/pages/my-activities/main">
             <i slot="icon" class="iconfont">&#xe607;</i>
           </i-cell>
-          <i-cell title="我的回复">
+          <i-cell title="我的回复" is-link url="/pages/replies/main">
             <i slot="icon" class="iconfont">&#xe6b8;</i>
           </i-cell>
-          <i-cell title="我的通知">
+          <i-cell title="我的通知" is-link url="/pages/my-messages/main">
             <i slot="icon" class="iconfont">&#xe637;</i>
           </i-cell>
-          <i-cell title="帮助反馈">
+          <i-cell title="帮助反馈" is-link url="/pages/help/main">
             <i slot="icon" class="iconfont">&#xe60b;</i>
           </i-cell>
         </i-cell-group>
       </div>
       <div class="cell-group">
         <i-cell-group>
-          <i-cell title="账户设置">
+          <i-cell title="账户设置" is-link url="/pages/account/main">
             <i slot="icon" class="iconfont">&#xe61d;</i>
           </i-cell>
           <i-cell title="开启认证">
@@ -53,7 +55,7 @@
 </template>
 
 <script>
-import { getActivity, login } from "../../api/api";
+import { getActivity, loginWeixin } from "../../api/index";
 import UserCard from './components/card'
 
 export default {
@@ -63,8 +65,8 @@ export default {
   data () {
     return {
       visible: false,
-      user: this.$store.state.userInfo.user,
-      night: false
+      user: null,
+      night: false,
     }
   },
   methods: {
@@ -74,7 +76,7 @@ export default {
     onNight() {
       this.night = !this.night
     },
-    handleClose(e) {
+    handleClick(e) {
       this.visible = false;
       if ( e.mp.type == 'ok' ) {
         wx.login({ success: (res) => {
@@ -82,7 +84,7 @@ export default {
           wx.getUserInfo({ success: (res) => {
             const encryptedData = res.encryptedData;
             const iv = res.iv;
-            login({code:code, encryptedData:encryptedData, iv:iv})
+            loginWeixin({code:code, encryptedData:encryptedData, iv:iv})
               .then((res) => {
                 console.log(res);
                 this.user = res.data.userInfo;
@@ -92,7 +94,10 @@ export default {
             } });
           }})
       } else {
-        console.log('cancel')
+        console.log(e);
+        wx.navigateTo({
+          url: '/pages/email/main'
+        })
       }
     },
     handleOpen() {
@@ -103,6 +108,9 @@ export default {
         .then((res) => {console.log(res)})
         .catch((err) => {console.log(err)})
     },
+  },
+  onShow() {
+    this.user = this.$store.state.userInfo.user
   },
 };
 </script>
@@ -121,8 +129,5 @@ export default {
     background-color: white;
     margin:0 15px;
     border-radius:6px;
-  }
-  .user-info-card:active {
-    background-color: #f9f9f9;
   }
 </style>

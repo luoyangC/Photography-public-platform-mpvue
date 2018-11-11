@@ -1,14 +1,16 @@
 <template>
   <div>
     <scroll-view scroll-y :style="{height:contentHeight}">
-      <index-card v-for="item in activityList" :key="item.id" :activity="item"></index-card>
+      <div v-for="item in activityList" :key="item.id" @click="toDetail(item.id)">
+        <index-card :activity="item"></index-card>
+      </div>
     </scroll-view>
   </div>
 </template>
 
 <script>
-import IndexCard from "@/components/index-card"
-import { getActivity } from "@/api/api"
+import IndexCard from "@/common/index-card"
+import { getActivity } from "@/api/index"
 export default {
   name: 'recommend',
   props: {
@@ -29,8 +31,13 @@ export default {
     },
   },
   methods: {
+    toDetail(id) {
+      let url = `/pages/detail/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
     getActivity() {
-      getActivity()
+      getActivity({activity_type:'original'})
         .then((res) => {
           console.log(res);
           this.activityList = res.data
@@ -40,6 +47,9 @@ export default {
   created() {
     this.getActivity()
   },
+  onShow() {
+    this.getActivity()
+  }
 };
 </script>
 
