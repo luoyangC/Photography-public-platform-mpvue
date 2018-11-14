@@ -3,17 +3,21 @@
     <div class="detail-content">
       <activity-card v-if="activity" :activity="activity"></activity-card>
     </div>
-    <div class="detail-comment"></div>
+    <div class="detail-comment" id="comment">
+      <comment-list v-if="activity" :comments="activity.comments" :activityId="activity.id"></comment-list>
+    </div>
   </div>
 </template>
 
 <script>
 import ActivityCard from '../../common/activity-card'
+import CommentList from '../../common/comment-list'
 import { getActivityById } from "../../api";
 export default {
   name: 'index',
   components: {
-    ActivityCard
+    ActivityCard,
+    CommentList,
   },
   data() {
     return {
@@ -24,14 +28,14 @@ export default {
     getActivity(id) {
       getActivityById(id)
         .then((res) => {
-          this.activity = res.data
+          this.activity = res.data;
         }).catch((err) => {
           console.log(err)
       })
     }
   },
   onLoad(option) {
-    this.getActivity(option.id)
+    this.getActivity(option.id);
   },
   onUnload() {
     this.activity = null
