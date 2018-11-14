@@ -33,6 +33,7 @@
     <div class="a-card-tag" v-if="activity.topic.title">
       <span># {{activity.topic.title}}</span>
     </div>
+    <hr>
     <div class="a-card-footer">
       <span :class="{'active-operate': activity.is_like}"><i class="iconfont">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
       <span :class="{'active-operate': activity.is_comment}"><i class="iconfont">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
@@ -64,6 +65,9 @@ export default {
     flex-direction: column;
     margin:10px 0;
     background-color: white;
+    hr {
+      margin-left: 55px;
+    }
   }
   .a-card-header {
     display: flex;
@@ -110,7 +114,10 @@ export default {
     }
   }
   .a-card-tag {
-    padding: 8px 15px 0 55px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 8px 15px 8px 55px;
   }
   .a-card-tag span {
     font-size:10px;

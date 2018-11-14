@@ -1,5 +1,5 @@
 <template>
-  <div class="a-card">
+  <div class="a-card" @click="toActivityDetail(activity.id,false)">
     <div class="a-card-tag">
       <span># {{activity.topic.title}}</span>
       <div class="a-card-header-extra">
@@ -8,7 +8,9 @@
     </div>
     <div class="a-card-content">
       <text class="mui-ellipsis-5">{{activity.content}}</text>
-      <image-list :images="activity.images"></image-list>
+      <div @click.stop>
+        <image-list :images="activity.images"></image-list>
+      </div>
     </div>
     <div class="a-card-header">
       <div class="a-card-header-info">
@@ -20,8 +22,8 @@
     </div>
     <hr/>
     <div class="a-card-footer">
-      <span :class="{'active-operate': activity.is_like}"><i class="iconfont">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
-      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
+      <span :class="{'active-operate': activity.is_like}"><i class="iconfont" @click.stop>&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
+      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont" @click="toDetail(activity.id,true)">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
       <span :class="{'active-operate': activity.is_share}"><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
       <span><i class="iconfont">&#xe72a;</i></span>
     </div>
@@ -38,10 +40,17 @@ export default {
   components: {
     ImageList,
   },
+  methods: {
+    toActivityDetail(id, comment) {
+      let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .active-operate {
     color: #EA5149;
   }
@@ -78,7 +87,8 @@ export default {
   .a-card-tag {
     display: flex;
     justify-content: space-between;
-    padding:15px;
+    align-items: center;
+    padding:15px 15px 8px 15px;
   }
   .a-card-tag span {
     font-size:10px;

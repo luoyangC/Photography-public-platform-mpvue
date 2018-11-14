@@ -37,16 +37,13 @@ export default {
       })
     }
   },
-  created() {
-    this.getAgreement()
-  },
-  onShow() {
+  onLoad() {
     this.getAgreement()
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .card-item {
   }
 </style>

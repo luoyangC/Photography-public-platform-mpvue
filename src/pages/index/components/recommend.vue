@@ -1,7 +1,7 @@
 <template>
   <div>
     <scroll-view scroll-y :style="{height:contentHeight}">
-      <div v-for="item in activityList" :key="item.id" @click="toDetail(item.id)">
+      <div v-for="item in activityList" :key="item.id">
         <index-card :activity="item"></index-card>
       </div>
     </scroll-view>
@@ -31,11 +31,6 @@ export default {
     },
   },
   methods: {
-    toDetail(id) {
-      let url = `/pages/detail/main?id=${id}`;
-      console.log(url);
-      wx.navigateTo({ url })
-    },
     getActivity() {
       getActivity({activity_type:'original'})
         .then((res) => {
@@ -44,10 +39,7 @@ export default {
         })
     }
   },
-  created() {
-    this.getActivity()
-  },
-  onShow() {
+  onLoad() {
     this.getActivity()
   }
 };

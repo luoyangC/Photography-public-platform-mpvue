@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "帮助与反馈"
+  "navigationBarTitleText": "评论详情",
+  "usingComponents": {
+    "i-modal": "../../../static/iview/modal/index"
+  }
 }

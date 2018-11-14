@@ -1,5 +1,7 @@
 <template>
-  <div>帮助于反馈</div>
+  <div>
+    <div>帮助与反馈</div>
+  </div>
 </template>
 
 <script>

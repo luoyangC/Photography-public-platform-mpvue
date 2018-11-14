@@ -42,7 +42,7 @@ Component({
         handleClickItem ({ currentTarget = {} }) {
             const dataset = currentTarget.dataset || {};
             const { index } = dataset;
-            this.triggerEvent('click', { index });
+            this.triggerEvent('clickItem', { index });
         },
         handleClickOk () {
             this.triggerEvent('ok');

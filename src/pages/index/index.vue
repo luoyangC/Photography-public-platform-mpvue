@@ -68,9 +68,6 @@ export default {
     },
   },
   methods: {
-    // 获取用户信息
-    getUserInfo() {
-    },
     // 获取系统信息，主要是获取窗口的高度
     getSystemInfo() {
       let that = this;
@@ -98,9 +95,6 @@ export default {
   onLoad() {
     this.getSystemInfo();
   },
-  onShow() {
-    this.getUserInfo();
-  }
 };
 </script>
 
