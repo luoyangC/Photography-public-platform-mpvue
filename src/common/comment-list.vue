@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="comment-title">评论</div>
+    <div class="comment-title">全部评论</div>
     <div class="comment-list" :style="{minHeight: commentsHeight}">
       <div v-if="commentNums == -1" class="no-comment">什么都没有，赶快试着评论一下吧</div>
       <div v-if="commentNums != -1" class="comment" 
            v-for="(comment, i) in comments" :key="comment.id" 
-           @click="handleOpen(comment, i)">
+           @click="handleCommentOpen(comment, i)">
         <div class="comment-header">
           <div class="comment-header-info">
             <image :src="comment.user.image" mode="scaleToFill"></image>
@@ -39,13 +39,13 @@
       <i class="iconfont">&#xe705;</i>
       <textarea :type="text" :fixed="true" :cursor-spacing="10" :auto-height="true" :show-confirm-bar="false"
                 @focus="focused" v-model.lazy="content" :focus="focus" :placeholder="placeholder"/>
-      <span @click.stop="handleOpenModel">发送</span>
+      <span @click.stop="handleDatermineOpen">发送</span>
     </div>
     <div class="comment-model">
-      <i-modal :visible="visible" :actions="actions" :action-mode="vertical" @clickItem="handleClick"></i-modal>
-      <i-modal title="确认发表吗？" :visible="datermine"  @ok="handleCloseModel" @cancel="handleCloseModel" ></i-modal>
+      <i-modal i-class="vertical" :visible="visible" :actions="actions" :action-mode="vertical" @clickItem="handleCommentClick"></i-modal>
+      <i-modal title="确认发表吗？" ok-text="确认发送" cancel-text="再改改" :visible="datermine"  @ok="handleDatermineClose" @cancel="handleDatermineClose" ></i-modal>
     </div>
-    <div class="comment-mask" v-if="focus" @click="handleCloseMask">
+    <div class="comment-mask" v-if="focus" @click="handleMaskClose">
     </div>
   </div>
 </template>
@@ -93,7 +93,8 @@ export default {
     }
   },
   methods: {
-    handleCloseModel(e) {
+    // 关闭确认对话框，判断是否确认，若确认则调用添加评论或者回复接口
+    handleDatermineClose(e) {
       this.datermine = false
       this.focus = false
       if (e.type=='ok') {
@@ -103,14 +104,17 @@ export default {
         this.focus = true
       }
     },
-    handleOpenModel() {
+    // 开启确认对话框
+    handleDatermineOpen() {
       this.focus = false
       this.datermine = true
     },
-    handleCloseMask() {
+    // 关闭遮罩层
+    handleMaskClose() {
       this.focus = false
     },
-    handleClick(e) {
+    // 关闭评论操作的选择对话框
+    handleCommentClick(e) {
       this.visible = false
       let index = e.mp.detail.index
       if (index == 0) {
@@ -122,37 +126,31 @@ export default {
         this.commentUser = 0
       }
     },
-    handleOpen(comment, index) {
+    // 开启评论操作的选择对话框
+    handleCommentOpen(comment, index) {
       this.visible = true
       this.currentIndex = index
       this.currentComment = comment
     },
-    toCommentDetail(id) {
-      let url = `/pages/comment-detail/main?id=${id}`
-      wx.navigateTo({ url })
-    },
+    // 点击输入框会触发
     focused(e) {
-      // 点击输入框会触发
       this.focus = true
       console.log('focus')
     },
+    // 点击完返回会触发
     blured(e) {
-      // 点击完返回会触发
       console.log('blur')
     },
+    // 添加评论或者回复
     addCommentOrReply() {
       if (this.currentComment) {
         addReply({content:this.content,comment:this.currentComment.id,to_user_id:this.currentComment.user.id})
           .then((res) => {
             this.comments[this.currentIndex].replies.push(res.data)
-            this.$set(this.comments, this.currentIndex, this.comments[this.currentIndex])
             this.currentIndex = 0
           }).catch((err) => {
             console.log(err)
           })
-        this.content = ''
-        this.currentComment = null
-        this.placeholder = '友善发言的人运气不会太差'
       } else {
         addComment({content:this.content,activity:this.activityId})
           .then((res) => {
@@ -160,11 +158,17 @@ export default {
           }).catch((err) => {
             console.log(err)
           })
-        this.content = ''
-        this.currentComment = null
-        this.placeholder = '友善发言的人运气不会太差'
       }
+      this.content = ''
+      this.currentComment = null
+      this.placeholder = '友善发言的人运气不会太差'
     },
+    // 跳转到评论详情页面
+    toCommentDetail(id) {
+      let url = `/pages/comment-detail/main?id=${id}`
+      wx.navigateTo({ url })
+    },
+    // 获取系统信息
     getSystemInfo() {
       let that = this;
       wx.getSystemInfo({

@@ -1,6 +1,6 @@
 {
-  "backgroundColor": "black",
   "enablePullDownRefresh": true,
+  "navigationBarTitleText": "动态",
   "usingComponents": {
     "i-input": "../../../static/iview/input/index",
     "i-button": "../../../static/iview/button/index"

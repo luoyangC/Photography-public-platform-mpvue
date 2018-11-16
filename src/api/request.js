@@ -2,8 +2,8 @@ import Fly from 'flyio/dist/npm/wx'
 import store from '../store/store'
 
 const fly = new Fly();
-// const host = 'http://127.0.0.1:8000/api/v1';
-const host = 'http://192.168.43.238:8000/api/v1'
+const host = 'http://127.0.0.1:8000/api/v1';
+// const host = 'http://192.168.43.238:8000/api/v1'
 
 
 fly.interceptors.request.use((config,promise)=>{

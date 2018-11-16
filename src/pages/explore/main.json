@@ -1,5 +1,6 @@
 {
   "enablePullDownRefresh": true,
+  "navigationBarTitleText": "发现",
   "usingComponents": {
     "i-input": "../../../static/iview/input/index",
     "i-card": "../../../static/iview/card/index"

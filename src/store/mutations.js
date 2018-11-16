@@ -8,4 +8,7 @@ export default {
       user: data.user,
     };
   },
+  [types.SET_TOPIC] (state, data) {
+    state.curTopic = data
+  }
 }

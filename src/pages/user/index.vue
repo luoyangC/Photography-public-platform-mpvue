@@ -90,6 +90,7 @@ export default {
                 this.user = res.data.userInfo;
                 wx.setStorage({key:"token", data:res.data.token});
                 wx.setStorage({key:"user", data:res.data.userInfo})
+                this.$store.commit('SET_INFO', {token:res.data.token, user:res.data.userInfo});
               })
             } });
           }})

@@ -2,6 +2,7 @@
   "usingComponents": {
     "i-tabs": "../../../static/iview/tabs/index",
     "i-tab": "../../../static/iview/tab/index",
-    "i-card": "../../../static/iview/card/index"
+    "i-card": "../../../static/iview/card/index",
+    "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

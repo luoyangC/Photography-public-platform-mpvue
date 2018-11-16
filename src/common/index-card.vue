@@ -2,7 +2,7 @@
   <div class="a-card" @click="toActivityDetail(activity.id,false)">
     <div class="a-card-tag">
       <span># {{activity.topic.title}}</span>
-      <div class="a-card-header-extra">
+      <div class="a-card-header-extra" @click.stop="openAction">
         <i class="iconfont">&#xe74a;</i>
       </div>
     </div>
@@ -16,7 +16,7 @@
       <div class="a-card-header-info">
         <image  :src="activity.user.image"></image>
         <div>
-          <p class="a-card-header-user-name">{{activity.user.nick_name || '匿名'}}</p>
+          <p class="a-card-header-user-name">{{activity.user.nick_name || '匿名'}}&nbsp;发布</p>
         </div>
       </div>
     </div>
@@ -27,11 +27,15 @@
       <span :class="{'active-operate': activity.is_share}"><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
       <span><i class="iconfont">&#xe72a;</i></span>
     </div>
+    <div class="a-card-action">
+      <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
+    </div>
   </div>
 </template>
 
 <script>
 import ImageList from './image-list'
+import { delActivity } from '../api';
 export default {
   name: 'activity-card',
   props: {
@@ -40,7 +44,58 @@ export default {
   components: {
     ImageList,
   },
+  data() {
+    return {
+      visible: false,
+    }
+  },
+  computed: {
+    actions() {
+      if (this.activity.is_author){
+        return [{name: '删除'},{name: '修改'},{name: '去分享',icon: 'share',openType: 'share'}]
+      } else {
+        return [{name: '收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+      }
+    },
+  },
   methods: {
+    handleClickItem(e) {
+      let index = e.mp.detail.index
+      // 判断是否为作者
+      if (this.activity.is_author) {
+        if (index == 0) {
+          // 删除操作
+          this.actions[0].loading = true
+          this.delActivity()
+        } else if (index == 1 ) {
+          // 修改操作
+          console.log('change')
+        }
+      } else {
+        if (index == 0) {
+          // 收藏操作
+          console.log('keep')
+        } else if (index == 1 ) {
+          // 举报操作
+          console.log('jubao')
+        }
+      }
+      this.visible = false
+    },
+    handleCancel() {
+      this.visible = false
+    },
+    openAction() {
+      this.visible = true
+    },
+    delActivity() {
+      delActivity(this.activity.id)
+        .then((res) => {
+          console.log(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+    },
     toActivityDetail(id, comment) {
       let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
       console.log(url);

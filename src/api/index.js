@@ -28,8 +28,17 @@ export const getAgreement = () => { return fly.get(`/agreement/`) }
 // 获取评论详情
 export const getComment = (id) => { return fly.get(`/comment/${id}`) }
 
+// 添加动态接口
+export const addActivity = (data) => { return fly.post(`/activity/`, data) }
+
+// 删除动态接口
+export const delActivity = (id) => { return fly.delete(`/activity/${id}`) }
+
 // 添加评论接口
 export const addComment = (data) => { return fly.post(`/comment/`, data) }
 
 // 添加回复接口
 export const addReply = (data) => { return fly.post(`/reply/`, data) }
+
+// 获取主题接口
+export const getTopic = () => { return fly.get(`/topic/`) }

@@ -1,6 +1,6 @@
 <template>
   <div class="activity">
-    <div @click="handleNewActivity" class="activity-input">
+    <div @click="newActivity" class="activity-input">
       <image class="activity-input-user-image" :src="user.image" mode="scaleToFill"></image>
       <div class="activity-input-content">
         <p>发表动态...</p>
@@ -26,8 +26,9 @@ export default {
     };
   },
   methods: {
-    handleNewActivity () {
-      console.log('new activity')
+    newActivity () {
+      let url = `/pages/new/main`
+      wx.navigateTo({ url })
     },
     getActivity() {
       getActivity()

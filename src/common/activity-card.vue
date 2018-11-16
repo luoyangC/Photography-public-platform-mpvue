@@ -5,7 +5,7 @@
         <image :src="activity.user.image" mode="scaleToFill"></image>
         <div>
           <p class="a-card-header-user-name">{{activity.user.nick_name || '匿名'}}</p>
-          <p class="a-card-header-create-time">{{activity.create_time || '2018.11.06'}}</p>
+          <p class="a-card-header-create-time">{{formatActivityTime || '2018.11.06'}}</p>
         </div>
       </div>
       <div class="a-card-header-extra">
@@ -45,6 +45,7 @@
 
 <script>
 import ImageList from './image-list'
+import { formatTime } from '../utils'
 export default {
   name: 'activity-card',
   props: {
@@ -52,6 +53,11 @@ export default {
   },
   components: {
     ImageList,
+  },
+  computed: {
+    formatActivityTime() {
+      return formatTime(this.activity.create_time)
+    }
   },
 };
 </script>
