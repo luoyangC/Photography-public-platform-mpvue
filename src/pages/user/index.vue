@@ -112,6 +112,7 @@ export default {
   },
   onShow() {
     this.user = this.$store.state.userInfo.user
+    console.log('user on show')
   },
 };
 </script>

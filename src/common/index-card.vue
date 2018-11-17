@@ -22,8 +22,8 @@
     </div>
     <hr/>
     <div class="a-card-footer">
-      <span :class="{'active-operate': activity.is_like}"><i class="iconfont" @click.stop>&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
-      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont" @click="toDetail(activity.id,true)">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
+      <span :class="{'active-operate': activity.is_like}"><i class="iconfont" @click.stop="changeLikeType">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
+      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont" @click.stop="toActivityDetail(activity.id,true)">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
       <span :class="{'active-operate': activity.is_share}"><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
       <span><i class="iconfont">&#xe72a;</i></span>
     </div>
@@ -35,7 +35,7 @@
 
 <script>
 import ImageList from './image-list'
-import { delActivity } from '../api';
+import { delActivity, delLike, addLike } from '../api';
 export default {
   name: 'activity-card',
   props: {
@@ -59,6 +59,27 @@ export default {
     },
   },
   methods: {
+    changeLikeType() {
+      if (this.activity.is_like) {
+        delLike(this.activity.is_like)
+          .then((res) => {
+            console.log(res)
+            this.activity.is_like = false
+            this.activity.like_nums --
+          }).catch((err) => {
+            console.log(err)
+          })
+      } else {
+        addLike({activity: this.activity.id})
+          .then((res) => {
+            console.log(res)
+            this.activity.is_like = res.data.id
+            this.activity.like_nums ++
+          }).catch((err) => {
+            console.log(err)
+          })
+      }
+    },
     handleClickItem(e) {
       let index = e.mp.detail.index
       // 判断是否为作者
@@ -86,6 +107,7 @@ export default {
       this.visible = false
     },
     openAction() {
+      console.log('click')
       this.visible = true
     },
     delActivity() {

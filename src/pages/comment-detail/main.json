@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "评论详情",
   "usingComponents": {
-    "i-modal": "../../../static/iview/modal/index"
+    "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

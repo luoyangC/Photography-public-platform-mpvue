@@ -46,8 +46,10 @@
       <span @click.stop="handleDatermineOpen">发送</span>
     </div>
     <div class="comment-model">
-      <i-modal :visible="visible" :actions="actions" :action-mode="vertical" @clickItem="handleCommentClick"></i-modal>
       <i-modal title="确认发表吗？" ok-text="确认发送" cancel-text="再改改" :visible="datermine"  @ok="handleDatermineClose" @cancel="handleDatermineClose" ></i-modal>
+    </div>
+    <div class="a-card-action">
+      <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCommentClick" @click.stop @clickItem="handleCommentClick" />
     </div>
     <div class="comment-mask" v-if="focus" @click="handleMaskClose">
     </div>
@@ -55,7 +57,7 @@
 </template>
 
 <script>
-import { getComment, addReply } from "../../api";
+import { getComment, addReply, delReply } from "../../api";
 
 export default {
   name: 'index',
@@ -69,10 +71,17 @@ export default {
       visible: false,
       datermine: false,
       placeholder: '友善发言的人运气不会太差',
-      actions: [{name: '回复'}, {name: '关注'}, {name: '举报'}]
+      actionType: false,
     }
   },
   computed: {
+    actions() {
+      if (this.actionType){
+        return [{name: '回复'},{name: '修改'},{name: '删除'}]
+      } else {
+        return [{name: '回复'},{name: '举报'},{name: '关注'}]
+      }
+    },
     replyNums() {
       if (this.comment) {
         return this.comment.replies.length - 1
@@ -101,17 +110,41 @@ export default {
     },
     handleCommentClick(e) {
       this.visible = false
+      if (e.type == 'cancel') {
+        return false
+      }
       let index = e.mp.detail.index
-      if (index == 0) {
-        this.placeholder = `回复${this.currentReply.from_user.nick_name}：`
-        this.focus = true
+      // 判断是否为作者
+      if (this.actionType) {
+        if (index == 0) {
+          this.placeholder = `回复${this.currentReply.from_user.nick_name}：`
+          this.focus = true
+        } else if (index == 1) {
+          console.log('chenge')
+        } else if (index == 2) {
+          this.delReply()
+        } else {
+          console.log('not do any')
+        }
       } else {
-        // 其他的逻辑以后再写
-        this.commentId = 0
-        this.commentUser = 0
+        if (index == 0) {
+          this.placeholder = `回复${this.currentReply.from_user.nick_name}：`
+          this.focus = true
+        } else if (index == 1) {
+          console.log('juebao')
+        } else if (index == 2) {
+          console.log('like')
+        } else {
+          console.log('not do any')
+        }
       }
     },
     handleCommentOpen(reply, index) {
+      if (reply.is_author) {
+        this.actionType = true
+      } else {
+        this.actionType = false
+      }
       this.visible = true
       this.currentIndex = index
       this.currentReply = reply
@@ -124,6 +157,17 @@ export default {
     blured(e) {
       // 点击完返回会触发
       console.log('blur')
+    },
+    delReply() {
+      delReply(this.currentReply.id)
+        .then((res) => {
+          this.comment.replies.pop(this.currentReply)
+          console.log(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+      this.currentIndex = 0
+      this.currentComment = null
     },
     addReply() {
       if (this.currentReply) {
@@ -227,7 +271,7 @@ export default {
     justify-content: space-between;
     width: 100%;
     bottom: 0;
-    z-index: 999;
+    z-index: 202;
     font-size: 14px;
     padding: 10px 0;
     background-color: #f9f9f9;
@@ -258,7 +302,7 @@ export default {
     height:100%;
     position:fixed;
     background-color:#999;
-    z-index:998;
+    z-index:201;
     top:0;
     left:0;
     opacity:0.5;

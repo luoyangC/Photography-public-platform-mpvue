@@ -1,5 +1,5 @@
 <template>
-  <div class="a-card">
+  <div class="a-card"  @click="toActivityDetail(activity.id,false)">
     <div class="a-card-header">
       <div class="a-card-header-info">
         <image :src="activity.user.image" mode="scaleToFill"></image>
@@ -8,22 +8,24 @@
           <p class="a-card-header-create-time">{{formatActivityTime || '2018.11.06'}}</p>
         </div>
       </div>
-      <div class="a-card-header-extra">
+      <div class="a-card-header-extra" @click.stop="openAction">
         <i class="iconfont">&#xe74a;</i>
       </div>
     </div>
     <div class="a-card-content">
       <text class="mui-ellipsis-5">{{activity.content}}</text>
-      <image-list :images="activity.images"></image-list>
-      <div class="a-card-share" v-if="activity.source">
+      <div class="image-list" @click.stop>
+        <image-list :images="activity.images"></image-list>
+      </div>
+      <div class="a-card-share" v-if="activity.source" @click="toActivityDetail(activity.source.id,false)">
         <div class="share-text">
           <a ref="#">@{{activity.source.user.nick_name}}：</a>
           <text class="mui-ellipsis-5">{{activity.source.content}}</text>
         </div>
         <div class="share-info">
-          <span>点赞{{activity.like_nums}} | </span>
-          <span>评论{{activity.comment_nums}} | </span>
-          <span>转发{{activity.share_nums}}</span>
+          <span>点赞{{activity.source.like_nums}} | </span>
+          <span>评论{{activity.source.comment_nums}} | </span>
+          <span>转发{{activity.source.share_nums}}</span>
         </div>
         <div class="share-image">
           <image-list :images="activity.source.images"></image-list>
@@ -35,10 +37,13 @@
     </div>
     <hr>
     <div class="a-card-footer">
-      <span :class="{'active-operate': activity.is_like}"><i class="iconfont">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
-      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
+      <span :class="{'active-operate': activity.is_like}"><i class="iconfont" @click.stop="changeLikeType">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
+      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont" @click.stop="toActivityDetail(activity.id,true)">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
       <span :class="{'active-operate': activity.is_share}"><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
       <span><i class="iconfont">&#xe72a;</i></span>
+    </div>
+    <div class="a-card-action">
+      <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
     </div>
   </div>
 </template>
@@ -46,6 +51,7 @@
 <script>
 import ImageList from './image-list'
 import { formatTime } from '../utils'
+import { delActivity, addLike, delLike } from '../api';
 export default {
   name: 'activity-card',
   props: {
@@ -54,11 +60,88 @@ export default {
   components: {
     ImageList,
   },
+  data() {
+    return {
+      visible: false,
+    }
+  },
   computed: {
+    actions() {
+      if (this.activity.is_author){
+        return [{name: '删除'},{name: '修改'},{name: '去分享',icon: 'share',openType: 'share'}]
+      } else {
+        return [{name: '收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+      }
+    },
     formatActivityTime() {
       return formatTime(this.activity.create_time)
     }
   },
+  methods: {
+    changeLikeType() {
+      if (this.activity.is_like) {
+        delLike(this.activity.is_like)
+          .then((res) => {
+            console.log(res)
+            this.activity.is_like = false
+            this.activity.like_nums --
+          }).catch((err) => {
+            console.log(err)
+          })
+      } else {
+        addLike({activity: this.activity.id})
+          .then((res) => {
+            console.log(res)
+            this.activity.is_like = res.data.id
+            this.activity.like_nums ++
+          }).catch((err) => {
+            console.log(err)
+          })
+      }
+    },
+    handleClickItem(e) {
+      let index = e.mp.detail.index
+      // 判断是否为作者
+      if (this.activity.is_author) {
+        if (index == 0) {
+          // 删除操作
+          this.actions[0].loading = true
+          this.delActivity()
+        } else if (index == 1 ) {
+          // 修改操作
+          console.log('change')
+        }
+      } else {
+        if (index == 0) {
+          // 收藏操作
+          console.log('keep')
+        } else if (index == 1 ) {
+          // 举报操作
+          console.log('jubao')
+        }
+      }
+      this.visible = false
+    },
+    handleCancel() {
+      this.visible = false
+    },
+    openAction() {
+      this.visible = true
+    },
+    delActivity() {
+      delActivity(this.activity.id)
+        .then((res) => {
+          console.log(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+    },
+    toActivityDetail(id, comment) {
+      let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
+  }
 };
 </script>
 
