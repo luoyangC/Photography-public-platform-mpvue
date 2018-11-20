@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getComment, addReply, delReply } from "../../api";
+import { getCommentById, addReply, delReply } from "../../api";
 
 export default {
   name: 'index',
@@ -190,7 +190,7 @@ export default {
       this.placeholder = '友善发言的人运气不会太差'
     },
     getComment(id) {
-      getComment(id)
+      getCommentById(id)
         .then((res) => {
           this.comment = res.data
         }).catch((err) => {

@@ -1,16 +1,32 @@
 <script>
+import { getUserInfo } from './api';
 /* eslint-disable */
 export default {
+  methods: {
+    // 获取系统信息
+    getSystemInfo() {
+      wx.getSystemInfo({
+        success: (res) => {
+          this.$store.commit('SET_SYSTEM', res)
+          }
+      })
+    },
+    getUserInfo() {
+      const token = wx.getStorageSync('token') || '';
+      const user = wx.getStorageSync('user') || '';
+      this.$store.commit('SET_INFO', {token:token, user:user})
+    }
+  },
   created() {
     // 调用API从本地缓存中获取数据
     const logs = wx.getStorageSync('logs') || [];
     logs.unshift(Date.now());
     wx.setStorageSync('logs', logs);
     console.log('app created and cache logs by setStorageSync');
-    // 获取token信息，写入vuex
-    const token = wx.getStorageSync('token') || '';
-    const user = wx.getStorageSync('user') || '';
-    this.$store.commit('SET_INFO', {token:token, user:user})
+    // 获取系统信息，写入vuex
+    this.getSystemInfo()
+    // 获取用户信息，写入vuex
+    this.getUserInfo()
   },
 };
 </script>

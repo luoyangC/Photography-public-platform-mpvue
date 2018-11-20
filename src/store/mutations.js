@@ -8,6 +8,9 @@ export default {
       user: data.user,
     };
   },
+  [types.SET_SYSTEM] (state, data) {
+    state.systemInfo = data
+  },
   [types.SET_TOPIC] (state, data) {
     state.curTopic = data
   }

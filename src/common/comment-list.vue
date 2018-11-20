@@ -89,7 +89,9 @@ export default {
       return this.winWidth + "px"
     },
     commentNums() {
-      return this.comments.length-1
+      if (this.comments) {
+        return this.comments.length-1
+      }
     },
   },
   watch: {

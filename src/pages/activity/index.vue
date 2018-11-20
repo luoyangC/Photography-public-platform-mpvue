@@ -31,7 +31,7 @@ export default {
       wx.navigateTo({ url })
     },
     getActivity() {
-      getActivity()
+      getActivity({follow:'user'})
         .then((res) => {
           console.log(res);
           this.activityList = res.data

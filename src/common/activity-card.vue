@@ -8,7 +8,10 @@
           <p class="a-card-header-create-time">{{formatActivityTime || '2018.11.06'}}</p>
         </div>
       </div>
-      <div class="a-card-header-extra" @click.stop="openAction">
+      <div v-if="isDetail"  class="a-card-header-extra" @click.stop>
+        <i class="iconfont">&#xe709;</i>
+      </div>
+      <div v-else class="a-card-header-extra" @click.stop="openAction">
         <i class="iconfont">&#xe74a;</i>
       </div>
     </div>
@@ -56,6 +59,7 @@ export default {
   name: 'activity-card',
   props: {
     'activity': Object,
+    'isDetail': Boolean,
   },
   components: {
     ImageList,

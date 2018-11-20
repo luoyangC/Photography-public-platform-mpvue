@@ -82,14 +82,13 @@ export default {
       password: '',
       username: '',
       activeIndex: 1,
-      winHeight: 0,
       emailCode: '',
       errMessage: '',
     }
   },
   computed: {
     contentHeight() {
-      return this.winHeight + "px";
+       return this.$store.state.systemInfo.windowHeight + "px";
     },
   },
   methods: {
@@ -143,14 +142,6 @@ export default {
           this.errMessage = err
       });
     },
-    getSystemInfo() {
-      let that = this;
-      wx.getSystemInfo({
-        success(res) {
-          that.winHeight = res.windowHeight;
-        }
-      })
-    },
     tabClick(e) {
       this.activeIndex = e.currentTarget.id;
     },
@@ -161,11 +152,6 @@ export default {
     onAnimationFinish() {
       console.log("滑动完成.....")
     },
-  },
-  onLoad() {
-    let user = this.$store.state.userInfo.token;
-    console.log(user);
-    this.getSystemInfo();
   },
 }
 </script>

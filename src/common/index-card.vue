@@ -35,7 +35,7 @@
 
 <script>
 import ImageList from './image-list'
-import { delActivity, delLike, addLike } from '../api';
+import { delActivity, delLike, addLike, delKeep, addKeep } from '../api';
 export default {
   name: 'activity-card',
   props: {
@@ -54,11 +54,36 @@ export default {
       if (this.activity.is_author){
         return [{name: '删除'},{name: '修改'},{name: '去分享',icon: 'share',openType: 'share'}]
       } else {
-        return [{name: '收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+        if (this.activity.is_keep) {
+          return [{name: '取消收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+        } else {
+          return [{name: '收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+        }
       }
     },
   },
   methods: {
+    changeKeepType() {
+      if (this.activity.is_keep) {
+        delKeep(this.activity.is_keep)
+          .then((res) => {
+            console.log(res)
+            this.activity.is_keep == false
+            this.activity.Keep_nums --
+          }).catch((err) => {
+            console.log(err)
+          })
+      } else {
+        addKeep({activity: this.activity.id})
+          .then((res) => {
+            console.log(res)
+            this.activity.is_Keep = res.data.id
+            this.activity.keep_nums ++
+          }).catch((err) => {
+            console.log(err)
+          })
+      }
+    },
     changeLikeType() {
       if (this.activity.is_like) {
         delLike(this.activity.is_like)
@@ -95,7 +120,7 @@ export default {
       } else {
         if (index == 0) {
           // 收藏操作
-          console.log('keep')
+          this.changeKeepType()
         } else if (index == 1 ) {
           // 举报操作
           console.log('jubao')

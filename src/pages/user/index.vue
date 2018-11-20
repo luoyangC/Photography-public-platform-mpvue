@@ -16,10 +16,10 @@
     <div>
       <div class="cell-group">
         <i-cell-group>
-          <i-cell title="关注主题" is-link url="/pages/my-keeps/main">
+          <i-cell title="我的关注" is-link url="/pages/my-follows/main">
             <i slot="icon" class="iconfont">&#xe6db;</i>
           </i-cell>
-          <i-cell title="我的收藏" is-link url="/pages/my-follows/main">
+          <i-cell title="我的收藏" is-link url="/pages/my-keeps/main">
             <i slot="icon" class="iconfont">&#xe6ca;</i>
           </i-cell>
           <i-cell title="我的动态" is-link url="/pages/my-activities/main">
@@ -30,9 +30,6 @@
           </i-cell>
           <i-cell title="我的通知" is-link url="/pages/my-messages/main">
             <i slot="icon" class="iconfont">&#xe637;</i>
-          </i-cell>
-          <i-cell title="帮助反馈" is-link url="/pages/help/main">
-            <i slot="icon" class="iconfont">&#xe60b;</i>
           </i-cell>
         </i-cell-group>
       </div>
@@ -47,6 +44,9 @@
           <i-cell title="夜间模式">
             <i slot="icon" class="iconfont">&#xe6c1;</i>
             <i-switch slot="footer" :value="night" @change="onNight" />
+          </i-cell>
+          <i-cell title="帮助反馈" is-link url="/pages/help/main">
+            <i slot="icon" class="iconfont">&#xe60b;</i>
           </i-cell>
         </i-cell-group>
       </div>
