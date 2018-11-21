@@ -12,12 +12,12 @@
       <swiper class="content" duration="500" :style="{height:contentHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
         <swiper-item>
           <div>
-            <simple-card :topic="topic" v-for="topic in followTopic" :key="topic.id"></simple-card>
+            <simple-card :followTopic="topic" v-for="topic in followTopic" :key="topic.id"></simple-card>
           </div>
         </swiper-item>
         <swiper-item>
           <div>
-            <simple-card :user="user" v-for="user in followUser" :key="user.id"></simple-card>
+            <simple-card :followUser="user" v-for="user in followUser" :key="user.id"></simple-card>
           </div>
         </swiper-item>
       </swiper>

@@ -2,6 +2,7 @@
   "navigationBarTitleText": "内容详情",
   "usingComponents": {
     "i-modal": "../../../static/iview/modal/index",
+    "i-icon": "../../../static/iview/icon/index",    
     "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

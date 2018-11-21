@@ -3,6 +3,7 @@
   "navigationBarTitleText": "发现",
   "usingComponents": {
     "i-input": "../../../static/iview/input/index",
-    "i-card": "../../../static/iview/card/index"
+    "i-card": "../../../static/iview/card/index",
+    "m-search": "../../../static/minui/wxc-search/dist/index"
   }
 }

@@ -8,11 +8,12 @@
           <p class="a-card-header-create-time">{{formatActivityTime || '2018.11.06'}}</p>
         </div>
       </div>
-      <div v-if="isDetail"  class="a-card-header-extra" @click.stop>
-        <i class="iconfont">&#xe709;</i>
+      <div v-if="isDetail" class="a-card-header-extra" @click.stop>
+        <i-icon v-if="activity.is_keep" type="collection_fill" size="16" color="#EA5149" />
+        <i-icon v-else type="collection" size="20" />
       </div>
       <div v-else class="a-card-header-extra" @click.stop="openAction">
-        <i class="iconfont">&#xe74a;</i>
+        <i-icon type="unfold" size="20" />
       </div>
     </div>
     <div class="a-card-content">
@@ -40,10 +41,24 @@
     </div>
     <hr>
     <div class="a-card-footer">
-      <span :class="{'active-operate': activity.is_like}"><i class="iconfont" @click.stop="changeLikeType">&#xe71b;</i>&nbsp;{{activity.like_nums}}</span>
-      <span :class="{'active-operate': activity.is_comment}"><i class="iconfont" @click.stop="toActivityDetail(activity.id,true)">&#xe70c;</i>&nbsp;{{activity.comment_nums}}</span>
-      <span :class="{'active-operate': activity.is_share}"><i class="iconfont">&#xe726;</i>&nbsp;{{activity.share_nums}}</span>
-      <span><i class="iconfont">&#xe72a;</i></span>
+      <div>
+        <i-icon v-if="activity.is_like" size="20" type="praise_fill" color="#EA5149" @click.stop="changeLikeType" />
+        <i-icon v-else type="praise" size="20" @click.stop="changeLikeType" />
+        <span>&nbsp;{{activity.like_nums}}</span>
+      </div>
+      <div>
+        <i-icon v-if="activity.is_comment" size="20" type="interactive_fill" color="#EA5149" @click.stop="toActivityDetail(activity.id,true)"/>
+        <i-icon v-else size="20" type="interactive" @click.stop="toActivityDetail(activity.id,true)"/>
+        <span>&nbsp;{{activity.comment_nums}}</span>
+      </div>
+      <div>
+        <i-icon v-if="activity.is_share" size="20" type="share_fill" color="#EA5149" />
+        <i-icon v-else size="20" type="share" />
+        <span>&nbsp;{{activity.share_nums}}</span>
+      </div>
+      <div>
+        <i-icon type="more"  size="20" />
+      </div>
     </div>
     <div class="a-card-action">
       <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
@@ -141,18 +156,17 @@ export default {
         })
     },
     toActivityDetail(id, comment) {
-      let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
-      console.log(url);
-      wx.navigateTo({ url })
+      if (!this.isDetail) {
+        let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
+        console.log(url);
+        wx.navigateTo({ url })
+      }
     },
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  .active-operate {
-    color: #EA5149;
-  }
   .a-card {
     display: flex;
     flex-direction: column;
@@ -161,6 +175,9 @@ export default {
     hr {
       margin-left: 55px;
     }
+  }
+  .a-card:active {
+    background-color: #f9f9f9;
   }
   .a-card-header {
     display: flex;
@@ -229,5 +246,9 @@ export default {
     padding: 8px 15px 15px 55px;
     color:#80848f;
     font-size:12px;
+    div {
+      display: flex;
+      align-items: center
+    }
   }
 </style>

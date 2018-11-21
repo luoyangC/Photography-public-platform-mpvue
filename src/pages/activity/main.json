@@ -3,6 +3,7 @@
   "navigationBarTitleText": "动态",
   "usingComponents": {
     "i-input": "../../../static/iview/input/index",
+    "i-icon": "../../../static/iview/icon/index",    
     "i-button": "../../../static/iview/button/index",
     "i-action-sheet": "../../../static/iview/action-sheet/index"
   }

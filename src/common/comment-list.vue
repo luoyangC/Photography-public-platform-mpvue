@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="comment-header-extra">
-            <i class="iconfont">&#xe74a;</i>
+            <i-icon type="unfold" size="20" />
           </div>
         </div>
         <div class="comment-content">
@@ -36,7 +36,9 @@
       </div>
     </div>
     <div class="comment-input" :style="{width: commentWidth}">
-      <i class="iconfont">&#xe705;</i>
+      <div class="comment-icon">
+        <i-icon size="20" type="emoji" />
+      </div>
       <textarea :type="text" :fixed="true" :cursor-spacing="10" :auto-height="true" :show-confirm-bar="false"
                 @focus="focused" v-model.lazy="content" :focus="focus" :placeholder="placeholder"/>
       <span @click.stop="handleDatermineOpen">发送</span>
@@ -321,7 +323,7 @@ export default {
     background-color: #f9f9f9;
     border-top:1rpx solid #dddee1;
     box-shadow: 0 1rpx 6rpx #ccc;
-    .iconfont {
+    .comment-icon {
       width: 10%;
       margin: 0 15px;
       line-height: 30px;

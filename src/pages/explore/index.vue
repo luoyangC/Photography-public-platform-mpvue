@@ -1,23 +1,42 @@
 <template>
   <div>
-    <div>
-      <i-input mode="wrapped" placeholder="搜索" />
+    <div class="search-wrap">
+      <m-search class="search" v-model="value" icon-color="#EA5149" ph-color="#EA5149" placeholder="请输入"></m-search>
     </div>
     <div class="approximately">
-      <i-card class="card-item" v-for="(item,index) in cardList" :key="index" full="true" title="Title" :extra="item">
-        <div slot="content">内容不错</div>
-        <div slot="footer">尾部内容</div>
-      </i-card>
+      <div>
+        <simple-card :topic="topic" v-for="topic in topicList" :key="topic.id"></simple-card>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import SimpleCard from "@/common/simple-card"
+import { getTopic } from '../../api'
 export default {
+  components: {
+    SimpleCard,
+  },
   data() {
     return {
-      cardList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      topicList: [],
+      value: ''
     };
+  },
+  methods: {
+    getTopic() {
+      getTopic()
+        .then((res) => {
+          console.log(res)
+          this.topicList = res.data
+        }).catch((err) => {
+          console.log(err)
+        })
+    }
+  },
+  onLoad() {
+    this.getTopic()
   },
   onPullDownRefresh() {
     wx.showNavigationBarLoading();
@@ -30,5 +49,24 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .search-wrap {
+    position: fixed;
+    display: flex;
+    top: 0;
+    z-index: 201;
+    align-items: center;
+    width: 100%;
+    height: 90rpx;
+    background: white;
+    box-shadow: 0 1rpx 6rpx #ccc;
+    .search {
+      flex-grow: 1;
+      margin: 15rpx 30rpx;
+    }
+  }
+  .approximately {
+    box-sizing: border-box;
+    padding-top: 100rpx;
+  }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="simple-card">
+    <div class="simple-card" v-if="item">
       <div class="simple-card-body">
         <div class="simple-card-image">
-          <image  :src="item.image"></image>
+          <image :src="item.image"></image>
         </div>
         <div class="simple-card-content">
           <p class="simple-card-title">{{item.title || ''}}</p>
@@ -11,8 +11,8 @@
         </div>
       </div>
       <div class="simple-card-extra">
-        <button v-if="item.id" size="mini" @click.stop="delFollow">取消关注</button>
-        <button v-else size="mini" @click.stop="addFollow">关注</button>
+        <button v-if="item.followId" size="mini" @click.stop="delFollow">取消</button>
+        <button v-else size="mini" @click.stop="addFollow" style="color: #EA5149">关注</button>
       </div>
     </div>
     <hr>
@@ -24,52 +24,65 @@ import { delFollow, addFollow } from '../api';
 export default {
   name: 'simple-card',
   props: {
+    followTopic: Object,
+    followUser: Object,
     topic: Object,
-    user: Object,
+  },
+  data() {
+    return {
+      item: null
+    }
   },
   computed: {
-    item() {
-      if (this.topic) {
-        let follow = this.topic.follow
-        return {
-          id: this.topic.id,
-          title: follow.title,
-          image: follow.image,
-          info: follow.info,
-          followId: follow.id,
-          followType: this.topic.follow_type
+    makeItem() {
+      if (this.followTopic) {
+        let topic = this.followTopic.follow
+        this.item = {
+          id: topic.id,
+          title: topic.title,
+          image: topic.image,
+          info: topic.info,
+          followId: this.followTopic.id,
+          followType: 'topic'
         }
       } 
-      else if (this.user) {
-        let follow = this.user.follow
-        return {
-          id: this.user.id,
-          title: follow.nick_name,
-          image: follow.image,
-          info : follow.simple_info,
-          followId: follow.id,
-          followType: this.user.follow_type
+      else if (this.followUser) {
+        let user = this.followUser.follow
+        this.item = {
+          id: user.id,
+          title: user.nick_name,
+          image: user.image,
+          info : user.simple_info,
+          followId: this.followUser.id,
+          followType: 'user'
+        }
+      }
+      else if (this.topic) {
+        let topic = this.topic
+        this.item = {
+          id: topic.id,
+          title: topic.title,
+          image: topic.image,
+          info: topic.info,
+          followId: topic.is_follow,
+          followType: 'topic'
         }
       } 
     }
   },
   methods: {
     addFollow() {
-      console.log('add')
-      addFollow({follow_id: this.item.followId, follow_type: this.item.followType})
+      addFollow({follow_id: this.item.id, follow_type: this.item.followType})
         .then((res) => {
-          console.log(res)
-          this.item.id = res.data.id
+          this.item.followId = res.data.id
         }).catch((err) => {
           console.log(err)
         })
     },
     delFollow() {
-      console.log('del')
-      delFollow(this.item.id)
+      delFollow(this.item.followId)
         .then((res) => {
-          console.log(res)
-          this.item.id = false
+          this.item.followId = false
         }).catch((err) => {
           console.log(err)
         })
