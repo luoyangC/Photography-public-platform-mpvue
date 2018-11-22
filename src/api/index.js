@@ -52,6 +52,9 @@ export const delReply = (id) => { return fly.delete(`/reply/${id}/`) }
 // 获取主题接口
 export const getTopic = () => { return fly.get(`/topic/`) }
 
+// 获取主题详情接口
+export const getTopicById = (id) => { return fly.get(`/topic/${id}`) }
+
 // 添加点赞接口
 export const addLike = (data) => { return fly.post(`/like/`, data) }
 

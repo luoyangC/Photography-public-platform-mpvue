@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "用户信息",
+  "usingComponents": {
+    "i-icon": "../../../static/iview/icon/index",
+    "m-tag": "../../../static/minui/wxc-label/dist/index",
+    "m-button": "../../../static/minui/wxc-button/dist/index"
+  }
+}

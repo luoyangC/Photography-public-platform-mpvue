@@ -12,9 +12,10 @@ export default {
       })
     },
     getUserInfo() {
-      const token = wx.getStorageSync('token') || '';
-      const user = wx.getStorageSync('user') || '';
-      this.$store.commit('SET_INFO', {token:token, user:user})
+      getUserInfo().then((res) => {
+        console.log(res)
+        this.$store.commit('SET_INFO', res.data)
+        }).catch((err) => {console.log(err)})
     }
   },
   created() {

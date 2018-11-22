@@ -1,6 +1,6 @@
 <template>
   <div class="activity">
-    <div @click="newActivity" class="activity-input">
+    <div v-if="user" @click="newActivity" class="activity-input">
       <image class="activity-input-user-image" :src="user.image" mode="scaleToFill"></image>
       <div class="activity-input-content">
         <p>发表动态...</p>
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       activityList: [],
-      user: this.$store.state.userInfo.user,
+      user: null,
     };
   },
   methods: {
@@ -39,6 +39,7 @@ export default {
     }
   },
   onShow() {
+    this.user = this.$store.state.userInfo
     this.getActivity()
   },
   onPullDownRefresh() {

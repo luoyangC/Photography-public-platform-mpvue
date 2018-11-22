@@ -1,10 +1,8 @@
 <template>
   <div class="user-page">
     <div class="user-info">
-      <div v-if="user" class="user-info-card" @click="handleUserInfo">
-        <navigator url="/pages/info/main" hover-class="navigator-hover">
-          <user-card :user="user" ></user-card>
-        </navigator>
+      <div v-if="user" class="user-info-card" @click="toUserInfo">
+        <user-card :user="user" ></user-card>
       </div>
       <div v-else class="user-info-button">
         <i-button type="primary" open-type="getUserInfo" @click="handleOpen">注册登录</i-button>
@@ -109,15 +107,20 @@ export default {
         .then((res) => {console.log(res)})
         .catch((err) => {console.log(err)})
     },
+    toUserInfo() {
+      let url = `/pages/user-info/main`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
   },
   onShow() {
-    this.user = this.$store.state.userInfo.user
+    this.user = this.$store.state.userInfo
     console.log('user on show')
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .user-page {
     background-color: #f9f9f9;
   }
@@ -131,5 +134,8 @@ export default {
     background-color: white;
     margin:0 15px;
     border-radius:6px;
+    :active {
+      background-color: #f9f9f9;
+    }
   }
 </style>

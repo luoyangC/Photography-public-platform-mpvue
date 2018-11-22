@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="a-card-tag" v-if="activity.topic.title">
+    <div class="a-card-tag" v-if="activity.topic.title && !topicDetail"  @click.stop="toTopicDetail(activity.topic.id)">
       <span># {{activity.topic.title}}</span>
     </div>
     <hr>
@@ -75,6 +75,7 @@ export default {
   props: {
     'activity': Object,
     'isDetail': Boolean,
+    'topicDetail': Boolean,
   },
   components: {
     ImageList,
@@ -154,6 +155,11 @@ export default {
         }).catch((err) => {
           console.log(err)
         })
+    },
+    toTopicDetail(id) {
+      let url = `/pages/topic-detail/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
     },
     toActivityDetail(id, comment) {
       if (!this.isDetail) {

@@ -1,6 +1,6 @@
 <template>
   <div class="a-card" @click="toActivityDetail(activity.id,false)">
-    <div class="a-card-tag">
+    <div class="a-card-tag" v-if="activity.topic.title" @click.stop="toTopicDetail(activity.topic.id)">
       <span># {{activity.topic.title}}</span>
       <div class="a-card-header-extra" @click.stop="openAction">
         <i-icon type="unfold" size="20" />
@@ -156,6 +156,11 @@ export default {
         }).catch((err) => {
           console.log(err)
         })
+    },
+    toTopicDetail(id) {
+      let url = `/pages/topic-detail/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
     },
     toActivityDetail(id, comment) {
       let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;

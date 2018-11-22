@@ -1,0 +1,9 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "主题详情",
+  "usingComponents": {
+    "i-icon": "../../../static/iview/icon/index",
+    "m-button": "../../../static/minui/wxc-button/dist/index",
+    "i-action-sheet": "../../../static/iview/action-sheet/index"
+  }
+}

@@ -7,8 +7,8 @@ import * as getters from './getters'
 
 Vue.use(Vuex);
 
-const userInfo = {token: null, user: null}
-const systemInfo = {}
+const userInfo = null
+const systemInfo = null
 const curTopic = null
 
 const state = {

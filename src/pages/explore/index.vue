@@ -4,8 +4,8 @@
       <m-search class="search" v-model="value" icon-color="#EA5149" ph-color="#EA5149" placeholder="请输入"></m-search>
     </div>
     <div class="approximately">
-      <div>
-        <simple-card :topic="topic" v-for="topic in topicList" :key="topic.id"></simple-card>
+      <div class="item" v-for="topic in topicList" :key="topic.id" @click="toTopicDetail(topic.id)">
+        <simple-card :topic="topic"></simple-card>
       </div>
     </div>
   </div>
@@ -33,7 +33,12 @@ export default {
         }).catch((err) => {
           console.log(err)
         })
-    }
+    },
+    toTopicDetail(id) {
+      let url = `/pages/topic-detail/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
   },
   onLoad() {
     this.getTopic()

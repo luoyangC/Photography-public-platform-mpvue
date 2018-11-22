@@ -3,10 +3,7 @@ import * as types from './mutation-types';
 
 export default {
   [types.SET_INFO] (state, data) {
-    state.userInfo = {
-      token: data.token,
-      user: data.user,
-    };
+    state.userInfo = data
   },
   [types.SET_SYSTEM] (state, data) {
     state.systemInfo = data

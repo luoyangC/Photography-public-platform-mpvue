@@ -3,12 +3,13 @@ import store from '../store/store'
 
 const fly = new Fly();
 const host = 'http://127.0.0.1:8000/api/v1';
+const token = wx.getStorageSync('token') || '';
 // const host = 'http://192.168.43.238:8000/api/v1'
 
 
 fly.interceptors.request.use((config,promise)=>{
-  if (store.state.userInfo.token) {
-    config.headers.Authorization = `JWT ${store.state.userInfo.token}`
+  if (token) {
+    config.headers.Authorization = `JWT ${token}`
   }
   return config;
 });
