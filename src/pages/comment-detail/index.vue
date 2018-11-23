@@ -1,11 +1,11 @@
 <template>
   <div class="comment-detail" v-if="comment">
-    <div class="comment">
+    <!-- <div class="comment">
       <div class="comment-header">
         <div class="comment-header-info">
-          <image :src="comment.user.image" mode="scaleToFill"></image>
+          <image :src="comment.user.image" mode="scaleToFill" @click.stop="toUserInfo(comment.user.id)"></image>
           <div>
-            <p class="comment-header-user-name">{{comment.user.nick_name || '匿名'}}</p>
+            <p class="comment-header-user-name" @click.stop="toUserInfo(comment.user.id)">{{comment.user.nick_name || '匿名'}}</p>
             <p class="comment-header-create-time">{{comment.create_time || '2018.11.06'}}</p>
           </div>
         </div>
@@ -16,27 +16,14 @@
       <div class="comment-content">
         <text>{{comment.content}}</text>
       </div>
+    </div> -->
+    <div class="comment">
+      <comment-card :comment="comment"></comment-card>
     </div>
     <div class="reply-title">全部回复</div>
-    <div v-if="comment.replies" class="reply-list">
-      <div class="reply" v-for="(reply,i) in comment.replies" :key="reply.id" @click="handleCommentOpen(reply, i)">
-        <div class="reply-header">
-          <div class="reply-header-info">
-            <image :src="reply.from_user.image" mode="scaleToFill"></image>
-            <div>
-              <p class="reply-header-user-name">{{reply.from_user.nick_name || '匿名'}}</p>
-              <p class="reply-header-create-time">{{reply.create_time || '2018.11.06'}}</p>
-            </div>
-          </div>
-          <div class="reply-header-extra">
-            <i-icon type="unfold" size="20" />
-          </div>
-        </div>
-        <div class="reply-content">
-          <span v-if="reply.source_link">&nbsp;回复&nbsp;<a>{{reply.to_user.nick_name}}</a>：</span><text>{{reply.content}}</text>
-        </div>
-        <hr v-if="i != replyNums">
-        <hr v-else class="last-item">
+    <div class="reply-list" v-if="comment.replies">
+      <div class="reply-item" v-for="(reply,index) in comment.replies" :key="reply.id" @click="handleCommentOpen(reply, index)">
+        <comment-card :reply="reply" :index="index" :commentNums="replyNums"></comment-card>
       </div>
     </div>
     <div class="comment-input">
@@ -59,17 +46,21 @@
 </template>
 
 <script>
-import { getCommentById, addReply, delReply } from "../../api";
-
+import { getCommentById, addReply, delReply } from "@/api";
+import { formatTime } from '@/utils'
+import CommentCard from '@/common/comment-card'
 export default {
   name: 'index',
+  components: {
+    CommentCard,
+  },
   data() {
     return {
-      comment: null,
+      content: null,
       focus: false,
-      content: '',
       currentIndex: 0,
       currentReply: null,
+      comment: null,
       visible: false,
       datermine: false,
       placeholder: '友善发言的人运气不会太差',
@@ -169,7 +160,7 @@ export default {
           console.log(err)
         })
       this.currentIndex = 0
-      this.currentComment = null
+      this.currentReply = null
     },
     addReply() {
       if (this.currentReply) {
@@ -199,12 +190,17 @@ export default {
           console.log(err)
       })
     },
+    toUserInfo(id) {
+      let url = `/pages/user-info/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
   },
   onLoad(option) {
     this.getComment(option.id);
   },
   onUnload() {
-    this.comment = null
+    this.currentComment = null
   }
 }
 </script>
@@ -223,48 +219,6 @@ export default {
   }
   .reply-list {
     margin-bottom: 56px;
-  }
-  .comment,.reply {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    hr {
-      margin-left: 55px;
-    }
-    .last-item {
-      margin: 0;
-    }
-  }
-  .comment-header,.reply-header {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    padding:15px 15px 8px 15px;
-    font-size:12px;
-    align-items:center;
-
-  }
-  .comment-header-info,.reply-header-info {
-    display: flex;
-    align-items: center;
-    image {
-      width: 32px;
-      height: 32px;
-      border-radius: 16px;
-      margin-right: 8px;
-    }
-  }
-  .comment-header-create-time,.reply-header-create-time {
-    font-size: 10px;
-  }
-  .comment-content,.reply-content {
-    padding: 0 15px 10px 55px;
-    color:#495060;
-    font-size:14px;
-    a {
-      display: inline;
-      color: #0084ff;
-    }
   }
   .comment-input {
     position: fixed;

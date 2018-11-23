@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item in keepList" :key="item.id">
-      <activity-card :activity="item.activity" :isDetail="true"></activity-card>
+      <activity-card :activity="item.activity"></activity-card>
     </div>
   </div>
 </template>

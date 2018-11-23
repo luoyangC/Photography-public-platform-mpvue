@@ -3,36 +3,8 @@
     <div class="comment-title">全部评论</div>
     <div class="comment-list" :style="{minHeight: commentsHeight}">
       <div v-if="commentNums == -1" class="no-comment">什么都没有，赶快试着评论一下吧</div>
-      <div v-if="commentNums != -1" class="comment" 
-           v-for="(comment, i) in comments" :key="comment.id" 
-           @click="handleCommentOpen(comment, i)">
-        <div class="comment-header">
-          <div class="comment-header-info">
-            <image :src="comment.user.image" mode="scaleToFill"></image>
-            <div>
-              <p class="comment-header-user-name">{{comment.user.nick_name || '匿名'}}</p>
-              <p class="comment-header-create-time">{{comment.create_time || '2018.11.06'}}</p>
-            </div>
-          </div>
-          <div class="comment-header-extra">
-            <i-icon type="unfold" size="20" />
-          </div>
-        </div>
-        <div class="comment-content">
-          <text class="mui-ellipsis-5">{{comment.content}}</text>
-        </div>
-        <div class="comment-reply" v-if="comment.reply_nums != 0" @click.stop="toCommentDetail(comment.id)">
-          <div class="reply-item" v-for="reply in comment.replies" :key="reply.id">
-            <a>{{reply.from_user.nick_name}}</a>
-            <span v-if="reply.source_link">&nbsp;回复&nbsp;<a>{{reply.to_user.nick_name}}</a></span>
-            <text>：{{reply.content}}</text>
-          </div>
-          <div v-if="comment.reply_nums > 2" class="reply-item">
-            <a>共{{comment.reply_nums}}条回复</a>
-          </div>
-        </div>
-        <hr v-if="i != commentNums">
-        <hr v-else class="last-item">
+      <div class="comment-item" v-for="(comment, index) in comments" :key="comment.id"  @click="handleCommentOpen(comment, index)">
+        <comment-card :comment="comment" :index="index" :commentNums="commentNums" :isCommentList="true"></comment-card>
       </div>
     </div>
     <div class="comment-input" :style="{width: commentWidth}">
@@ -55,12 +27,16 @@
 </template>
 
 <script>
-import { addComment, addReply, delComment } from "../api"
+import { addComment, addReply, delComment } from "@/api"
+import CommentCard from '@/common/comment-card'
 export default {
   name: 'comment-list',
   props: {
     comments: Array,
     activityId: Number,
+  },
+  components: {
+    CommentCard,
   },
   data() {
     return {
@@ -211,11 +187,6 @@ export default {
       this.currentComment = null
       this.placeholder = '友善发言的人运气不会太差'
     },
-    // 跳转到评论详情页面
-    toCommentDetail(id) {
-      let url = `/pages/comment-detail/main?id=${id}`
-      wx.navigateTo({ url })
-    },
     // 获取系统信息
     getSystemInfo() {
       let that = this;
@@ -255,61 +226,6 @@ export default {
     font-size: 14px;
     color: #495060;
     background-color: #f9f9f9;
-  }
-  .comment {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    hr {
-      margin-left: 55px;
-    }
-    .last-item {
-      margin: 0;
-    }
-  }
-  .comment-reply {
-    display: flex;
-    flex-direction: column;
-    background-color: #eee;
-    margin: 0 15px 15px 55px;
-    padding: 5px 10px;
-    color:#495060;
-    font-size:14px;
-    .reply-item {
-      display: flex;
-      flex-direction: row;
-      a {
-        display: inline;
-        color: #0084ff;
-      }
-    }
-  }
-  .comment-header {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    padding:15px 15px 8px 15px;
-    font-size:12px;
-    align-items:center;
-
-  }
-  .comment-header-info {
-    display: flex;
-    align-items: center;
-    image {
-      width: 32px;
-      height: 32px;
-      border-radius: 16px;
-      margin-right: 8px;
-    }
-  }
-  .comment-header-create-time {
-    font-size: 10px;
-  }
-  .comment-content {
-    padding: 0 15px 10px 55px;
-    color:#495060;
-    font-size:14px;
   }
   .comment-input {
     position: fixed;

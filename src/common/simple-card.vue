@@ -71,6 +71,11 @@ export default {
     }
   },
   methods: {
+    toUserInfo(id) {
+      let url = `/pages/user-info/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
+    },
     addFollow() {
       addFollow({follow_id: this.item.id, follow_type: this.item.followType})
         .then((res) => {

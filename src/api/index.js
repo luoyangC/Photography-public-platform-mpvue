@@ -13,8 +13,11 @@ export const getEmailCode = (data) => { return fly.post(`/code/`, data) }
 // 邮箱用户注册
 export const createUserByEmail = (data) => { return fly.post(`/user/`, data) }
 
-// 获取用户信息
+// 获取当前用户信息
 export const getUserInfo = () => { return fly.get('/user/') }
+
+// 获取指定用户信息
+export const getUserInfoById = (id) => { return fly.get(`/user/${id}`) }
 
 // 获取动态列表
 export const getActivity = (params) => { return fly.get(`/activity/`, params) }

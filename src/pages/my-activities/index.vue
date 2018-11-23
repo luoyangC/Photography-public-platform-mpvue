@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="item in activityList" :key="item.id">
-      <activity-card :activity="item" :isDetail="true"></activity-card>
+      <activity-card :activity="item"></activity-card>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     getMyActivity() {
-      getActivity({user: this.$store.state.userInfo.user.id})
+      getActivity({user: this.$store.state.userInfo.id})
         .then((res) => {
           console.log(res)
           this.activityList = res.data

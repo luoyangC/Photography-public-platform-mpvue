@@ -4,19 +4,32 @@ export const formatNumber = (n) => {
 }
 
 export const formatTime = (date) => {
+  let now = new Date()
   date = new Date(date)
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
 
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  const second = date.getSeconds();
+  let now_year = now.getFullYear();
+  let now_month = now.getMonth() + 1;
+  let now_day = now.getDate();
 
-  const t1 = [year, month, day].map(formatNumber).join('/');
-  const t2 = [hour, minute, second].map(formatNumber).join(':');
+  let date_year = date.getFullYear();
+  let date_month = date.getMonth() + 1;
+  let date_day = date.getDate();
 
-  return `${t1} ${t2}`;
+  let date_hour = date.getHours();
+  let date_minute = date.getMinutes();
+
+  if (date_year != now_year) {
+    let t1 = [date_year, date_month, date_day].map(formatNumber).join('/')
+    return `${t1}`
+  }
+  else if (date_month != now_month || date_day != now_day) {
+    let t2 = [date_month, date_day].map(formatNumber).join('/')
+    return `${t2}`
+  }
+  else {
+    let t3 = [date_hour, date_minute].map(formatNumber).join(':');
+    return `${t3}`;
+  }
 }
 
 export const uploadimg = (data) => {

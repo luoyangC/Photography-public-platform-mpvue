@@ -1,7 +1,7 @@
 <template>
   <div class="user-page">
     <div class="user-info">
-      <div v-if="user" class="user-info-card" @click="toUserInfo">
+      <div v-if="user" class="user-info-card" @click="toUserInfo(user.id)">
         <user-card :user="user" ></user-card>
       </div>
       <div v-else class="user-info-button">
@@ -107,8 +107,8 @@ export default {
         .then((res) => {console.log(res)})
         .catch((err) => {console.log(err)})
     },
-    toUserInfo() {
-      let url = `/pages/user-info/main`;
+    toUserInfo(id) {
+      let url = `/pages/user-info/main?id=${id}`;
       console.log(url);
       wx.navigateTo({ url })
     },

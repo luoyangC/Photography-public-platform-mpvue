@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "我的动态列表"
+  "navigationBarTitleText": "我的动态列表",
+  "usingComponents": {
+    "i-icon": "../../../static/iview/icon/index",
+    "i-action-sheet": "../../../static/iview/action-sheet/index"
+  }
 }

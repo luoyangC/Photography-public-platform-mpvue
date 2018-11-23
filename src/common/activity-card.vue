@@ -1,11 +1,11 @@
 <template>
   <div class="a-card"  @click="toActivityDetail(activity.id,false)">
     <div class="a-card-header">
-      <div class="a-card-header-info">
+      <div class="a-card-header-info" @click="toUserInfo(activity.user.id)">
         <image :src="activity.user.image" mode="scaleToFill"></image>
         <div>
-          <p class="a-card-header-user-name">{{activity.user.nick_name || '匿名'}}</p>
-          <p class="a-card-header-create-time">{{formatActivityTime || '2018.11.06'}}</p>
+          <p class="a-card-header-user-name" @click.stop="toUserInfo(activity.user.id)">{{activity.user.nick_name || '匿名'}}</p>
+          <p class="a-card-header-create-time" @click.stop>{{formatActivityTime || '2018.11.06'}}</p>
         </div>
       </div>
       <div v-if="isDetail" class="a-card-header-extra" @click.stop>
@@ -36,8 +36,8 @@
         </div>
       </div>
     </div>
-    <div class="a-card-tag" v-if="activity.topic.title && !topicDetail"  @click.stop="toTopicDetail(activity.topic.id)">
-      <span># {{activity.topic.title}}</span>
+    <div class="a-card-tag" v-if="activity.topic.title && !topicDetail">
+      <span @click.stop="toTopicDetail(activity.topic.id)"># {{activity.topic.title}}</span>
     </div>
     <hr>
     <div class="a-card-footer">
@@ -155,6 +155,11 @@ export default {
         }).catch((err) => {
           console.log(err)
         })
+    },
+    toUserInfo(id) {
+      let url = `/pages/user-info/main?id=${id}`;
+      console.log(url);
+      wx.navigateTo({ url })
     },
     toTopicDetail(id) {
       let url = `/pages/topic-detail/main?id=${id}`;

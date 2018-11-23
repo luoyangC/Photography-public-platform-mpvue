@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       activity: null,
-      comments: [],
+      comments: null,
     }
   },
   methods: {
@@ -49,6 +49,7 @@ export default {
   },
   onUnload() {
     this.activity = null
+    this.comments = null
   }
 }
 </script>

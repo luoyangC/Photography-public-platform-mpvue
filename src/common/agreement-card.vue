@@ -5,11 +5,11 @@
         <image  :src="agreement.user.image"></image>
         <div>
           <p class="a-card-header-user-name">{{agreement.user.nick_name || '匿名'}}</p>
-          <p class="a-card-header-create-time">{{agreement.create_time || '2018.11.06'}}</p>
+          <p class="a-card-header-create-time">{{formatAgreementTime || '2018.11.06'}}</p>
         </div>
       </div>
       <div class="a-card-header-extra">
-        <i class="iconfont">&#xe74a;</i>
+        <i-icon type="unfold" size="20" />
       </div>
     </div>
     <div class="a-card-tag">
@@ -22,16 +22,28 @@
     </div>
     <hr>
     <div class="a-card-footer">
-      <span><i class="iconfont">&#xe610;</i>&nbsp;{{agreement.address.city}}</span>
-      <span><i class="iconfont">&#xe70c;</i>&nbsp;{{agreement.comment_nums}}</span>
-      <span><i class="iconfont">&#xe614;</i>&nbsp;{{agreement.send_nums}}</span>
-      <span><i class="iconfont">&#xe710;</i></span>
+      <div>
+        <i-icon size="20" type="coordinates" />
+        <span>&nbsp;{{agreement.address.city}}</span>
+      </div>
+      <div>
+        <i-icon size="20" type="interactive"/>
+        <span>&nbsp;{{agreement.comment_nums}}</span>
+      </div>
+      <div>
+        <i-icon size="20" type="send" />
+        <span>&nbsp;{{agreement.send_nums}}</span>
+      </div>
+      <div>
+        <i-icon size="20" type="more" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import ImageList from './image-list'
+import { formatTime } from '../utils'
 export default {
   name: 'agreement-card',
   components: {
@@ -48,6 +60,9 @@ export default {
       else if (this.agreement.agreement_type == 'toll') {
         return '需要收费'
       }
+    },
+    formatAgreementTime() {
+      return formatTime(this.agreement.create_time)
     }
   }
 }

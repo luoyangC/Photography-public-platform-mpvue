@@ -2,6 +2,7 @@
   "navigationBarTitleText": "评论详情",
   "usingComponents": {
     "i-action-sheet": "../../../static/iview/action-sheet/index",
-    "i-icon": "../../../static/iview/icon/index"
+    "i-icon": "../../../static/iview/icon/index",
+    "i-modal": "../../../static/iview/modal/index"
   }
 }

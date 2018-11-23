@@ -9,15 +9,19 @@
       </div>
     </div>
     <div class="swiper-content">
-      <swiper class="content" duration="500" :style="{height:contentHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
+      <swiper class="content" duration="500" :style="{height:swiperHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
         <swiper-item>
           <div>
-            <simple-card :followTopic="topic" v-for="topic in followTopic" :key="topic.id"></simple-card>
+            <scroll-view scroll-y :style="{height:scrollHeight}">
+              <simple-card :followTopic="topic" v-for="topic in followTopic" :key="topic.id"></simple-card>
+            </scroll-view>
           </div>
         </swiper-item>
         <swiper-item>
           <div>
-            <simple-card :followUser="user" v-for="user in followUser" :key="user.id"></simple-card>
+            <scroll-view scroll-y :style="{height:scrollHeight}">
+              <simple-card :followUser="user" v-for="user in followUser" :key="user.id"></simple-card>
+            </scroll-view>
           </div>
         </swiper-item>
       </swiper>
@@ -38,12 +42,16 @@ export default {
       followUser: [],
       followTopic: [],
       activeIndex: 0,
+      windowHeight: 0,
     }
   },
   computed: {
-    contentHeight() {
-      return this.$store.state.systemInfo.windowHeight + "px";
+    swiperHeight() {
+      return this.windowHeight + "px";
     },
+    scrollHeight() {
+      return this.windowHeight - 50 + "px";
+    }
   },
   methods: {
     getFollowList() {
@@ -72,8 +80,16 @@ export default {
     onAnimationFinish() {
       console.log("滑动完成.....")
     },
+    getSystemInfo() {
+      wx.getSystemInfo({
+        success: (res) => {
+          this.windowHeight = res.windowHeight
+          }
+      })
+    },
   },
   onLoad() {
+    this.getSystemInfo()
     this.getFollowList()
     console.log(this.$store.state.systemInfo)
   }
@@ -121,40 +137,5 @@ export default {
     padding-top: 50px;
     background-color: #f9f9f9;
     -webkit-overflow-scrolling: touch;
-  }
-  .a-input {
-    display: flex;
-    flex-direction: column;
-    padding:7px 15px;
-    color:#495060;
-    box-sizing:border-box;
-    border:0 solid #e9eaec;
-    border-bottom-width:1px;
-    left:15px;
-    right:0;
-    .a-input-err {
-      color: red;
-      font-size: 12px;
-    }
-    .a-input-model {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      .a-input-title {
-        color:#495060;
-        min-width:65px;
-        font-size: 14px;
-        padding-right:10px
-      }
-      .a-input-input {
-        flex:1;
-        line-height:1.6;
-        padding:4px 0;
-        min-height:22px;
-        height:auto;
-        font-size:14px
-      }
-    }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="thumb" v-if="user">
+  <div v-if="user">
+    <div class="user-thumb">
       <img class="image-back" :src="user.image" mode='aspectFill'>
       <div class="image-before"></div>
       <div class="user-detail">
@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="user-name">{{user.nick_name}}</div>
-        <div class="user-info">{{user.simple_info}}</div>
+        <div class="user-info">{{user.simple_info || "该用户很懒，什么也没留下"}}</div>
         <div class="user-tags">
           <m-tag text="男" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
           <m-tag text="摄影师" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
@@ -28,7 +28,7 @@
         <div class="nums-item">关注我的人</div>
       </div>
     </div>
-    <div class="nav-bar">
+    <div class="nav-bar" :class="{isTop:isTop}">
       <div :id="0" class="nav-bar-item" @click="tabClick">
         <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==0}">发布</div>
       </div>
@@ -37,15 +37,25 @@
       </div>
     </div>
     <div class="swiper-content">
-      <swiper class="content" duration="500" :style="{height:contentHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
+      <swiper class="content" duration="500" :style="{height:swiperHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
         <swiper-item>
-          <div>
-            发布内容
+          <div class="user-activity">
+            <i-panel title="用户动态">
+              <scroll-view :scroll-y="isScroll" :style="{height:scrollHeight}" @scrolltoupper="onLiveBottom">
+                <activity-card :activity="activity" v-for="activity in activityList" :key="activity.id"></activity-card>
+              </scroll-view>
+            </i-panel>
           </div>
         </swiper-item>
         <swiper-item>
-          <div>
-            回复内容
+          <div class="user-archive">
+            <i-panel title="基础信息">
+              <i-input :value="user.gender" title="性别" disabled />
+              <i-input :value="user.birthday" title="星座" disabled />
+              <i-input :value="user.simple_info" title="签名" disabled />
+              <i-input :value="user.address" title="所在地" disabled />
+              <i-input :value="user.approve" title="认证类型" disabled />
+            </i-panel>
           </div>
         </swiper-item>
       </swiper>
@@ -54,21 +64,64 @@
 </template>
 
 <script>
+import ActivityCard from "../../common/activity-card";
+import { getActivity, getUserInfoById } from '@/api'
 export default {
   name: 'index',
+  components: {
+    ActivityCard,
+  },
   data() {
     return {
       user: null,
+      isTop: false,
+      isScroll: false,
       activeIndex: 0,
+      windowHeight: 0,
+      activityList: null,
       style: 'background:rgba(250,76,69, 0.5);border-radius:66rpx;color:#fff;min-width:0;margin-left:8px;'
     }
   },
   computed: {
-    contentHeight() {
-      return this.$store.state.systemInfo.windowHeight + "px";
+    swiperHeight() {
+      return this.windowHeight - 50 + "px";
     },
+    scrollHeight() {
+      return this.windowHeight - 94 + "px";
+    }
   },
   methods: {
+    onLiveBottom() {
+      this.isTop = false
+      this.isScroll = false
+    },
+    getUserInfo(id) {
+      getUserInfoById(id)
+        .then((res) => {
+          console.log(res)
+          this.user = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getSystemInfo() {
+      wx.getSystemInfo({
+        success: (res) => {
+          this.windowHeight = res.windowHeight
+          }
+      })
+    },
+    getActivity(id) {
+      getActivity({user: id})
+        .then((res) => {
+          console.log(res)
+          this.activityList = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     tabClick(e) {
       this.activeIndex = e.currentTarget.id;
     },
@@ -80,16 +133,38 @@ export default {
       console.log("滑动完成.....")
     },
   },
-  onShow() {
-    this.user = this.$store.state.userInfo
+  onLoad(option) {
+    this.getSystemInfo()
+    this.getUserInfo(option.id)
+    this.getActivity(option.id)
   },
+  onUnload() {
+    this.user = null
+    this.activityList = null
+  },
+  onReachBottom() {
+    console.log('down')
+    this.isTop = true
+    this.isScroll = true
+  },
+  // onPageScroll(e) {
+  //   console.log(e)
+  //   if (e.scrollTop > 295) {
+  //     this.isTop = true
+  //     this.isScroll = true
+  //   }
+  //   else {
+  //     this.isTop = false
+  //     this.isScroll = false
+  //   }
+  // }
 }
 </script>
 
 <style lang="scss" scoped>
-  .thumb{
+  .user-thumb{
     width:100%;
-    height:550rpx;
+    height:300px;
     overflow:hidden;
     position: relative;
     .image-back{
@@ -99,7 +174,7 @@ export default {
     .image-before {
         position: absolute;
         width:100%;
-        height:550rpx;
+        height:300px;
         left:0;
         top:0;
         background-color: rgba($color: #000, $alpha: 0.2)
@@ -159,6 +234,9 @@ export default {
       color:white;
     }
   }
+  .isTop {
+    border-radius:0 !important;
+    }
   .nav-bar {
     display: -webkit-box;
     display: -webkit-flex;
@@ -200,8 +278,10 @@ export default {
   }
   .content {
     box-sizing: border-box;
-    padding-top: 50px;
     background-color: #f9f9f9;
     -webkit-overflow-scrolling: touch;
+  }
+  .user-archive {
+    padding: 0, 15px;
   }
 </style>
