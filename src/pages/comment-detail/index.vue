@@ -21,8 +21,8 @@
       <comment-card :comment="comment"></comment-card>
     </div>
     <div class="reply-title">全部回复</div>
-    <div class="reply-list" v-if="comment.replies">
-      <div class="reply-item" v-for="(reply,index) in comment.replies" :key="reply.id" @click="handleCommentOpen(reply, index)">
+    <div class="reply-list" v-if="replyList">
+      <div class="reply-item" v-for="(reply,index) in replyList" :key="reply.id" @click="handleCommentOpen(reply, index)">
         <comment-card :reply="reply" :index="index" :commentNums="replyNums"></comment-card>
       </div>
     </div>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { getCommentById, addReply, delReply } from "@/api";
+import { getCommentById, addReply, delReply, getReply } from "@/api";
 import { formatTime } from '@/utils'
 import CommentCard from '@/common/comment-card'
 export default {
@@ -65,6 +65,7 @@ export default {
       datermine: false,
       placeholder: '友善发言的人运气不会太差',
       actionType: false,
+      replyList: null,
     }
   },
   computed: {
@@ -76,8 +77,8 @@ export default {
       }
     },
     replyNums() {
-      if (this.comment) {
-        return this.comment.replies.length - 1
+      if (this.replyList) {
+        return this.replyList.length - 1
       } else {
         return 0
       }
@@ -154,26 +155,25 @@ export default {
     delReply() {
       delReply(this.currentReply.id)
         .then((res) => {
-          this.comment.replies.pop(this.currentReply)
-          console.log(res)
+          this.replyList.splice(this.currentIndex, 1)
+          this.currentIndex = 0
+          this.currentReply = null
         }).catch((err) => {
           console.log(err)
         })
-      this.currentIndex = 0
-      this.currentReply = null
     },
     addReply() {
       if (this.currentReply) {
         addReply({content:this.content, to_user_id:this.currentReply.from_user.id, comment:this.comment.id, source_link:this.currentReply.id})
           .then((res) => {
-            this.comment.replies.push(res.data)
+            this.replyList.push(res.data)
           }).catch((err) => {
             console.log(err)
           })
       } else {
         addReply({content:this.content,comment:this.comment.id,to_user_id:this.comment.user.id})
           .then((res) => {
-            this.comment.replies.push(res.data)
+            this.replyList.push(res.data)
           }).catch((err) => {
             console.log(err)
           })
@@ -182,6 +182,17 @@ export default {
       this.currentReply = null
       this.placeholder = '友善发言的人运气不会太差'
     },
+    // 获取评论回复
+    getCommentReply(id) {
+      getReply({comment: id})
+        .then((res) => {
+          this.replyList = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    // 获取评论详情
     getComment(id) {
       getCommentById(id)
         .then((res) => {
@@ -192,15 +203,17 @@ export default {
     },
     toUserInfo(id) {
       let url = `/pages/user-info/main?id=${id}`;
-      console.log(url);
       wx.navigateTo({ url })
     },
   },
   onLoad(option) {
     this.getComment(option.id);
+    this.getCommentReply(option.id)
   },
   onUnload() {
     this.currentComment = null
+    this.comment = null
+    this.replyList = null
   }
 }
 </script>

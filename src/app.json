@@ -12,6 +12,7 @@
     "pages/email/main",
     "pages/comment-detail/main",
     "pages/activity-detail/main",
+    "pages/agreement-detail/main",
     "pages/topic-detail/main",
     "pages/my-activities/main",
     "pages/my-follows/main",

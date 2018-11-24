@@ -14,7 +14,7 @@
               <p class="reply-header-create-time" @click.stop>{{formatCommentTime}}</p>
             </div>
           </div>
-          <div class="comment-header-extra">
+          <div class="comment-header-extra" @click.stop="getParent">
             <i-icon type="unfold" size="20" />
           </div>
         </div>
@@ -27,14 +27,14 @@
             <text>{{reply.content}}</text>
           </div>
         </div>
-        <div class="comment-reply" v-if="comment && isCommentList && comment.reply_nums != 0" @click.stop="toCommentDetail(comment.id)">
-          <div class="reply-item" v-for="reply in comment.replies" :key="reply.id">
+        <div class="comment-reply" v-if="comment && isCommentList && replytNums != 0" @click.stop="toCommentDetail(comment.id)">
+          <div class="reply-item" v-for="reply in replies" :key="reply.id">
             <a @click.stop="toUserInfo(reply.from_user.id)">{{reply.from_user.nick_name}}</a>
             <span v-if="reply.source_link">&nbsp;回复&nbsp;<a @click.stop="toUserInfo(reply.to_user.id)">{{reply.to_user.nick_name}}</a></span>
             <text>：{{reply.content}}</text>
           </div>
-          <div v-if="comment.reply_nums > 2" class="reply-item">
-            <a>共{{comment.reply_nums}}条回复</a>
+          <div v-if="replytNums > 2" class="reply-item">
+            <a>共{{replytNums}}条回复</a>
           </div>
         </div>
         <hr v-if="index != commentNums">
@@ -45,6 +45,7 @@
 
 <script>
 import { formatTime } from '../utils'
+import { getReply } from '../api';
 export default {
   name: "comment-card",
   props: {
@@ -54,8 +55,13 @@ export default {
     commentNums: Number,
     isCommentList: Boolean,
   },
+  data() {
+    return {
+      replyList: null
+    }
+  },
   computed: {
-    //格式化
+    // 格式化时间
     formatCommentTime() {
       if (this.comment) {
         return formatTime(this.comment.create_time)
@@ -63,9 +69,38 @@ export default {
       else if (this.reply) {
         return formatTime(this.reply.create_time)
       }
+    },
+    replytNums() {
+      if (this.replyList) {
+        return this.replyList.length
+      }
+    },
+    replies() {
+      if (this.replytNums > 2) {
+        return this.replyList.slice(0, 2)
+      }
+      else {
+        return this.replyList
+      }
     }
   },
   methods: {
+    // 添加回复，由父组件调用
+    addCommentReply(data) {
+      if (data) {
+        this.replyList.push(data)
+      }
+    },
+    // 获取评论回复
+    getCommentReply() {
+      getReply({comment: this.comment.id})
+        .then((res) => {
+          this.replyList = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     // 跳转到用户详情页面
     toUserInfo(id) {
       let url = `/pages/user-info/main?id=${id}`
@@ -77,6 +112,11 @@ export default {
       wx.navigateTo({ url })
     },
   },
+  onLoad() {
+    if (this.isCommentList) {
+      this.getCommentReply()
+    }
+  }
 }
 </script>
 

@@ -3,8 +3,8 @@
     <div class="comment-title">全部评论</div>
     <div class="comment-list" :style="{minHeight: commentsHeight}">
       <div v-if="commentNums == -1" class="no-comment">什么都没有，赶快试着评论一下吧</div>
-      <div class="comment-item" v-for="(comment, index) in comments" :key="comment.id"  @click="handleCommentOpen(comment, index)">
-        <comment-card :comment="comment" :index="index" :commentNums="commentNums" :isCommentList="true"></comment-card>
+      <div class="comment-item" v-for="(comment, index) in comments" :key="comment.id" @click="handleCommentOpen(comment, index)">
+        <comment-card :comment="comment" :index="index" :commentNums="commentNums" :isCommentList="true" ref="comment"></comment-card>
       </div>
     </div>
     <div class="comment-input" :style="{width: commentWidth}">
@@ -34,6 +34,7 @@ export default {
   props: {
     comments: Array,
     activityId: Number,
+    agreementId: Number,
   },
   components: {
     CommentCard,
@@ -82,6 +83,9 @@ export default {
     }
   },
   methods: {
+    getChild (){
+         console.log(this.$refs.comment)
+     },
     // 关闭确认对话框，判断是否确认，若确认则调用添加评论或者回复接口
     handleDatermineClose(e) {
       this.datermine = false
@@ -157,34 +161,51 @@ export default {
     delComment() {
       delComment(this.currentComment.id)
         .then((res) => {
-          this.comments.pop(this.currentComment)
-          console.log(res)
+          this.comments.splice(this.currentIndex, 1)
+          this.currentIndex = 0
+          this.currentComment = null
         }).catch((err) => {
           console.log(err)
         })
-      this.currentIndex = 0
-      this.currentComment = null
     },
     // 添加评论或者回复
     addCommentOrReply() {
       if (this.currentComment) {
         addReply({content:this.content,comment:this.currentComment.id,to_user_id:this.currentComment.user.id})
           .then((res) => {
-            this.comments[this.currentIndex].replies.push(res.data)
+            // 调用子组件的添加回复函数，将API的返回数据传入子组件
+            this.$refs.comment[this.currentIndex].addCommentReply(res.data)
+            this.currentIndex = 0
+            this.currentComment = null
           }).catch((err) => {
             console.log(err)
           })
       } else {
-        addComment({content:this.content,activity:this.activityId})
-          .then((res) => {
-            this.comments.push(res.data)
-          }).catch((err) => {
-            console.log(err)
-          })
+        if (this.activityId) {
+          addComment({content:this.content,activity:this.activityId})
+            .then((res) => {
+              this.comments.push(res.data)
+              this.currentIndex = 0
+              this.currentComment = null
+            }).catch((err) => {
+              console.log(err)
+            })
+        }
+        else if (this.agreementId) {
+          addComment({content:this.content,agreement:this.agreementId})
+            .then((res) => {
+              this.comments.push(res.data)
+              this.currentIndex = 0
+              this.currentComment = null
+            }).catch((err) => {
+              console.log(err)
+            })
+        }
+        else {
+          console.log('err')
+        }
       }
       this.content = ''
-      this.currentIndex = 0
-      this.currentComment = null
       this.placeholder = '友善发言的人运气不会太差'
     },
     // 获取系统信息

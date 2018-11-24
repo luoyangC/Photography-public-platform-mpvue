@@ -1,5 +1,5 @@
 <template>
-  <div class="a-card">
+  <div class="a-card" @click="toAgreementDetail(agreement.id)">
     <div class="a-card-header">
       <div class="a-card-header-info">
         <image  :src="agreement.user.image"></image>
@@ -50,7 +50,8 @@ export default {
     ImageList,
   },
   props: {
-    agreement: Object
+    agreement: Object,
+    isDetail: Boolean,
   },
   computed: {
     getType() {
@@ -64,7 +65,13 @@ export default {
     formatAgreementTime() {
       return formatTime(this.agreement.create_time)
     }
-  }
+  },
+  methods: {
+    toAgreementDetail(id) {
+      let url = `/pages/agreement-detail/main?id=${id}`
+      wx.navigateTo({ url })
+    },
+  },
 }
 </script>
 

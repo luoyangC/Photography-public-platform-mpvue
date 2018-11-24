@@ -34,6 +34,9 @@ export const delActivity = (id) => { return fly.delete(`/activity/${id}/`) }
 // 获取约拍列表
 export const getAgreement = () => { return fly.get(`/agreement/`) }
 
+// 获取约拍详情
+export const getAgreementById = (id) => { return fly.get(`/agreement/${id}`) }
+
 // 获取评论列表
 export const getComment = (params) => { return fly.get(`/comment/`, params) }
 
@@ -45,6 +48,9 @@ export const addComment = (data) => { return fly.post(`/comment/`, data) }
 
 // 删除评论接口
 export const delComment = (id) => { return fly.delete(`/comment/${id}/`) }
+
+// 获取回复列表
+export const getReply = (params) => { return fly.get(`/reply/`, params) }
 
 // 添加回复接口
 export const addReply = (data) => { return fly.post(`/reply/`, data) }

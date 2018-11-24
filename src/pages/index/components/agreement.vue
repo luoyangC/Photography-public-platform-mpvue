@@ -12,7 +12,7 @@ import { getAgreement } from "@/api/index"
 export default {
   name: 'agreement',
   props: {
-    winHeight: Number
+    winHeight: Number,
   },
   components: {
     AgreementCard,
