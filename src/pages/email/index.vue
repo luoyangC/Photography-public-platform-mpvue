@@ -122,31 +122,24 @@ export default {
     login() {
       loginEmail({username:this.email, password: this.password})
         .then((res) => {
-          let token = res.data.token;
-          this.$store.commit('SET_INFO', {token:token, user:''});
-          console.log(token);
-          wx.setStorageSync("token", token);
-          getUserInfo().then((res) => {
-              let user = res.data;
-              let token = wx.getStorageSync('token') || '';
-              this.$store.commit('SET_INFO', {token:token, user:user});
-              wx.setStorageSync("user",res.data);
-              console.log('get user info is success')
+          wx.setStorage({key:'token', data:res.data.token, success: () => {
+            getUserInfo({self:2}).then((res) => {
+              this.$store.commit('SET_INFO', res.data[0])
+              wx.switchTab({ url: '/pages/user/main' })
             }).catch((err) => {
               console.log(err)
-          });
-          wx.switchTab({ url: '/pages/index/main' });
+            })
+          }})
         }).catch((err) => {
-          console.log('err');
-          console.log(err);
           this.errMessage = err
+          console.log(err)
       });
     },
     tabClick(e) {
-      this.activeIndex = e.currentTarget.id;
+      this.activeIndex = e.currentTarget.id
     },
     swiperChange(e) {
-      this.activeIndex = e.mp.detail.current;
+      this.activeIndex = e.mp.detail.current
     },
     // 滑动完成的回调函数
     onAnimationFinish() {

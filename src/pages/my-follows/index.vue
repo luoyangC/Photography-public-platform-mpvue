@@ -13,14 +13,18 @@
         <swiper-item>
           <div>
             <scroll-view scroll-y :style="{height:scrollHeight}">
-              <simple-card :followTopic="topic" v-for="topic in followTopic" :key="topic.id"></simple-card>
+              <div class="topic-item" v-for="followTopic in followTopicList" :key="followTopic.id" @click="toTopicDetail(followTopic.follow.id)">
+                <simple-card :followTopic="followTopic"></simple-card>
+              </div>
             </scroll-view>
           </div>
         </swiper-item>
         <swiper-item>
           <div>
             <scroll-view scroll-y :style="{height:scrollHeight}">
-              <simple-card :followUser="user" v-for="user in followUser" :key="user.id"></simple-card>
+              <div class="user-item" v-for="followUser in followUserList" :key="followUser.id" @click="toUserInfo(followUser.follow.id)">
+                <simple-card :followUser="followUser"></simple-card>
+              </div>
             </scroll-view>
           </div>
         </swiper-item>
@@ -39,8 +43,8 @@ export default {
   },
   data() {
     return {
-      followUser: [],
-      followTopic: [],
+      followUserList: [],
+      followTopicList: [],
       activeIndex: 0,
       windowHeight: 0,
     }
@@ -58,14 +62,14 @@ export default {
       getFollow({follow_type: 'user'})
         .then((res) => {
           console.log(res)
-          this.followUser = res.data
+          this.followUserList = res.data
         }).catch((err) => {
           console.log(err)
         })
       getFollow({follow_type: 'topic'})
         .then((res) => {
           console.log(res)
-          this.followTopic = res.data
+          this.followTopicList = res.data
         }).catch((err) => {
           console.log(err)
         })
@@ -79,6 +83,14 @@ export default {
     // 滑动完成的回调函数
     onAnimationFinish() {
       console.log("滑动完成.....")
+    },
+    toUserInfo(id) {
+      let url = `/pages/user-info/main?id=${id}`
+      wx.navigateTo({ url })
+    },
+    toTopicDetail(id) {
+      let url = `/pages/topic-detail/main?id=${id}`
+      wx.navigateTo({ url })
     },
     getSystemInfo() {
       wx.getSystemInfo({

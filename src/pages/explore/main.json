@@ -4,6 +4,8 @@
   "usingComponents": {
     "i-input": "../../../static/iview/input/index",
     "i-card": "../../../static/iview/card/index",
+    "i-icon": "../../../static/iview/icon/index",
+    "i-action-sheet": "../../../static/iview/action-sheet/index",
     "m-search": "../../../static/minui/wxc-search/dist/index"
   }
 }

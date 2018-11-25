@@ -13,8 +13,8 @@ export const getEmailCode = (data) => { return fly.post(`/code/`, data) }
 // 邮箱用户注册
 export const createUserByEmail = (data) => { return fly.post(`/user/`, data) }
 
-// 获取当前用户信息
-export const getUserInfo = () => { return fly.get('/user/') }
+// 获取用户信息
+export const getUserInfo = (params) => { return fly.get('/user/', params) }
 
 // 获取指定用户信息
 export const getUserInfoById = (id) => { return fly.get(`/user/${id}`) }
@@ -32,7 +32,7 @@ export const addActivity = (data) => { return fly.post(`/activity/`, data) }
 export const delActivity = (id) => { return fly.delete(`/activity/${id}/`) }
 
 // 获取约拍列表
-export const getAgreement = () => { return fly.get(`/agreement/`) }
+export const getAgreement = (params) => { return fly.get(`/agreement/`, params) }
 
 // 获取约拍详情
 export const getAgreementById = (id) => { return fly.get(`/agreement/${id}`) }
@@ -59,7 +59,7 @@ export const addReply = (data) => { return fly.post(`/reply/`, data) }
 export const delReply = (id) => { return fly.delete(`/reply/${id}/`) }
 
 // 获取主题接口
-export const getTopic = () => { return fly.get(`/topic/`) }
+export const getTopic = (params) => { return fly.get(`/topic/`, params) }
 
 // 获取主题详情接口
 export const getTopicById = (id) => { return fly.get(`/topic/${id}`) }

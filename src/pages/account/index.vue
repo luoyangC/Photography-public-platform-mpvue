@@ -40,15 +40,11 @@ export default {
     },
     handleClose(e) {
       if ( e.mp.type == 'ok' ) {
-        wx.removeStorageSync('token');
-        wx.removeStorageSync('user');
-        this.$store.commit('SET_INFO', {
-          token: '',
-          user: ''
-        });
-        wx.switchTab({ url: '/pages/user/main' });
+        wx.removeStorageSync('token')
+        this.$store.commit('SET_INFO', null)
+        wx.switchTab({ url: '/pages/user/main' })
       }
-      this.visible = false;
+      this.visible = false
     },
   }
 }

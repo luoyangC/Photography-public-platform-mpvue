@@ -7,3 +7,6 @@ export const systemInfo = (state) => {
 export const curTopic = (state) => {
   return state.curTopic
 }
+export const location = (state) => {
+  return state.location
+}

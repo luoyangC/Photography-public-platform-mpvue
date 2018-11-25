@@ -10,5 +10,8 @@ export default {
   },
   [types.SET_TOPIC] (state, data) {
     state.curTopic = data
+  },
+  [types.SET_LOCATION] (state, data) {
+    state.location = data
   }
 }

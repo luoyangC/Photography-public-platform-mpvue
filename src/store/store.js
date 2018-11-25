@@ -10,11 +10,13 @@ Vue.use(Vuex);
 const userInfo = null
 const systemInfo = null
 const curTopic = null
+const location = null
 
 const state = {
   userInfo,
   systemInfo,
   curTopic,
+  location,
 }
 
 export default new Vuex.Store({

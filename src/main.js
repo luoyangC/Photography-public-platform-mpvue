@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import App from '@/App';
 
-import '../static/css/WeUi.css'
 import store from './store/store'
 
 

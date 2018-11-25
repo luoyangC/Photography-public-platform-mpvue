@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { getActivity, loginWeixin } from "../../api/index";
+import { getActivity, loginWeixin, getUserInfo } from "../../api/index";
 import UserCard from './components/card'
 
 export default {
@@ -75,25 +75,30 @@ export default {
       this.night = !this.night
     },
     handleClick(e) {
-      this.visible = false;
+      this.visible = false
       if ( e.mp.type == 'ok' ) {
         wx.login({ success: (res) => {
-          const code = res.code;
+          const code = res.code
           wx.getUserInfo({ success: (res) => {
-            const encryptedData = res.encryptedData;
-            const iv = res.iv;
+            const iv = res.iv
+            const encryptedData = res.encryptedData
             loginWeixin({code:code, encryptedData:encryptedData, iv:iv})
               .then((res) => {
-                console.log(res);
-                this.user = res.data.userInfo;
-                wx.setStorage({key:"token", data:res.data.token});
-                wx.setStorage({key:"user", data:res.data.userInfo})
-                this.$store.commit('SET_INFO', {token:res.data.token, user:res.data.userInfo});
+                let token = res.data.token
+                wx.setStorage({key:"token", data:token, success: () => {
+                  getUserInfo({self:2}).then((res) => {
+                    this.user = res.data[0]
+                    this.$store.commit('SET_INFO', res.data[0])
+                    console.log('get user info is success')
+                    }).catch((err) => {
+                      console.log(err)
+                    })
+                }})
               })
-            } });
+            } })
           }})
       } else {
-        console.log(e);
+        console.log(e)
         wx.navigateTo({
           url: '/pages/email/main'
         })
@@ -108,7 +113,7 @@ export default {
         .catch((err) => {console.log(err)})
     },
     toUserInfo(id) {
-      let url = `/pages/user-info/main?id=${id}`;
+      let url = `/pages/user-info/main?id=${id}`
       console.log(url);
       wx.navigateTo({ url })
     },

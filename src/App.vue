@@ -11,11 +11,36 @@ export default {
           }
       })
     },
+    // 获取用户信息
     getUserInfo() {
-      getUserInfo().then((res) => {
+      getUserInfo({self:2}).then((res) => {
         console.log(res)
-        this.$store.commit('SET_INFO', res.data)
+        this.$store.commit('SET_INFO', res.data[0])
         }).catch((err) => {console.log(err)})
+    },
+    // 获取定位信息
+    // DRF3LymHPGDm78IgIifgHqzH9t7ItZBM
+    getLocation() {
+      wx.getLocation({
+      type: 'wgs84',
+      success: (res) => {
+        console.log(res)
+        wx.request({
+          url: 'http://api.map.baidu.com/geocoder/v2/',
+          data: {
+            ak: 'DRF3LymHPGDm78IgIifgHqzH9t7ItZBM',
+            location: `${res.latitude},${res.longitude}`,
+            output: 'json',
+          },
+          success: (res) => {
+            if (res.data.status == 0) {
+              let add = res.data.result.addressComponent
+              this.$store.commit('SET_LOCATION', [add.province, add.city, add.district])
+            }
+          }
+        })
+      }
+      })
     }
   },
   created() {
@@ -24,10 +49,9 @@ export default {
     logs.unshift(Date.now());
     wx.setStorageSync('logs', logs);
     console.log('app created and cache logs by setStorageSync');
-    // 获取系统信息，写入vuex
     this.getSystemInfo()
-    // 获取用户信息，写入vuex
     this.getUserInfo()
+    this.getLocation()
   },
 };
 </script>

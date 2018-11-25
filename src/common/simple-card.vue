@@ -7,7 +7,7 @@
         </div>
         <div class="simple-card-content">
           <p class="simple-card-title">{{item.title || ''}}</p>
-          <P class="simple-card-info">{{item.info || ''}}</P>
+          <P class="simple-card-info">{{item.info || '该用户很懒，什么都没留下'}}</P>
         </div>
       </div>
       <div class="simple-card-extra">
@@ -27,6 +27,7 @@ export default {
     followTopic: Object,
     followUser: Object,
     topic: Object,
+    user: Object,
   },
   data() {
     return {
@@ -66,6 +67,17 @@ export default {
           info: topic.info,
           followId: topic.is_follow,
           followType: 'topic'
+        }
+      }
+      else if (this.user) {
+        let user = this.user
+        this.item = {
+          id: user.id,
+          title: user.nick_name,
+          image: user.image,
+          info: user.simple_info,
+          followId: user.is_follow,
+          followType: 'user'
         }
       } 
     }
