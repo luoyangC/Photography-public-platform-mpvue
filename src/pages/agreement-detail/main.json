@@ -3,6 +3,7 @@
   "usingComponents": {
     "i-modal": "../../../static/iview/modal/index",
     "i-icon": "../../../static/iview/icon/index",    
+    "i-message": "../../../static/iview/message/index",
     "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

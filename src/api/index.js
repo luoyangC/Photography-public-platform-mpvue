@@ -35,7 +35,7 @@ export const delActivity = (id) => { return fly.delete(`/activity/${id}/`) }
 export const getAgreement = (params) => { return fly.get(`/agreement/`, params) }
 
 // 获取约拍详情
-export const getAgreementById = (id) => { return fly.get(`/agreement/${id}`) }
+export const getAgreementById = (id) => { return fly.get(`/agreement/${id}/`) }
 
 // 获取评论列表
 export const getComment = (params) => { return fly.get(`/comment/`, params) }
@@ -86,4 +86,13 @@ export const getFollow = (params) => { return fly.get(`/follow/`, params) }
 export const addFollow = (data) => { return fly.post(`/follow/`, data) }
 
 // 取消关注接口
-export const delFollow = (id) => { return fly.delete(`/follow/${id}`) }
+export const delFollow = (id) => { return fly.delete(`/follow/${id}/`) }
+
+// 获取消息接口
+export const getMessage = (params) => { return fly.get(`/message/`, params) }
+
+// 发送消息接口
+export const addMessage = (data) => { return fly.post(`/message/`, data) }
+
+// 更新消息接口
+export const upMessage = (id, data) => { return fly.put(`/message/${id}/`, data) }

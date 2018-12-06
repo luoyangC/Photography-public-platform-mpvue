@@ -8,6 +8,8 @@
     "i-modal": "../../../static/iview/modal/index",
     "i-button": "../../../static/iview/button/index",
     "i-cell-group": "./../../static/iview/cell-group/index",
+    "i-message": "../../../static/iview/message/index",
+    "i-badge": "../../../static/iview/badge/index",
     "i-cell": "./../../static/iview/cell/index"
   }
 }

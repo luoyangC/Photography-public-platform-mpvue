@@ -13,5 +13,11 @@ export default {
   },
   [types.SET_LOCATION] (state, data) {
     state.location = data
+  },
+  [types.SET_WEBSOCKET] (state, data) {
+    state.webSocket = data
+  },
+  [types.SET_MSGNUMS] (state, data) {
+    state.msgNums = data
   }
 }

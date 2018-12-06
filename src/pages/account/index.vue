@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="cell-group">
       <i-cell-group>
         <i-cell title="当前登录模式" label="微信登录">

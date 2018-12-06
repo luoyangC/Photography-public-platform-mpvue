@@ -1,5 +1,8 @@
 <template>
   <div class="user-page">
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="user-info">
       <div v-if="user" class="user-info-card" @click="toUserInfo(user.id)">
         <user-card :user="user" ></user-card>
@@ -20,14 +23,15 @@
           <i-cell title="我的收藏" is-link url="/pages/my-keeps/main">
             <i slot="icon" class="iconfont">&#xe6ca;</i>
           </i-cell>
-          <i-cell title="我的动态" is-link url="/pages/my-activities/main">
+           <i-cell title="我的邀请" is-link url="/pages/my-invites/main">
             <i slot="icon" class="iconfont">&#xe607;</i>
           </i-cell>
-          <i-cell title="我的回复" is-link url="/pages/replies/main">
+          <i-cell title="我的回复" is-link url="/pages/my-replies/main">
             <i slot="icon" class="iconfont">&#xe6b8;</i>
           </i-cell>
           <i-cell title="我的通知" is-link url="/pages/my-messages/main">
             <i slot="icon" class="iconfont">&#xe637;</i>
+            <div slot="footer" class="message-footer" v-if="messageNums">{{messageNums}}</div>
           </i-cell>
         </i-cell-group>
       </div>
@@ -53,7 +57,8 @@
 </template>
 
 <script>
-import { getActivity, loginWeixin, getUserInfo } from "../../api/index";
+import { getActivity, loginWeixin, getUserInfo } from "@/api";
+import { toUserDetail } from '@/router'
 import UserCard from './components/card'
 
 export default {
@@ -65,6 +70,7 @@ export default {
       visible: false,
       user: null,
       night: false,
+      messageNums: 0,
     }
   },
   methods: {
@@ -113,13 +119,12 @@ export default {
         .catch((err) => {console.log(err)})
     },
     toUserInfo(id) {
-      let url = `/pages/user-info/main?id=${id}`
-      console.log(url);
-      wx.navigateTo({ url })
+      toUserDetail(id)
     },
   },
   onShow() {
     this.user = this.$store.state.userInfo
+    this.messageNums = this.$store.state.msgNums
     console.log('user on show')
   },
 };
@@ -142,5 +147,15 @@ export default {
     :active {
       background-color: #f9f9f9;
     }
+  }
+  .message-footer {
+    text-align: center;
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    background-color: #EA5149;
+    border-radius: 10px;
+    color: white;
   }
 </style>

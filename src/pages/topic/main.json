@@ -2,6 +2,7 @@
   "navigationBarTitleText": "主题列表",
   "usingComponents": {
     "i-cell-group": "./../../static/iview/cell-group/index",
+    "i-message": "../../../static/iview/message/index",
     "i-cell": "./../../static/iview/cell/index"
   }
 }

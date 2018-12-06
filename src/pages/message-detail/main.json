@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "消息详情",
+  "usingComponents": {
+    "i-icon": "../../../static/iview/icon/index",
+    "i-card": "../../../static/iview/card/index",
+    "i-modal": "../../../static/iview/modal/index",
+    "m-btn": "../../../static/minui/wxc-button/dist/index",
+    "i-message": "../../../static/iview/message/index",
+    "i-avatar": "../../../static/iview/avatar/index"
+  }
+}

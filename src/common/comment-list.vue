@@ -171,7 +171,7 @@ export default {
     // 添加评论或者回复
     addCommentOrReply() {
       if (this.currentComment) {
-        addReply({content:this.content,comment:this.currentComment.id,to_user_id:this.currentComment.user.id})
+        addReply({content:this.content,comment:this.currentComment.id,source_link:null})
           .then((res) => {
             // 调用子组件的添加回复函数，将API的返回数据传入子组件
             this.$refs.comment[this.currentIndex].addCommentReply(res.data)
@@ -182,7 +182,7 @@ export default {
           })
       } else {
         if (this.activityId) {
-          addComment({content:this.content,activity:this.activityId})
+          addComment({content:this.content,activity:this.activityId,agreement:null})
             .then((res) => {
               this.comments.push(res.data)
               this.currentIndex = 0
@@ -192,7 +192,7 @@ export default {
             })
         }
         else if (this.agreementId) {
-          addComment({content:this.content,agreement:this.agreementId})
+          addComment({content:this.content,agreement:this.agreementId,activity:null})
             .then((res) => {
               this.comments.push(res.data)
               this.currentIndex = 0

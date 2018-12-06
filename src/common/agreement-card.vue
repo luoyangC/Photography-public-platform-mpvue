@@ -2,9 +2,9 @@
   <div class="a-card" @click="toAgreementDetail(agreement.id)">
     <div class="a-card-header">
       <div class="a-card-header-info">
-        <image  :src="agreement.user.image"></image>
+        <image :src="agreement.user.image" @click.stop="toUserDetail(agreement.user.id)"></image>
         <div>
-          <p class="a-card-header-user-name">{{agreement.user.nick_name || '匿名'}}</p>
+          <p class="a-card-header-user-name" @click.stop="toUserDetail(agreement.user.id)">{{agreement.user.nick_name || '匿名'}}</p>
           <p class="a-card-header-create-time">{{formatAgreementTime || '2018.11.06'}}</p>
         </div>
       </div>
@@ -14,7 +14,7 @@
     </div>
     <div class="a-card-tag">
       <span># {{getType}} #</span>
-      <span v-if="agreement.amount != 0">{{agreement.amount}}元</span>
+      <span v-if="agreement.amount != 0">{{agreement.amount}}¥</span>
     </div>
     <div class="a-card-content">
       <text class="mui-ellipsis-5">{{agreement.content}}</text>
@@ -23,19 +23,21 @@
     <hr>
     <div class="a-card-footer">
       <div>
-        <i-icon size="20" type="coordinates" />
+        <i-icon size="20" type="coordinates" @click.stop />
         <span>&nbsp;{{agreement.address.city}}</span>
       </div>
       <div>
-        <i-icon size="20" type="interactive"/>
+        <i-icon v-if="agreement.is_comment" size="20" type="interactive_fill" color="#EA5149"/>
+        <i-icon v-else size="20" type="interactive"/>
         <span>&nbsp;{{agreement.comment_nums}}</span>
       </div>
       <div>
-        <i-icon size="20" type="send" />
-        <span>&nbsp;{{agreement.send_nums}}</span>
+        <i-icon v-if="agreement.is_message" size="20" type="send" color="#EA5149" @click.stop="toMessage(agreement)" />
+        <i-icon v-else size="20" type="send" @click.stop="toMessage(agreement)" />
+        <span>&nbsp;{{agreement.message_nums}}</span>
       </div>
       <div>
-        <i-icon size="20" type="more" />
+        <i-icon size="20" type="more" @click.stop />
       </div>
     </div>
   </div>
@@ -43,7 +45,8 @@
 
 <script>
 import ImageList from './image-list'
-import { formatTime } from '../utils'
+import { formatTime } from '@/utils'
+import { toUserDetail, toMessageList, toMessageDetail, toAgreementDetail } from '@/router'
 export default {
   name: 'agreement-card',
   components: {
@@ -61,16 +64,25 @@ export default {
       else if (this.agreement.agreement_type == 'toll') {
         return '需要收费'
       }
+      else if (this.agreement_type == 'paid') {
+        return '愿意付费'
+      }
     },
     formatAgreementTime() {
       return formatTime(this.agreement.create_time)
     }
   },
   methods: {
-    toAgreementDetail(id) {
-      let url = `/pages/agreement-detail/main?id=${id}`
-      wx.navigateTo({ url })
+    toUserDetail(id) {toUserDetail(id)},
+    toMessage(agreement) {
+      if (this.agreement.is_author) {
+        toMessageList(agreement.id,'invite')
+        }
+      else {
+        toMessageDetail(agreement.id,'invite',agreement.user.id)
+        }
     },
+    toAgreementDetail(id) {toAgreementDetail(id)},
   },
 }
 </script>

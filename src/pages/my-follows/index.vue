@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="nav-bar">
       <div :id="0" class="nav-bar-item" @click="tabClick">
         <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==0}">关注主题列表</div>

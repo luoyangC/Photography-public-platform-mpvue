@@ -1,6 +1,9 @@
 <template>
   <div class="activity">
-    <div v-if="user" @click="newActivity" class="activity-input">
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
+    <div v-if="user" @click="toNewActivity" class="activity-input">
       <image class="activity-input-user-image" :src="user.image" mode="scaleToFill"></image>
       <div class="activity-input-content">
         <p>发表动态...</p>
@@ -26,8 +29,8 @@ export default {
     };
   },
   methods: {
-    newActivity () {
-      let url = `/pages/new/main`
+    toNewActivity () {
+      let url = `/pages/new-activity/main`
       wx.navigateTo({ url })
     },
     getActivity() {

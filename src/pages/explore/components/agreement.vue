@@ -40,7 +40,6 @@ export default {
     },
     getAgreement() {
       getAgreement().then((res) => {
-        console.log(res);
         this.agreementList = res.data
       }).catch((err) => {
         console.log(err)

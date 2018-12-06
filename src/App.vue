@@ -1,5 +1,5 @@
 <script>
-import { getUserInfo } from './api';
+import { getUserInfo } from './api'
 /* eslint-disable */
 export default {
   methods: {
@@ -19,7 +19,6 @@ export default {
         }).catch((err) => {console.log(err)})
     },
     // 获取定位信息
-    // DRF3LymHPGDm78IgIifgHqzH9t7ItZBM
     getLocation() {
       wx.getLocation({
       type: 'wgs84',
@@ -41,7 +40,29 @@ export default {
         })
       }
       })
-    }
+    },
+    // 建立WebSocket连接
+    connectSocket() {
+      let messageSocket = wx.connectSocket({
+        url: 'ws://127.0.0.1:8000/get/message/',
+        header:{
+          'content-type': 'application/json',
+          'authorization': wx.getStorageSync('token'),
+        },
+        method:"GET",
+        success: (e) => {
+          console.log(e)
+        },
+        fail: (e) => {
+          console.log(e)
+        }
+      })
+      messageSocket.onMessage((res) => {
+        let messageList = JSON.parse(res.data)
+        this.$store.commit('SET_MSGNUMS', messageList.length)
+      })
+      this.$store.commit('SET_WEBSOCKET', messageSocket)
+    },
   },
   created() {
     // 调用API从本地缓存中获取数据
@@ -52,6 +73,7 @@ export default {
     this.getSystemInfo()
     this.getUserInfo()
     this.getLocation()
+    this.connectSocket()
   },
 };
 </script>

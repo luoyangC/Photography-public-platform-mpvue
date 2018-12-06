@@ -1,5 +1,8 @@
 <template>
   <div class="detail">
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="detail-content">
       <activity-card v-if="activity" :activity="activity" :isDetail="true"></activity-card>
     </div>

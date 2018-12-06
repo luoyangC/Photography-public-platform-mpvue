@@ -10,3 +10,9 @@ export const curTopic = (state) => {
 export const location = (state) => {
   return state.location
 }
+export const webSocket = (state) => {
+  return state.webSocket
+}
+export const msgNums = (state) => {
+  return state.msgNums
+}

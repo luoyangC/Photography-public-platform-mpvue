@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="nav-bar">
       <block v-for="(item, index) in tabs" :key="index">
         <div :id="index" class="nav-bar-item" @click="tabClick">
@@ -29,6 +32,7 @@
 import IndexAgreement from './components/agreement'
 import IndexAttention from './components/attention'
 import IndexRecommend from './components/recommend'
+import { $Message } from '../../../static/iview/base/index.js'
 
 export default {
   components: {
@@ -68,6 +72,21 @@ export default {
     },
   },
   methods: {
+    pushIndexMessage(nums) {
+      if (nums > 0) {
+        $Message({
+          content: `您有${nums}条消息，请注意查看`,
+          type: 'success',
+          duration: 5,
+        }) 
+      }
+    },
+    pushNewMessage() {
+      $Message({
+        content: '您有一条新的消息',
+        type: 'success'
+      });
+    },
     // 获取系统信息，主要是获取窗口的高度
     getSystemInfo() {
       let that = this;
@@ -94,6 +113,11 @@ export default {
   },
   onLoad() {
     this.getSystemInfo();
+    this.pushIndexMessage(this.$store.state.msgNums)
+    let messageSocket = this.$store.state.webSocket
+    messageSocket.onMessage((res) => {
+      this.pushNewMessage()
+    })
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="a-card" @click="toActivityDetail(activity.id,false)">
+  <div class="a-card" @click.stop="toActivityDetail(activity.id,false)">
     <div class="a-card-tag" v-if="activity.topic.title">
       <span @click.stop="toTopicDetail(activity.topic.id)"># {{activity.topic.title}}</span>
       <div class="a-card-header-extra" @click.stop="openAction">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="a-card-header">
-      <div class="a-card-header-info" @click="toUserInfo(activity.user.id)">
+      <div class="a-card-header-info" @click.stop="toUserInfo(activity.user.id)">
         <image  :src="activity.user.image"></image>
         <div>
           <p class="a-card-header-user-name">{{activity.user.nick_name || '匿名'}}&nbsp;发布</p>
@@ -49,6 +49,7 @@
 
 <script>
 import ImageList from './image-list'
+import { toUserDetail } from '@/router'
 import { delActivity, delLike, addLike, delKeep, addKeep } from '../api';
 export default {
   name: 'activity-card',
@@ -157,11 +158,7 @@ export default {
           console.log(err)
         })
     },
-    toUserInfo(id) {
-      let url = `/pages/user-info/main?id=${id}`;
-      console.log(url);
-      wx.navigateTo({ url })
-    },
+    toUserInfo(id) { toUserDetail(id)},
     toTopicDetail(id) {
       let url = `/pages/topic-detail/main?id=${id}`;
       console.log(url);

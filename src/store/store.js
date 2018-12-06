@@ -11,12 +11,16 @@ const userInfo = null
 const systemInfo = null
 const curTopic = null
 const location = null
+const webSocket = null
+const msgNums = null
 
 const state = {
   userInfo,
   systemInfo,
   curTopic,
   location,
+  webSocket,
+  msgNums,
 }
 
 export default new Vuex.Store({

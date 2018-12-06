@@ -1,7 +1,8 @@
 {
-  "navigationBarTitleText": "我的动态列表",
+  "navigationBarTitleText": "我的邀请",
   "usingComponents": {
     "i-icon": "../../../static/iview/icon/index",
+    "i-message": "../../../static/iview/message/index",
     "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

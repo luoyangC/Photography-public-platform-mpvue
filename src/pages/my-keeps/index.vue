@@ -1,37 +1,40 @@
 <template>
   <div>
-    <div v-for="item in keepList" :key="item.id">
-      <activity-card :activity="item.activity"></activity-card>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
+    <div v-for="activity in keepActivityList" :key="activity.id">
+      <activity-card :activity="activity"></activity-card>
     </div>
   </div>
 </template>
 
 <script>
 import ActivityCard from "../../common/activity-card";
-import { getKeep } from '@/api'
+import { getActivity } from '@/api'
 export default {
   name: 'index',
   data() {
     return {
-      keepList: [],
+      keepActivityList: [],
     }
   },
   components: {
     ActivityCard,
   },
   methods: {
-    getKeepList() {
-      getKeep()
+    getkeepActivityList() {
+      getActivity({keep:2})
         .then((res) => {
-          console.log(res.data)
-          this.keepList = res.data
-        }).catch((err) => {
+          this.keepActivityList = res.data
+        })
+        .catch((err) => {
           console.log(err)
         })
     }
   },
   onLoad() {
-    this.getKeepList()
+    this.getkeepActivityList()
   }
 }
 </script>

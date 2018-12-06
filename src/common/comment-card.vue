@@ -44,8 +44,9 @@
 </template>
 
 <script>
-import { formatTime } from '../utils'
-import { getReply } from '../api';
+import { formatTime } from '@/utils'
+import { getReply } from '@/api'
+import { toUserDetail } from '@/router'
 export default {
   name: "comment-card",
   props: {
@@ -102,10 +103,7 @@ export default {
         })
     },
     // 跳转到用户详情页面
-    toUserInfo(id) {
-      let url = `/pages/user-info/main?id=${id}`
-      wx.navigateTo({ url })
-    },
+    toUserInfo(id) {toUserDetail(id)},
     // 跳转到评论详情页面
     toCommentDetail(id) {
       let url = `/pages/comment-detail/main?id=${id}`

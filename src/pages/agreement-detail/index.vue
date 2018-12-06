@@ -1,5 +1,8 @@
 <template>
   <div class="detail">
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="detail-content">
       <agreement-card v-if="agreement" :agreement="agreement" :isDetail="true"></agreement-card>
     </div>

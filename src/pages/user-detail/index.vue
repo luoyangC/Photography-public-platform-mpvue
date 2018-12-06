@@ -1,5 +1,8 @@
 <template>
   <div v-if="user">
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="user-thumb">
       <img class="image-back" :src="user.image" mode='aspectFill'>
       <div class="image-before"></div>

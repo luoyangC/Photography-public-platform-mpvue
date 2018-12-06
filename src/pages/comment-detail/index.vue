@@ -1,22 +1,8 @@
 <template>
   <div class="comment-detail" v-if="comment">
-    <!-- <div class="comment">
-      <div class="comment-header">
-        <div class="comment-header-info">
-          <image :src="comment.user.image" mode="scaleToFill" @click.stop="toUserInfo(comment.user.id)"></image>
-          <div>
-            <p class="comment-header-user-name" @click.stop="toUserInfo(comment.user.id)">{{comment.user.nick_name || '匿名'}}</p>
-            <p class="comment-header-create-time">{{comment.create_time || '2018.11.06'}}</p>
-          </div>
-        </div>
-        <div class="comment-header-extra">
-          <i-icon type="unfold" size="20" />
-        </div>
-      </div>
-      <div class="comment-content">
-        <text>{{comment.content}}</text>
-      </div>
-    </div> -->
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="comment">
       <comment-card :comment="comment"></comment-card>
     </div>
@@ -164,14 +150,14 @@ export default {
     },
     addReply() {
       if (this.currentReply) {
-        addReply({content:this.content, to_user_id:this.currentReply.from_user.id, comment:this.comment.id, source_link:this.currentReply.id})
+        addReply({content:this.content,comment:this.comment.id,source_link:this.currentReply.id})
           .then((res) => {
             this.replyList.push(res.data)
           }).catch((err) => {
             console.log(err)
           })
       } else {
-        addReply({content:this.content,comment:this.comment.id,to_user_id:this.comment.user.id})
+        addReply({content:this.content,comment:this.comment.id,source_link:null})
           .then((res) => {
             this.replyList.push(res.data)
           }).catch((err) => {

@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "i-icon": "../../../static/iview/icon/index",
+    "i-message": "../../../static/iview/message/index",
     "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

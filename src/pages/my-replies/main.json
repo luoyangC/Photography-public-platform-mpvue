@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "我的回复列表"
+  "navigationBarTitleText": "我的回复列表",
+  "usingComponents": {
+    "i-icon": "../../../static/iview/icon/index",
+    "i-message": "../../../static/iview/message/index"
+  }
 }

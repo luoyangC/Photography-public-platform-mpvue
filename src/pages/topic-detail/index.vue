@@ -1,5 +1,8 @@
 <template>
   <div class="topic-detail">
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="topic" v-if="topic">
       <div class="topic-image">
         <img class='image-back' :src="topic.image" mode='aspectFill'>

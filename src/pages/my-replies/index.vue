@@ -1,5 +1,9 @@
 <template>
-  <div>我的回复列表</div>
+  <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
+  </div>
 </template>
 
 <script>

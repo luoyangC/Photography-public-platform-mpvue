@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="search-wrap">
       <m-search class="search" v-model="value" icon-color="#EA5149" ph-color="#EA5149" placeholder="请输入 主题/用户/约拍城市"></m-search>
     </div>

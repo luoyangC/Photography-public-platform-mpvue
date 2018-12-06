@@ -5,6 +5,7 @@
     "i-input": "../../../static/iview/input/index",
     "i-icon": "../../../static/iview/icon/index",    
     "i-button": "../../../static/iview/button/index",
+    "i-message": "../../../static/iview/message/index",
     "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

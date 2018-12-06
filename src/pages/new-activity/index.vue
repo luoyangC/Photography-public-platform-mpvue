@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="add-list">
       <div class="add-item" @click="addImage"><i class="iconfont">&#xe717;</i>&nbsp;图片</div>
       <div class="add-item"><i class="iconfont">&#xe6f6;</i>&nbsp;连接</div>

@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { delFollow, addFollow } from '../api';
+import { delFollow, addFollow } from '@/api'
+import { toUserDetail } from '@/router'
 export default {
   name: 'simple-card',
   props: {
@@ -83,11 +84,7 @@ export default {
     }
   },
   methods: {
-    toUserInfo(id) {
-      let url = `/pages/user-info/main?id=${id}`;
-      console.log(url);
-      wx.navigateTo({ url })
-    },
+    toUserInfo(id) {toUserDetail(id)},
     addFollow() {
       addFollow({follow_id: this.item.id, follow_type: this.item.followType})
         .then((res) => {

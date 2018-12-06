@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="show-message">
+      <i-message id="message" />
+    </div>
     <div class="nav-bar">
       <block>
         <div :id="0" class="nav-bar-item" @click="tabClick">

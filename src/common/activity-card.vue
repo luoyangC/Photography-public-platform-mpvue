@@ -1,10 +1,10 @@
 <template>
   <div class="a-card"  @click="toActivityDetail(activity.id,false)">
     <div class="a-card-header">
-      <div class="a-card-header-info" @click="toUserInfo(activity.user.id)">
+      <div class="a-card-header-info" @click="toUserDetail(activity.user.id)">
         <image :src="activity.user.image" mode="scaleToFill"></image>
         <div>
-          <p class="a-card-header-user-name" @click.stop="toUserInfo(activity.user.id)">{{activity.user.nick_name || '匿名'}}</p>
+          <p class="a-card-header-user-name" @click.stop="toUserDetail(activity.user.id)">{{activity.user.nick_name || '匿名'}}</p>
           <p class="a-card-header-create-time" @click.stop>{{formatActivityTime || '2018.11.06'}}</p>
         </div>
       </div>
@@ -68,8 +68,9 @@
 
 <script>
 import ImageList from './image-list'
-import { formatTime } from '../utils'
-import { delActivity, addLike, delLike } from '../api';
+import { formatTime } from '@/utils'
+import { toUserDetail, toTopicDetail } from '@/router'
+import { delActivity, addLike, delLike } from '@/api';
 export default {
   name: 'activity-card',
   props: {
@@ -156,16 +157,8 @@ export default {
           console.log(err)
         })
     },
-    toUserInfo(id) {
-      let url = `/pages/user-info/main?id=${id}`;
-      console.log(url);
-      wx.navigateTo({ url })
-    },
-    toTopicDetail(id) {
-      let url = `/pages/topic-detail/main?id=${id}`;
-      console.log(url);
-      wx.navigateTo({ url })
-    },
+    toUserDetail(id) { toUserDetail(id) },
+    toTopicDetail(id) { toTopicDetail(id) },
     toActivityDetail(id, comment) {
       if (!this.isDetail) {
         let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
