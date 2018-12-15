@@ -33,8 +33,8 @@
         <span>&nbsp;{{activity.comment_nums}}</span>
       </div>
       <div>
-        <i-icon v-if="activity.is_share" size="20" color="#EA5149" type="share_fill" />
-        <i-icon v-else size="20" type="share" />
+        <i-icon v-if="activity.is_share" size="20" color="#EA5149" type="share_fill" @click.stop="toShare(activity.id, 'share')" />
+        <i-icon v-else size="20" type="share" @click.stop="toShare(activity.id, 'share')" />
         <span>&nbsp;{{activity.share_nums}}</span>
       </div>
       <div>
@@ -49,8 +49,8 @@
 
 <script>
 import ImageList from './image-list'
-import { toUserDetail } from '@/router'
-import { delActivity, delLike, addLike, delKeep, addKeep } from '../api';
+import { toUserDetail, toActivityEdit } from '@/router'
+import { delActivity, delLike, addLike, delKeep, addKeep, addMessage } from '../api';
 export default {
   name: 'activity-card',
   props: {
@@ -120,6 +120,15 @@ export default {
           })
       }
     },
+    addReport() {
+      addMessage({to_user:1,message_type:'report', activity:this.activity.id}).then((res) => {
+        wx.showToast({
+          title: '举报成功',
+          icon: 'success',
+          duration: 2000
+        })
+      })
+    },
     handleClickItem(e) {
       let index = e.mp.detail.index
       // 判断是否为作者
@@ -130,7 +139,7 @@ export default {
           this.delActivity()
         } else if (index == 1 ) {
           // 修改操作
-          console.log('change')
+          toActivityEdit(this.activity.id, 'activity')
         }
       } else {
         if (index == 0) {
@@ -138,7 +147,7 @@ export default {
           this.changeKeepType()
         } else if (index == 1 ) {
           // 举报操作
-          console.log('jubao')
+          this.addReport()
         }
       }
       this.visible = false
@@ -158,6 +167,7 @@ export default {
           console.log(err)
         })
     },
+    toShare(id, type) { toActivityEdit(id, type) },
     toUserInfo(id) { toUserDetail(id)},
     toTopicDetail(id) {
       let url = `/pages/topic-detail/main?id=${id}`;

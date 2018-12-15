@@ -22,7 +22,7 @@
         </i-card>
       </div>
       <div class="message-answer-info" v-if="answerMessage">
-        <i-card :title="answerMessage.content" :extra="answerMessage.create_time">
+        <!-- <i-card :title="answerMessage.content" :extra="answerMessage.create_time">
           <div class="agreement-content" slot="content">
             <div class="content-user-info" style="padding-top:8px">
               <i-avatar :src="answerMessage.from_user.image" size="default" shape="circle"></i-avatar>
@@ -42,7 +42,8 @@
           <div slot="footer" v-if="answerMessage.answer==4">
             <span>已拒绝</span>
           </div>
-        </i-card>
+        </i-card> -->
+        <invite-card :isAuthor="agreement.is_author" :invite="answerMessage"></invite-card>
       </div>
       <div class="message-item" 
           :class="message.from_user.id == userInfo.id ? 'item-right' : 'item-left'" 
@@ -83,10 +84,15 @@
 </template>
 
 <script>
+import InviteCard from '@/common/invite-card'
+
 import {getAgreementById, getMessage, addMessage, upMessage} from '@/api'
 import { formatTime } from '@/utils'
 export default {
   name: 'index',
+  components: {
+    InviteCard,
+  },
   data() {
     return {
       agreement: null,
@@ -206,7 +212,6 @@ export default {
           let inviteList = res.data
           inviteList.forEach(element => {
             if (element.answer > 1) {
-              element.create_time = formatTime(element.create_time)
               this.answerMessage = element
               inviteList.splice(inviteList.indexOf(element), 1)
             }

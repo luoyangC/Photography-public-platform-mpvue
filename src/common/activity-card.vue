@@ -52,8 +52,8 @@
         <span>&nbsp;{{activity.comment_nums}}</span>
       </div>
       <div>
-        <i-icon v-if="activity.is_share" size="20" type="share_fill" color="#EA5149" />
-        <i-icon v-else size="20" type="share" />
+        <i-icon v-if="activity.is_share" size="20" type="share_fill" color="#EA5149" @click.stop="toShare(activity.id, 'share')" />
+        <i-icon v-else size="20" type="share" @click.stop="toShare(activity.id, 'share')" />
         <span>&nbsp;{{activity.share_nums}}</span>
       </div>
       <div>
@@ -69,8 +69,8 @@
 <script>
 import ImageList from './image-list'
 import { formatTime } from '@/utils'
-import { toUserDetail, toTopicDetail } from '@/router'
-import { delActivity, addLike, delLike } from '@/api';
+import { toUserDetail, toActivityEdit, toTopicDetail } from '@/router'
+import { delActivity, delLike, addLike, delKeep, addKeep, addMessage } from '@/api';
 export default {
   name: 'activity-card',
   props: {
@@ -99,6 +99,36 @@ export default {
     }
   },
   methods: {
+    changeKeepType() {
+      if (this.activity.is_keep) {
+        delKeep(this.activity.is_keep)
+          .then((res) => {
+            console.log(res)
+            this.activity.is_keep == false
+            this.activity.Keep_nums --
+          }).catch((err) => {
+            console.log(err)
+          })
+      } else {
+        addKeep({activity: this.activity.id})
+          .then((res) => {
+            console.log(res)
+            this.activity.is_Keep = res.data.id
+            this.activity.keep_nums ++
+          }).catch((err) => {
+            console.log(err)
+          })
+      }
+    },
+    addReport() {
+      addMessage({to_user:1,message_type:'report', activity:this.activity.id}).then((res) => {
+        wx.showToast({
+          title: '举报成功',
+          icon: 'success',
+          duration: 2000
+        })
+      })
+    },
     changeLikeType() {
       if (this.activity.is_like) {
         delLike(this.activity.is_like)
@@ -130,15 +160,15 @@ export default {
           this.delActivity()
         } else if (index == 1 ) {
           // 修改操作
-          console.log('change')
+          toActivityEdit(this.activity.id, 'activity')
         }
       } else {
         if (index == 0) {
           // 收藏操作
-          console.log('keep')
+          this.changeKeepType()
         } else if (index == 1 ) {
           // 举报操作
-          console.log('jubao')
+          this.addReport()
         }
       }
       this.visible = false
@@ -157,6 +187,7 @@ export default {
           console.log(err)
         })
     },
+    toShare(id, type) { toActivityEdit(id, type) },
     toUserDetail(id) { toUserDetail(id) },
     toTopicDetail(id) { toTopicDetail(id) },
     toActivityDetail(id, comment) {

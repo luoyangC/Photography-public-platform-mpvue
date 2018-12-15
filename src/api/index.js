@@ -31,11 +31,20 @@ export const addActivity = (data) => { return fly.post(`/activity/`, data) }
 // 删除动态接口
 export const delActivity = (id) => { return fly.delete(`/activity/${id}/`) }
 
+// 修改动态接口
+export const upActivity = (id, data) => { return fly.put(`/activity/${id}/`, data) }
+
 // 获取约拍列表
 export const getAgreement = (params) => { return fly.get(`/agreement/`, params) }
 
 // 获取约拍详情
 export const getAgreementById = (id) => { return fly.get(`/agreement/${id}/`) }
+
+// 添加约拍接口
+export const addAgreement = (data) => { return fly.post(`/activity/`, data) }
+
+// 更新约拍接口
+export const upAgreement = (id, data) => { return fly.put(`/agreement/${id}/`, data) }
 
 // 获取评论列表
 export const getComment = (params) => { return fly.get(`/comment/`, params) }

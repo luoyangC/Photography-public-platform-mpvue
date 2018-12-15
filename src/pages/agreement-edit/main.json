@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "发布新动态",
+  "navigationBarTitleText": "约拍发布",
   "usingComponents": {
     "i-cell-group": "./../../static/iview/cell-group/index",
     "i-message": "../../../static/iview/message/index",

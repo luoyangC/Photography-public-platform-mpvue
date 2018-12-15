@@ -88,17 +88,16 @@ export default {
           wx.getUserInfo({ success: (res) => {
             const iv = res.iv
             const encryptedData = res.encryptedData
-            loginWeixin({code:code, encryptedData:encryptedData, iv:iv})
-              .then((res) => {
-                let token = res.data.token
-                wx.setStorage({key:"token", data:token, success: () => {
-                  getUserInfo({self:2}).then((res) => {
-                    this.user = res.data[0]
-                    this.$store.commit('SET_INFO', res.data[0])
-                    console.log('get user info is success')
-                    }).catch((err) => {
-                      console.log(err)
-                    })
+            loginWeixin({code:code, encryptedData:encryptedData, iv:iv}).then((res) => {
+              let token = res.data.token
+              wx.setStorage({key:"token", data:token, success: () => {
+                getUserInfo({self:2}).then((res) => {
+                  this.user = res.data[0]
+                  this.$store.commit('SET_INFO', res.data[0])
+                  console.log('get user info is success')
+                  }).catch((err) => {
+                    console.log(err)
+                  })
                 }})
               })
             } })

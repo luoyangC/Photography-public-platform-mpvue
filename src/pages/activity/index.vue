@@ -3,21 +3,25 @@
     <div class="show-message">
       <i-message id="message" />
     </div>
-    <div v-if="user" @click="toNewActivity" class="activity-input">
+    <div v-if="user" @click="handleOpen" class="activity-input">
       <image class="activity-input-user-image" :src="user.image" mode="scaleToFill"></image>
       <div class="activity-input-content">
-        <p>发表动态...</p>
+        <p>发表新内容...</p>
       </div>
     </div>
     <div class="approximately">
       <activity-card v-for="item in activityList" :key="item.id" :activity="item"></activity-card>
     </div>
+    <div class="new-content-action">
+      <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
+    </div>
   </div>
 </template>
 
 <script>
-import ActivityCard from "../../common/activity-card";
-import { getActivity } from "../../api/index";
+import ActivityCard from "@/common/activity-card"
+import { getActivity } from "@/api"
+import { toAgreementEdit, toTopicEdit, toActivityEdit } from '@/router'
 export default {
   components: {
     ActivityCard,
@@ -26,13 +30,32 @@ export default {
     return {
       activityList: [],
       user: null,
+      visible: false,
+      actions: [{name: '动态'},{name: '约拍'},{name: '主题'}]
     };
   },
   methods: {
-    toNewActivity () {
-      let url = `/pages/new-activity/main`
-      wx.navigateTo({ url })
+    handleClickItem(e) {
+      let index = e.mp.detail.index
+      if (index == 0) {
+        // 发布新动态
+        toActivityEdit(0, 'activity')
+      } else if (index == 1 ) {
+        // 发布新约拍
+        toAgreementEdit(0)
+      } else {
+        // 发布新主题
+        toTopicEdit(0)
+      }
+      this.visible = false
     },
+    handleCancel() {
+      this.visible = false
+    },
+    handleOpen() {
+      this.visible = true
+    },
+    toNewActivity () { toActivityEdit(0, 'activity') },
     getActivity() {
       getActivity({follow:'user'})
         .then((res) => {

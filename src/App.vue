@@ -118,6 +118,16 @@ hr {
   border-top:1rpx solid #dddee1;
   margin:0 15px;
 }
+.mui-ellipsis-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal !important;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  font-size: 14px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .mui-ellipsis-5 {
   display: -webkit-box;
   overflow: hidden;

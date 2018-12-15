@@ -31,7 +31,7 @@
           <div class="reply-item" v-for="reply in replies" :key="reply.id">
             <a @click.stop="toUserInfo(reply.from_user.id)">{{reply.from_user.nick_name}}</a>
             <span v-if="reply.source_link">&nbsp;回复&nbsp;<a @click.stop="toUserInfo(reply.to_user.id)">{{reply.to_user.nick_name}}</a></span>
-            <text>：{{reply.content}}</text>
+            <text class="mui-ellipsis-2">：{{reply.content}}</text>
           </div>
           <div v-if="replytNums > 2" class="reply-item">
             <a>共{{replytNums}}条回复</a>

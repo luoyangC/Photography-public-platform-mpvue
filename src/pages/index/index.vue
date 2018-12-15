@@ -2,6 +2,7 @@
   <div>
     <div class="show-message">
       <i-message id="message" />
+      <i-toast id="toast" />
     </div>
     <div class="nav-bar">
       <block v-for="(item, index) in tabs" :key="index">
@@ -75,7 +76,7 @@ export default {
     pushIndexMessage(nums) {
       if (nums > 0) {
         $Message({
-          content: `您有${nums}条消息，请注意查看`,
+          content: `您有${nums}条未读消息，请注意查看`,
           type: 'success',
           duration: 5,
         }) 
@@ -83,7 +84,7 @@ export default {
     },
     pushNewMessage() {
       $Message({
-        content: '您有一条新的消息',
+        content: '您有一条新的消息，请注意查看',
         type: 'success'
       });
     },
