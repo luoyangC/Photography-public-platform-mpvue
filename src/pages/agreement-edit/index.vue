@@ -19,16 +19,22 @@
       </div>
       <div class="content-operate">
         <i-cell-group>
-          <i-cell title="约拍类型" is-link url="/pages/topic/main">
+          <i-cell :title="agreementType.title || '约拍类型'" is-link @click="handleOpen">
             <i slot="icon" class="iconfont">&#xe706;</i>
           </i-cell>
-          <i-cell title="添加位置" is-link url="/pages/account/main">
-            <i slot="icon" class="iconfont">&#xe610;</i>
-          </i-cell>
+          <i-input v-if="agreementType.type && agreementType.type != 'free'" v-model="amount" type="number" right title="金额" placeholder="请输入" style="margin:0" />
+          <picker mode="region" :value="address" @change="cityChange">
+            <i-cell :title="address[1] || '添加位置'" is-link>
+              <i slot="icon" class="iconfont">&#xe610;</i>
+            </i-cell>
+          </picker>
         </i-cell-group>
       </div>
       <div class="content-send">
-        <button type="warn" @click="addActivity">发送</button>
+        <button type="warn" @click="addAgreement">发送</button>
+      </div>
+      <div class="content-type">
+        <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
       </div>
     </div>
   </div>
@@ -44,18 +50,43 @@ export default {
   },
   data() {
     return {
+      address: ['江苏省', '南京市', '浦口区'],
+      actions: [{name: '希望互免'},{name: '需要收费'},{name: '愿意付费'}],
+      visible: false,
       agreement: null,
       editorType: 'add',
       content: '',
       placeholder: '想到什么，记录一下',
       tempFilePaths: [],
       imageNums: 0,
-      agreementType: '',
-      amount: 0,
-      address: '',
+      agreementType: {title: '', type: ''},
+      amount: 1,
     }
   },
   methods: {
+    handleClickItem(e) {
+      let index = e.mp.detail.index
+      if (index == 0) {
+        // 互免
+        this.agreementType = {title: '希望互免', type: 'free'}
+      } else if (index == 1 ) {
+        // 收费
+        this.agreementType = {title: '需要收费', type: 'toll'}
+      } else {
+        // 付费
+        this.agreementType = {title: '愿意付费', type: 'paid'}
+      }
+      this.visible = false
+    },
+    handleCancel() {
+      this.visible = false
+    },
+    handleOpen() {
+      this.visible = true
+    },
+    cityChange(e) {
+      this.address = e.mp.detail.value
+    },
     upAgreement() {
       let data = this.activity
       data.content = this.content
@@ -79,13 +110,13 @@ export default {
     addAgreement() {
       let data = {
         content: this.content,
-        agreement_type: this.agreementType,
-        address: this.address,
+        agreement_type: this.agreementType.type,
+        address: this.address.join(','),
         amount: this.amount,
       }
       addAgreement(data).then((res) => {
         console.log(res)
-        uploadimg({url:'http://127.0.0.1:8000/api/v1/photo/', path:this.tempFilePaths, id:res.data.id})
+        uploadimg({url:'http://127.0.0.1:8000/api/v1/sample/', path:this.tempFilePaths, id:res.data.id, type: 'agreement'})
         this.tempFilePaths = []
         wx.navigateBack({
           delta: 1,
@@ -133,6 +164,7 @@ export default {
     toActivityEdit() { toActivityEdit(0) },
   },
   onLoad(option) {
+    this.location = this.$store.state.location
     if (option.id != 0) {
       this.getAgreement(option.id)
     } else {
@@ -144,7 +176,7 @@ export default {
     this.editorType = 'add'
     this.agreement = null
     this.content = ''
-    this.agreementType = null
+    this.agreementType = {title: '', type: ''}
     this.tempFilePaths = []
   }
 }

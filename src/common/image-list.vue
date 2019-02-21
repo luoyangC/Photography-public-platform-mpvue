@@ -1,10 +1,10 @@
 <template>
   <div class="image-list">
     <div class="image-head" v-if="imageHead">
-      <image :src="imageHead.image" @click="handleImage(imageHead.image)" mode="aspectFill"></image>
+      <image :src="imageHead.thumbnail" @click="handleImage(imageHead.image)" mode="aspectFill"></image>
     </div>
-    <div :class="{'image-item-center': index==1 || index==4 || index==7}" class="image-item" v-for="(img,index) in imageList" :key="index">
-      <image :src="img.image" @click="handleImage(img.image)" mode="aspectFill"></image>
+    <div :class="{'image-item-center': index==1 || index==4 || index==7}" class="image-item" v-for="(image,index) in imageList" :key="index">
+      <image :src="image.thumbnail" @click="handleImage(image.image)" mode="aspectFill"></image>
     </div>
   </div>
 </template>
@@ -17,28 +17,9 @@ export default {
   },
   data() {
     return {
-      imageHead: null,
-      imageList: null,
+      imageHead: '',
+      imageList: [],
     }
-  },
-  computed: {
-    imageItem() {
-      let imageSize = this.images.length;
-      if (imageSize == 1) {
-        this.imageHead = this.images[0];
-      }
-      else if (imageSize == 4) {
-        this.imageHead = this.images[0];
-        this.imageList = this.images.slice(1,4);
-      }
-      else if (imageSize == 7) {
-        this.imageHead = this.images[0];
-        this.imageList = this.images.slice(1,7);
-      }
-      else {
-        this.imageList = this.images;
-      }
-    },
   },
   methods: {
     handleImage(e) {
@@ -51,6 +32,24 @@ export default {
         current: e,
         urls: urlList,
       })
+    },
+  },
+  created() {
+    let imageList = this.images
+    let imageSize = this.images.length
+    if (imageSize == 1) {
+      this.imageHead = imageList[0]
+    }
+    else if (imageSize == 4) {
+      this.imageHead = imageList[0]
+      this.imageList = imageList.slice(1,4)
+    }
+    else if (imageSize == 7) {
+      this.imageHead = imageList[0]
+      this.imageList = imageList.slice(1,7)
+    }
+    else {
+      this.imageList = imageList
     }
   },
 }

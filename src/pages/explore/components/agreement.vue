@@ -8,6 +8,7 @@
         </picker>
       </div>
       <agreement-card v-for="item in agreementList" :key="item.id" :agreement="item"></agreement-card>
+      <div class="agreement-more">———— 没有更多啦～ ————</div>
     </scroll-view>
   </div>
 </template>
@@ -38,8 +39,8 @@ export default {
     cityChange(e) {
       this.location = e.mp.detail.value
     },
-    getAgreement() {
-      getAgreement().then((res) => {
+    getAgreement(search) {
+      getAgreement({search:search}).then((res) => {
         this.agreementList = res.data
       }).catch((err) => {
         console.log(err)
@@ -47,7 +48,7 @@ export default {
     }
   },
   onLoad() {
-    this.getAgreement()
+    this.getAgreement('')
     this.location = this.$store.state.location
   }
 };
@@ -65,5 +66,11 @@ export default {
         color: #0084ff;
       }
     }
+  }
+  .agreement-more {
+    font-size: 12px;
+    color: #666;
+    padding: 20px;
+    text-align: center;
   }
 </style>

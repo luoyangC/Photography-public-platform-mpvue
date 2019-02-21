@@ -4,7 +4,7 @@
       <i-message id="message" />
     </div>
     <div class="search-wrap">
-      <m-search class="search" v-model="value" icon-color="#EA5149" ph-color="#EA5149" placeholder="请输入 主题/用户/约拍城市"></m-search>
+      <m-search class="search" icon-color="#EA5149" ph-color="#EA5149" placeholder="请输入 主题/用户/约拍城市" @confirm="onSearch"></m-search>
     </div>
     <div class="nav-bar">
       <div :id="0" class="nav-bar-item" @click="tabClick">
@@ -20,13 +20,13 @@
     <div class="swiper-content">
       <swiper class="content" duration="500" :style="{height:swiperHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
         <swiper-item>
-          <explore-topic :winHeight="windowHeight"></explore-topic>
+          <explore-topic :winHeight="windowHeight" ref="exploreTopic"></explore-topic>
         </swiper-item>
         <swiper-item>
-          <explore-user :winHeight="windowHeight"></explore-user>
+          <explore-user :winHeight="windowHeight" ref="exploreUser"></explore-user>
         </swiper-item>
         <swiper-item>
-          <explore-agreement :winHeight="windowHeight"></explore-agreement>
+          <explore-agreement :winHeight="windowHeight" ref="exploreAgreement"></explore-agreement>
         </swiper-item>
       </swiper>
     </div>
@@ -45,7 +45,6 @@ export default {
   },
   data() {
     return {
-      value: '',
       activeIndex: 0,
       windowHeight: 0,
     };
@@ -56,6 +55,13 @@ export default {
     },
   },
   methods: {
+    onSearch(e) {
+      let search = e.mp.detail.value
+      this.$refs.exploreTopic.getTopic(search)
+      this.$refs.exploreUser.getmodelList(search)
+      this.$refs.exploreUser.getphotographerList(search)
+      this.$refs.exploreAgreement.getAgreement(search)
+    },
     tabClick(e) {
       this.activeIndex = e.currentTarget.id;
     },

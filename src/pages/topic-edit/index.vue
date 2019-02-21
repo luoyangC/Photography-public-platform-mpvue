@@ -24,42 +24,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav-bar {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  position: sticky;
-  z-index: 500;
-  top: 0;
-  height: 50px;
-  width: 100%;
-  background-color: white;
-}
-.nav-bar-item {
-  position: relative;
-  display: block;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  flex: 1;
-  padding: 13px 0;
-  text-align: center;
-  font-size: 0;
-}
-.nav-bar-title {
-  color: black;
-  font-weight: 500;
-  display: inline-block;
-  font-size: 12px;
-  max-width: 8em;
-  width: auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-}
-.nav-bar-on {
-  color: #89c5de;
-}
 .content {
   box-sizing: border-box;
   background-color: #f9f9f9;

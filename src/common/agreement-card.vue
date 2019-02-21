@@ -1,5 +1,5 @@
 <template>
-  <div class="a-card" @click="toAgreementDetail(agreement.id)">
+  <div class="a-card" v-if="agreement" @click="toAgreementDetail(agreement.id)">
     <div class="a-card-header">
       <div class="a-card-header-info">
         <image :src="agreement.user.image" @click.stop="toUserDetail(agreement.user.id)"></image>
@@ -8,7 +8,7 @@
           <p class="a-card-header-create-time">{{formatAgreementTime || '2018.11.06'}}</p>
         </div>
       </div>
-      <div class="a-card-header-extra">
+      <div class="a-card-header-extra" @click.stop="openAction">
         <i-icon type="unfold" size="20" />
       </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="a-card-footer">
       <div>
         <i-icon size="20" type="coordinates" @click.stop />
-        <span>&nbsp;{{agreement.address.city}}</span>
+        <span>&nbsp;{{address[1]}}</span>
       </div>
       <div>
         <i-icon v-if="agreement.is_comment" size="20" type="interactive_fill" color="#EA5149"/>
@@ -40,6 +40,9 @@
         <i-icon size="20" type="more" @click.stop />
       </div>
     </div>
+    <div class="a-card-action">
+      <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
+    </div>
   </div>
 </template>
 
@@ -47,6 +50,7 @@
 import ImageList from './image-list'
 import { formatTime } from '@/utils'
 import { toUserDetail, toMessageList, toMessageDetail, toAgreementDetail } from '@/router'
+import { delAgreement } from '@/api'
 export default {
   name: 'agreement-card',
   components: {
@@ -55,6 +59,11 @@ export default {
   props: {
     agreement: Object,
     isDetail: Boolean,
+  },
+  data() {
+    return {
+      visible: false,
+    }
   },
   computed: {
     getType() {
@@ -68,11 +77,59 @@ export default {
         return '愿意付费'
       }
     },
+    address() {
+      return this.agreement.address.split(',')
+    },
     formatAgreementTime() {
       return formatTime(this.agreement.create_time)
-    }
+    },
+    actions() {
+      if (this.agreement.is_author){
+        return [{name: '删除'},{name: '修改'},{name: '分享',icon: 'share',openType: 'share'}]
+      } else {
+        return [{name: '私信'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
+      }
+    },
   },
   methods: {
+    handleClickItem(e) {
+      let index = e.mp.detail.index
+      // 判断是否为作者
+      if (this.agreement.is_author) {
+        if (index == 0) {
+          // 删除操作
+          // this.actions[0].loading = true
+          this.delAgreement()
+        } else if (index == 1 ) {
+          // 修改操作
+          // toActivityEdit(this.activity.id, 'activity')
+        }
+      } else {
+        if (index == 0) {
+          // 私信操作
+          // this.changeKeepType()
+        } else if (index == 1 ) {
+          // 举报操作
+          // this.addReport()
+        }
+      }
+      this.visible = false
+    },
+    handleCancel() {
+      this.visible = false
+    },
+    openAction() {
+      console.log('click')
+      this.visible = true
+    },
+    delAgreement() {
+      delAgreement(this.agreement.id).then((res) => {
+        console.log(res)
+        this.agreement = null
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     toUserDetail(id) {toUserDetail(id)},
     toMessage(agreement) {
       if (this.agreement.is_author) {

@@ -18,6 +18,7 @@
         <div v-for="user in modelList" :key="user.id" @click="toUserInfo(user.id)">
           <simple-card :user="user"></simple-card>
         </div>
+        <div class="user-more">———— 没有更多啦～ ————</div>
       </div>
     </scroll-view>
   </div>
@@ -46,15 +47,15 @@ export default {
     },
   },
   methods: {
-    getmodelList() {
-      getUserInfo({approve:"model"}).then((res) => {
+    getmodelList(search) {
+      getUserInfo({approve:"model", search:search}).then((res) => {
         this.modelList = res.data
       }).catch((err) => {
         console.log(err)
       })
     },
-    getphotographerList() {
-      getUserInfo({approve:"photographer"}).then((res) => {
+    getphotographerList(search) {
+      getUserInfo({approve:"photographer", search:search}).then((res) => {
         this.photographerList = res.data
       }).catch((err) => {
         console.log(err)
@@ -66,8 +67,8 @@ export default {
     },
   },
   onLoad() {
-    this.getmodelList()
-    this.getphotographerList()
+    this.getmodelList('')
+    this.getphotographerList('')
   }
 };
 </script>
@@ -80,5 +81,11 @@ export default {
       display: inline;
       margin-left: 4px;
     }
+  }
+  .user-more {
+    font-size: 12px;
+    color: #666;
+    padding: 20px;
+    text-align: center;
   }
 </style>

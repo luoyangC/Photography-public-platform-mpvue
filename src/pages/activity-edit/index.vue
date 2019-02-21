@@ -39,9 +39,11 @@
           <i-cell v-else title="添加主题（选合适的主题会被更多人发现哦）" is-link url="/pages/topic/main">
             <i slot="icon" class="iconfont">&#xe706;</i>
           </i-cell>
-          <i-cell title="添加位置" is-link url="/pages/account/main">
-            <i slot="icon" class="iconfont">&#xe610;</i>
-          </i-cell>
+          <picker mode="region" :value="address" @change="cityChange">
+            <i-cell :title="address[1] || '添加位置'" is-link>
+              <i slot="icon" class="iconfont">&#xe610;</i>
+            </i-cell>
+          </picker>
         </i-cell-group>
       </div>
       <div class="content-send">
@@ -63,6 +65,7 @@ export default {
   },
   data() {
     return {
+      address: ['江苏省', '南京市', '浦口区'],
       windowHeight: 0,
       activity: null,
       editorType: 'add',
@@ -123,12 +126,13 @@ export default {
         content: this.content,
         activity_type: 'original',
         topic:this.topic ? this.topic.id : null,
+        address: this.address.join(','),
         source_link: null,
       }
       addActivity(data)
       .then((res) => {
         console.log(res)
-        uploadimg({url:'http://127.0.0.1:8000/api/v1/photo/', path:this.tempFilePaths, id:res.data.id})
+        uploadimg({url:'https://www.luoyangc.cn/api/v1/photo/', path:this.tempFilePaths, id:res.data.id, type: 'activity'})
         this.tempFilePaths = []
         wx.navigateBack({
           delta: 1,
@@ -155,6 +159,9 @@ export default {
         console.log(this.tempFilePaths)
       }
     })
+    },
+    cityChange(e) {
+      this.address = e.mp.detail.value
     },
     getActivity(id, type) {
       getActivityById(id).then((res) => {

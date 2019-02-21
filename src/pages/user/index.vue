@@ -80,33 +80,24 @@ export default {
     onNight() {
       this.night = !this.night
     },
-    handleClick(e) {
+    async handleClick(e) {
       this.visible = false
-      if ( e.mp.type == 'ok' ) {
-        wx.login({ success: (res) => {
+      if (e.mp.type == 'ok') {
+        wx.login({ success: async (res) => {
           const code = res.code
-          wx.getUserInfo({ success: (res) => {
+          wx.getUserInfo({ success: async (res) => {
             const iv = res.iv
             const encryptedData = res.encryptedData
-            loginWeixin({code:code, encryptedData:encryptedData, iv:iv}).then((res) => {
-              let token = res.data.token
-              wx.setStorage({key:"token", data:token, success: () => {
-                getUserInfo({self:2}).then((res) => {
-                  this.user = res.data[0]
-                  this.$store.commit('SET_INFO', res.data[0])
-                  console.log('get user info is success')
-                  }).catch((err) => {
-                    console.log(err)
-                  })
-                }})
-              })
+            let _login = await loginWeixin({code:code, encryptedData:encryptedData, iv:iv})
+            wx.setStorageSync('token', _login.data.token)
+            let _user = await getUserInfo({self:2})
+            this.user = _user.data[0]
+            this.$store.commit('SET_INFO', _user.data[0])
+            console.log('get user info is success')
             } })
           }})
       } else {
-        console.log(e)
-        wx.navigateTo({
-          url: '/pages/email/main'
-        })
+        wx.navigateTo({ url: '/pages/email/main'})
       }
     },
     handleOpen() {

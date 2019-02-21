@@ -1,5 +1,5 @@
 <template>
-  <div class="a-card" @click.stop="toActivityDetail(activity.id,false)">
+  <div class="a-card" v-if="activity" @click.stop="toActivityDetail(activity.id,false)">
     <div class="a-card-tag" v-if="activity.topic.title">
       <span @click.stop="toTopicDetail(activity.topic.id)"># {{activity.topic.title}}</span>
       <div class="a-card-header-extra" @click.stop="openAction">
@@ -50,7 +50,7 @@
 <script>
 import ImageList from './image-list'
 import { toUserDetail, toActivityEdit } from '@/router'
-import { delActivity, delLike, addLike, delKeep, addKeep, addMessage } from '../api';
+import { delActivity, delLike, addLike, delKeep, addKeep, addMessage } from '@/api';
 export default {
   name: 'activity-card',
   props: {
@@ -67,12 +67,12 @@ export default {
   computed: {
     actions() {
       if (this.activity.is_author){
-        return [{name: '删除'},{name: '修改'},{name: '去分享',icon: 'share',openType: 'share'}]
+        return [{name: '删除'},{name: '修改'},{name: '分享',icon: 'share',openType: 'share'}]
       } else {
         if (this.activity.is_keep) {
-          return [{name: '取消收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+          return [{name: '取消收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
         } else {
-          return [{name: '收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+          return [{name: '收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
         }
       }
     },
@@ -163,6 +163,7 @@ export default {
       delActivity(this.activity.id)
         .then((res) => {
           console.log(res)
+          this.activity = null
         }).catch((err) => {
           console.log(err)
         })

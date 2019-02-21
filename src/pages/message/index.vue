@@ -6,7 +6,7 @@
     <div class="message-list" v-if="messageType == 'reply'">
       <i-cell-group>
         <div class="message-item" v-for="message in messageList" :key="message.id" 
-             @click="toCommentDetail(message.comment)">
+             @click="toCommentDetail(message)">
           <i-cell :title="message.from_user.nick_name" :label="message.content" is-link>
             <div slot="icon" class="message-user-image" @click.stop="toUserInfo(message.from_user.id)">
               <image :src="message.from_user.image"></image>
@@ -63,7 +63,19 @@ export default {
   methods: {
     toUserInfo(id) {toUserDetail(id)},
     toMessageDetail(agreement, type, other) { toMessageDetail(agreement, type, other) },
-    toCommentDetail(id) { toCommentDetail(id) },
+    toCommentDetail(message) {
+      this.readMessage(message) 
+      toCommentDetail(message.comment)
+       },
+    readMessage(message) {
+      let data = message
+      data.read = true
+      upMessage(message.id, data).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     getMessage(agreement,type) {
       getMessage({agreement:agreement,message_type:type, is_from:3, is_to:2})
         .then((res) => {

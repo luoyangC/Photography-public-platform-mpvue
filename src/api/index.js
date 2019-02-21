@@ -41,7 +41,10 @@ export const getAgreement = (params) => { return fly.get(`/agreement/`, params) 
 export const getAgreementById = (id) => { return fly.get(`/agreement/${id}/`) }
 
 // 添加约拍接口
-export const addAgreement = (data) => { return fly.post(`/activity/`, data) }
+export const addAgreement = (data) => { return fly.post(`/agreement/`, data) }
+
+// 删除约拍接口
+export const delAgreement = (id) => { return fly.delete(`/agreement/${id}/`) }
 
 // 更新约拍接口
 export const upAgreement = (id, data) => { return fly.put(`/agreement/${id}/`, data) }

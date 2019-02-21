@@ -42,27 +42,27 @@ export default {
       })
     },
     // 建立WebSocket连接
-    connectSocket() {
-      let messageSocket = wx.connectSocket({
-        url: 'ws://127.0.0.1:8000/get/message/',
-        header:{
-          'content-type': 'application/json',
-          'authorization': wx.getStorageSync('token'),
-        },
-        method:"GET",
-        success: (e) => {
-          console.log(e)
-        },
-        fail: (e) => {
-          console.log(e)
-        }
-      })
-      messageSocket.onMessage((res) => {
-        let messageList = JSON.parse(res.data)
-        this.$store.commit('SET_MSGNUMS', messageList.length)
-      })
-      this.$store.commit('SET_WEBSOCKET', messageSocket)
-    },
+    // connectSocket() {
+    //   let messageSocket = wx.connectSocket({
+    //     url: 'ws://www.luoyangc.cn/:8080/get/message/',
+    //     header:{
+    //       'content-type': 'application/json',
+    //       'authorization': wx.getStorageSync('token'),
+    //     },
+    //     method:"GET",
+    //     success: (e) => {
+    //       console.log(e)
+    //     },
+    //     fail: (e) => {
+    //       console.log(e)
+    //     }
+    //   })
+    //   messageSocket.onMessage((res) => {
+    //     let messageList = JSON.parse(res.data)
+    //     this.$store.commit('SET_MSGNUMS', messageList.length)
+    //   })
+    //   this.$store.commit('SET_WEBSOCKET', messageSocket)
+    // },
   },
   created() {
     // 调用API从本地缓存中获取数据
@@ -73,7 +73,7 @@ export default {
     this.getSystemInfo()
     this.getUserInfo()
     this.getLocation()
-    this.connectSocket()
+    // this.connectSocket()
   },
 };
 </script>

@@ -35,56 +35,54 @@ export default {
       item: null
     }
   },
-  computed: {
-    makeItem() {
-      if (this.followTopic) {
-        let topic = this.followTopic.follow
-        this.item = {
-          id: topic.id,
-          title: topic.title,
-          image: topic.image,
-          info: topic.info,
-          followId: this.followTopic.id,
-          followType: 'topic'
-        }
-      } 
-      else if (this.followUser) {
-        let user = this.followUser.follow
-        this.item = {
-          id: user.id,
-          title: user.nick_name,
-          image: user.image,
-          info : user.simple_info,
-          followId: this.followUser.id,
-          followType: 'user'
-        }
+  created() {
+    if (this.followTopic) {
+      let topic = this.followTopic.follow
+      this.item = {
+        id: topic.id,
+        title: topic.title,
+        image: topic.image,
+        info: topic.info,
+        followId: this.followTopic.id,
+        followType: 'topic'
       }
-      else if (this.topic) {
-        let topic = this.topic
-        this.item = {
-          id: topic.id,
-          title: topic.title,
-          image: topic.image,
-          info: topic.info,
-          followId: topic.is_follow,
-          followType: 'topic'
-        }
+    } 
+    else if (this.followUser) {
+      let user = this.followUser.follow
+      this.item = {
+        id: user.id,
+        title: user.nick_name,
+        image: user.image,
+        info : user.simple_info,
+        followId: this.followUser.id,
+        followType: 'user'
       }
-      else if (this.user) {
-        let user = this.user
-        this.item = {
-          id: user.id,
-          title: user.nick_name,
-          image: user.image,
-          info: user.simple_info,
-          followId: user.is_follow,
-          followType: 'user'
-        }
-      } 
+    }
+    else if (this.topic) {
+      let topic = this.topic
+      this.item = {
+        id: topic.id,
+        title: topic.title,
+        image: topic.image,
+        info: topic.info,
+        followId: topic.is_follow,
+        followType: 'topic'
+      }
+    }
+    else if (this.user) {
+      let user = this.user
+      this.item = {
+        id: user.id,
+        title: user.nick_name,
+        image: user.image,
+        info: user.simple_info,
+        followId: user.is_follow,
+        followType: 'user'
+      }
     }
   },
   methods: {
-    toUserInfo(id) {toUserDetail(id)},
+    toUserInfo(id) { toUserDetail(id) },
     addFollow() {
       addFollow({follow_id: this.item.id, follow_type: this.item.followType})
         .then((res) => {

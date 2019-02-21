@@ -9,7 +9,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 // var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-
+var MpvueVendorPlugin = require('webpack-mpvue-vendor-plugin')
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
@@ -32,22 +32,19 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new UglifyJsPlugin({
-      sourceMap: true
-    }),
     // extract css into its own file
     new ExtractTextPlugin({
       // filename: utils.assetsPath('[name].[contenthash].css')
-      filename: utils.assetsPath('[name].wxss')
+      filename: utils.assetsPath(`[name].${config.build.fileExt.style}`)
     }),
     // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different common can be deduped.
+    // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
         safe: true
       }
     }),
-    // generate iview index.html with correct asset hash for caching.
+    // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     // new HtmlWebpackPlugin({
@@ -64,7 +61,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     //   // necessary to consistently work with multiple chunks via CommonsChunkPlugin
     //   chunksSortMode: 'dependency'
     // }),
-    // my-keeps module.id stable when vender modules does not change
+    // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
@@ -83,6 +80,9 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common/manifest',
       chunks: ['common/vendor']
+    }),
+    new MpvueVendorPlugin({
+      platform: process.env.PLATFORM
     })
   ]
 })
@@ -108,6 +108,13 @@ var webpackConfig = merge(baseWebpackConfig, {
 if (config.build.bundleAnalyzerReport) {
   var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
+}
+
+var useUglifyJs = process.env.PLATFORM !== 'swan'
+if (useUglifyJs) {
+  webpackConfig.plugins.push(new UglifyJsPlugin({
+    sourceMap: true
+  }))
 }
 
 module.exports = webpackConfig

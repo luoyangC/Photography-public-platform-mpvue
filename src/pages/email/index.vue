@@ -122,21 +122,12 @@ export default {
           this.errMessage = err
       })
     },
-    login() {
-      loginEmail({username:this.email, password: this.password})
-        .then((res) => {
-          wx.setStorage({key:'token', data:res.data.token, success: () => {
-            getUserInfo({self:2}).then((res) => {
-              this.$store.commit('SET_INFO', res.data[0])
-              wx.switchTab({ url: '/pages/user/main' })
-            }).catch((err) => {
-              console.log(err)
-            })
-          }})
-        }).catch((err) => {
-          this.errMessage = err
-          console.log(err)
-      });
+    async login() {
+      let _login = await loginEmail({username:this.email, password:this.password})
+      wx.setStorageSync('token', _login.data.token)
+      let _user = await getUserInfo({self:2})
+      this.$store.commit('SET_INFO', _user.data[0])
+      wx.switchTab({ url: '/pages/user/main' })
     },
     tabClick(e) {
       this.activeIndex = e.currentTarget.id

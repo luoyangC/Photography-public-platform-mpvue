@@ -3,6 +3,8 @@
   "usingComponents": {
     "i-cell-group": "./../../static/iview/cell-group/index",
     "i-message": "../../../static/iview/message/index",
-    "i-cell": "./../../static/iview/cell/index"
+    "i-cell": "./../../static/iview/cell/index",
+    "i-input": "./../../static/iview/input/index",
+    "i-action-sheet": "../../../static/iview/action-sheet/index"
   }
 }

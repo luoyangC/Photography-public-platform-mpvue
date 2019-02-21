@@ -8,6 +8,7 @@
       <div class="topic-item" v-for="topic in topicList" :key="topic.id" @click="toTopicDetail(topic.id)">
         <simple-card :topic="topic"></simple-card>
       </div>
+      <div class="topic-more">———— 没有更多啦～ ————</div>
     </scroll-view>
   </div>
 </template>
@@ -34,9 +35,8 @@ export default {
     },
   },
   methods: {
-    getTopic() {
-      getTopic()
-        .then((res) => {
+    getTopic(search) {
+      getTopic({search:search}).then((res) => {
           console.log(res)
           this.topicList = res.data
         }).catch((err) => {
@@ -49,7 +49,7 @@ export default {
     },
   },
   onLoad() {
-    this.getTopic()
+    this.getTopic('')
   }
 };
 </script>
@@ -62,5 +62,11 @@ export default {
       display: inline;
       margin-left: 4px;
     }
+  }
+  .topic-more {
+    font-size: 12px;
+    color: #666;
+    padding: 20px;
+    text-align: center;
   }
 </style>

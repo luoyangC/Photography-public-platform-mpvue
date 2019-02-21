@@ -36,13 +36,12 @@ export const uploadimg = (data) => {
   let i = data.i ? data.i : 0
   let success = data.success ? data.success : 0
   let fail = data.fail ? data.fail : 0;
+  let formData = data.type == 'activity' ? {activity: data.id} : {agreement: data.id}
   wx.uploadFile({
     url: data.url,
     filePath: data.path[i],
     name: 'image',
-    formData: {
-      activity: data.id
-    },
+    formData: formData,
     header: {
       "Content-Type": "multipart/form-data",
     },

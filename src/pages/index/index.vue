@@ -114,11 +114,11 @@ export default {
   },
   onLoad() {
     this.getSystemInfo();
-    this.pushIndexMessage(this.$store.state.msgNums)
-    let messageSocket = this.$store.state.webSocket
-    messageSocket.onMessage((res) => {
-      this.pushNewMessage()
-    })
+    // this.pushIndexMessage(this.$store.state.msgNums)
+    // let messageSocket = this.$store.state.webSocket
+    // messageSocket.onMessage((res) => {
+    //   this.pushNewMessage()
+    // })
   },
 };
 </script>
