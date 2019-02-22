@@ -134,15 +134,15 @@ export default {
         console.log(res)
         uploadimg({url:'https://www.luoyangc.cn/api/v1/photo/', path:this.tempFilePaths, id:res.data.id, type: 'activity'})
         this.tempFilePaths = []
-        wx.navigateBack({
-          delta: 1,
-          success: () => {
-            wx.showToast({
-              title: '转发成功',
-              icon: 'success',
-              duration: 2000
-            })
-          } })
+        // wx.navigateBack({
+        //   delta: 1,
+        //   success: () => {
+        //     wx.showToast({
+        //       title: '转发成功',
+        //       icon: 'success',
+        //       duration: 2000
+        //     })
+        //   } })
         })
       .catch((err) => {
         console.log(err)

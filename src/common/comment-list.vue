@@ -11,16 +11,16 @@
       <div class="comment-icon">
         <i-icon size="20" type="emoji" />
       </div>
-      <textarea :type="text" :fixed="true" :cursor-spacing="10" :auto-height="true" :show-confirm-bar="false"
+      <textarea style="z-index: 202" :type="text" :fixed="true" :cursor-spacing="10" :auto-height="true" :show-confirm-bar="false"
                 @focus="focused" v-model.lazy="content" :focus="focus" :placeholder="placeholder"/>
       <span @click.stop="handleDatermineOpen">发送</span>
     </div>
     <div class="comment-model">
       <i-modal title="确认发表吗？" ok-text="确认发送" cancel-text="再改改" :visible="datermine"  @ok="handleDatermineClose" @cancel="handleDatermineClose" ></i-modal>
     </div>
-    <div class="a-card-action">
+    <div class="a-card-action" @click.stop>
       <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCommentClick" @click.stop @clickItem="handleCommentClick" />
-    </div>
+    </div>  
     <div class="comment-mask" v-if="focus" @click="handleMaskClose">
     </div>
   </div>
@@ -292,5 +292,9 @@ export default {
     -moz-opacity: 0.7;  
     opacity: 0.70;  
     filter: alpha(opacity=70); 
+  }
+  .a-card-action {
+    background-color:#fff;    
+    z-index: 1000;
   }
 </style>

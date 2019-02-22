@@ -8,7 +8,10 @@
       <div class="topic-item" v-for="topic in topicList" :key="topic.id" @click="toTopicDetail(topic.id)">
         <simple-card :topic="topic"></simple-card>
       </div>
-      <div class="topic-more">———— 没有更多啦～ ————</div>
+      <div>
+        <m-loadmore v-if="isLoadEnd" text="到底啦..."/>
+        <m-loadmore v-else text="正在努力加载中..." :icon="true"/>
+      </div>
     </scroll-view>
   </div>
 </template>
@@ -27,21 +30,23 @@ export default {
   data() {
     return {
       topicList: [],
+      nextPage: 'http://www.luoyangc.cn/api/v1/topic/',
     };
   },
   computed: {
     contentHeight() {
       return this.winHeight -100 + "px";
     },
+    isLoadEnd() {
+      if (this.nextPage) return false
+      else return true
+    }
   },
   methods: {
-    getTopic(search) {
-      getTopic({search:search}).then((res) => {
-          console.log(res)
-          this.topicList = res.data
-        }).catch((err) => {
-          console.log(err)
-        })
+    async getTopic(search) {
+      let {data} = await getTopic({search:search})
+      this.topicList = data
+      this.nextPage = null
     },
     toTopicDetail(id) {
       let url = `/pages/topic-detail/main?id=${id}`

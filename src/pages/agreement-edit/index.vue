@@ -116,7 +116,7 @@ export default {
       }
       addAgreement(data).then((res) => {
         console.log(res)
-        uploadimg({url:'http://127.0.0.1:8000/api/v1/sample/', path:this.tempFilePaths, id:res.data.id, type: 'agreement'})
+        uploadimg({url:'https://www.luoyangc.cn/api/v1/sample/', path:this.tempFilePaths, id:res.data.id, type: 'agreement'})
         this.tempFilePaths = []
         wx.navigateBack({
           delta: 1,

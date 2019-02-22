@@ -39,12 +39,9 @@ export default {
     cityChange(e) {
       this.location = e.mp.detail.value
     },
-    getAgreement(search) {
-      getAgreement({search:search}).then((res) => {
-        this.agreementList = res.data
-      }).catch((err) => {
-        console.log(err)
-      })
+    async getAgreement(search) {
+      let {data} = await getAgreement({search:search})
+      this.agreementList = data.results
     }
   },
   onLoad() {

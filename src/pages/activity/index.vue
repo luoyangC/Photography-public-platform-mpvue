@@ -15,6 +15,10 @@
     <div class="new-content-action">
       <i-action-sheet :visible="visible" :actions="actions" show-cancel :mask-closable="false" @cancel="handleCancel" @click.stop @clickItem="handleClickItem" />
     </div>
+    <div>
+      <m-loadmore v-if="isLoadEnd" text="到底啦..."/>
+      <m-loadmore v-else text="正在努力加载中..." :icon="true"/>
+    </div>
   </div>
 </template>
 
@@ -29,10 +33,17 @@ export default {
   data() {
     return {
       activityList: [],
+      nextPage: 'http://www.luoyangc.cn/api/v1/activity/',
       user: null,
       visible: false,
       actions: [{name: '动态'},{name: '约拍'},{name: '主题'}]
     };
+  },
+  computed: {
+    isLoadEnd() {
+      if (this.nextPage) return false
+      else return true
+    }
   },
   methods: {
     handleClickItem(e) {
@@ -55,26 +66,40 @@ export default {
     handleOpen() {
       this.visible = true
     },
-    toNewActivity () { toActivityEdit(0, 'activity') },
-    getActivity() {
-      getActivity({follow:'user'})
-        .then((res) => {
-          console.log(res);
-          this.activityList = res.data
+    toNewActivity () {
+      toActivityEdit(0, 'activity')
+    },
+    // 加载更多
+    async loadMore() {
+      if (this.nextPage) {
+        let {data} = await this.$fly.get(this.nextPage)
+        this.nextPage = data.next
+        data.results.forEach(element => {
+          this.activityList.push(element)
         })
+      }
+    },
+    // 获取好友动态
+    async getActivity() {
+      let {data} = await getActivity({follow:'user'})
+      this.activityList = data.results
+      this.nextPage = data.next
     }
   },
-  onShow() {
+  onLoad() {
     this.user = this.$store.state.userInfo
     this.getActivity()
   },
   onPullDownRefresh() {
-    wx.showNavigationBarLoading();
-    console.log('下拉');
+    wx.showNavigationBarLoading()
+    this.getActivity()
     setTimeout(function() {
-      wx.hideNavigationBarLoading();
+      wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
     },1000);
+  },
+  onReachBottom() {
+    this.loadMore()
   },
 };
 </script>

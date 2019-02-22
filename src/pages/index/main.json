@@ -1,7 +1,10 @@
 {
+  "enablePullDownRefresh": true,
   "usingComponents": {
+    "i-spin": "../../../static/iview/spin/index",
     "i-icon": "../../../static/iview/icon/index",
     "i-message": "../../../static/iview/message/index",
-    "i-action-sheet": "../../../static/iview/action-sheet/index"
+    "i-action-sheet": "../../../static/iview/action-sheet/index",
+    "m-loadmore": "../../../static/minui/wxc-loadmore/dist/index"
   }
 }

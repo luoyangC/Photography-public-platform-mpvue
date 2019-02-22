@@ -23,6 +23,10 @@
     <div class="approximately">
       <activity-card v-for="item in activityList" :key="item.id" :activity="item" :topicDetail="true"></activity-card>
     </div>
+    <div>
+      <m-loadmore v-if="isLoadEnd" text="到底啦..."/>
+      <m-loadmore v-else text="正在努力加载中..." :icon="true"/>
+    </div>
   </div>
 </template>
 
@@ -37,56 +41,68 @@ export default {
     return {
       topic: null,
       activityList: [],
+      nextPage: 'http://www.luoyangc.cn/api/v1/topic/',
       user: this.$store.state.userInfo,
       styleIsFollow: 'border-radius:66rpx;color:#000;',
       style: 'background:#EA5149;border-radius:66rpx;color:#fff;'
     };
   },
-  methods: {
-    addFollow() {
-      addFollow({follow_id: this.topic.id, follow_type: 'topic'})
-        .then((res) => {
-          this.topic.is_follow = res.data.id
-        }).catch((err) => {
-          console.log(err)
-        })
-    },
-    delFollow() {
-      delFollow(this.topic.is_follow)
-        .then((res) => {
-          this.topic.is_follow = false
-        }).catch((err) => {
-          console.log(err)
-        })
-    },
-    getActivity(id) {
-      getActivity({topic:id})
-        .then((res) => {
-          console.log(res);
-          this.activityList = res.data
-        })
-    },
-    getTopic(id) {
-      getTopicById(id)
-        .then((res) => {
-          console.log(res)
-          this.topic = res.data
-        }).catch((err) => {
-          console.log(err)
-        })
+  computed: {
+    isLoadEnd() {
+      if (this.nextPage) return false
+      else return true
     }
   },
+  methods: {
+    // 添加关注
+    async addFollow() {
+      let {data} = await addFollow({follow_id: this.topic.id, follow_type: 'topic'})
+      this.topic.is_follow = data.id
+    },
+    // 取消关注
+    async delFollow() {
+      await delFollow(this.topic.is_follow)
+      this.topic.is_follow = false
+    },
+    // 获取动态列表
+    async getActivity(id) {
+      let {data} = await getActivity({topic:id})
+      this.activityList = data.results
+      this.nextPage = data.next
+    },
+    // 获取主题详情
+    async getTopic(id) {
+      let {data} = await getTopicById(id)
+      this.topic = data
+    },
+     // 加载更多
+    async loadMore() {
+      if (this.nextPage) {
+        let {data} = await this.$fly.get(this.nextPage)
+        this.nextPage = data.next
+        data.results.forEach(element => {
+          this.activityList.push(element)
+        })
+      }
+    },
+  },
+  // 首次加载
   onLoad(option) {
     this.getTopic(option.id)
     this.getActivity(option.id)
   },
+  // 下拉
   onPullDownRefresh() {
-    wx.showNavigationBarLoading();
-    console.log('下拉');
+    wx.showNavigationBarLoading()
+    this.getActivity(this.topic.id)
     setTimeout(function() {
-      wx.hideNavigationBarLoading();
+      wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-    },1000);
+    },1000)
+  },
+  // 触底
+  onReachBottom() {
+    this.loadMore()
   },
 };
 </script>

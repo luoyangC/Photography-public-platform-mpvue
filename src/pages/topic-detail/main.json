@@ -5,6 +5,7 @@
     "i-icon": "../../../static/iview/icon/index",
     "m-button": "../../../static/minui/wxc-button/dist/index",
     "i-message": "../../../static/iview/message/index",
-    "i-action-sheet": "../../../static/iview/action-sheet/index"
+    "i-action-sheet": "../../../static/iview/action-sheet/index",
+    "m-loadmore": "../../../static/minui/wxc-loadmore/dist/index"
   }
 }

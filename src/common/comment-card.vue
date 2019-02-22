@@ -14,7 +14,7 @@
               <p class="reply-header-create-time" @click.stop>{{formatCommentTime}}</p>
             </div>
           </div>
-          <div class="comment-header-extra" @click.stop="getParent">
+          <div class="comment-header-extra">
             <i-icon type="unfold" size="20" />
           </div>
         </div>
@@ -27,14 +27,14 @@
             <text>{{reply.content}}</text>
           </div>
         </div>
-        <div class="comment-reply" v-if="comment && isCommentList && replytNums != 0" @click.stop="toCommentDetail(comment.id)">
+        <div class="comment-reply" v-if="comment && isCommentList && replyList.length != 0" @click.stop="toCommentDetail(comment.id)">
           <div class="reply-item" v-for="reply in replies" :key="reply.id">
             <a @click.stop="toUserInfo(reply.from_user.id)">{{reply.from_user.nick_name}}</a>
             <span v-if="reply.source_link">&nbsp;回复&nbsp;<a @click.stop="toUserInfo(reply.to_user.id)">{{reply.to_user.nick_name}}</a></span>
             <text class="mui-ellipsis-2">：{{reply.content}}</text>
           </div>
-          <div v-if="replytNums > 2" class="reply-item">
-            <a>共{{replytNums}}条回复</a>
+          <div v-if="replyList.length > 2" class="reply-item">
+            <a>共{{replyList.length}}条回复</a>
           </div>
         </div>
         <hr v-if="index != commentNums">
@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      replyList: null
+      replyList: []
     }
   },
   computed: {
@@ -71,13 +71,8 @@ export default {
         return formatTime(this.reply.create_time)
       }
     },
-    replytNums() {
-      if (this.replyList) {
-        return this.replyList.length
-      }
-    },
     replies() {
-      if (this.replytNums > 2) {
+      if (this.replyList.length > 2) {
         return this.replyList.slice(0, 2)
       }
       else {
@@ -93,17 +88,14 @@ export default {
       }
     },
     // 获取评论回复
-    getCommentReply() {
-      getReply({comment: this.comment.id})
-        .then((res) => {
-          this.replyList = res.data
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    async getCommentReply() {
+      let {data} = await getReply({comment: this.comment.id})
+      this.replyList = data
     },
     // 跳转到用户详情页面
-    toUserInfo(id) {toUserDetail(id)},
+    toUserInfo(id) {
+      toUserDetail(id)
+    },
     // 跳转到评论详情页面
     toCommentDetail(id) {
       let url = `/pages/comment-detail/main?id=${id}`

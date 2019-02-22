@@ -91,7 +91,8 @@ export default {
       if (this.activity.is_author){
         return [{name: '删除'},{name: '修改'},{name: '去分享',icon: 'share',openType: 'share'}]
       } else {
-        return [{name: '收藏'},{name: '举报'},{name: '去分享',icon: 'share',openType: 'share'}]
+        if (this.activity.is_keep) return [{name: '取消收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
+        else return [{name: '收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
       }
     },
     formatActivityTime() {
@@ -99,25 +100,16 @@ export default {
     }
   },
   methods: {
-    changeKeepType() {
+    // 改变收藏状态
+    async changeKeepType() {
       if (this.activity.is_keep) {
-        delKeep(this.activity.is_keep)
-          .then((res) => {
-            console.log(res)
-            this.activity.is_keep == false
-            this.activity.Keep_nums --
-          }).catch((err) => {
-            console.log(err)
-          })
+        await delKeep(this.activity.is_keep)
+        this.activity.is_keep = false
+        this.activity.Keep_nums --
       } else {
-        addKeep({activity: this.activity.id})
-          .then((res) => {
-            console.log(res)
-            this.activity.is_Keep = res.data.id
-            this.activity.keep_nums ++
-          }).catch((err) => {
-            console.log(err)
-          })
+        let {data} = await addKeep({activity: this.activity.id})
+        this.activity.is_keep = data.id
+        this.activity.keep_nums ++
       }
     },
     addReport() {

@@ -6,15 +6,35 @@
     <div class="nav-bar">
       <block>
         <div :id="0" class="nav-bar-item" @click="tabClick">
-          <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==0}">注册</div>
+          <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==0}">登录</div>
         </div>
         <div :id="1" class="nav-bar-item" @click="tabClick">
-          <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==1}">登录</div>
+          <div class="nav-bar-title" :class="{'nav-bar-on':activeIndex==1}">注册</div>
         </div>
       </block>
     </div>
     <div class="swiper-content">
       <swiper class="content" duration="500" :style="{height:contentHeight}" :current="activeIndex" @change="swiperChange" @animationfinish="onAnimationFinish">
+        <swiper-item>
+          <i-panel title="登录">
+            <div class="a-input">
+              <div class="a-input-err">{{errMessage.username}}</div>
+              <div class="a-input-err">{{errMessage.non_field_errors}}</div>
+              <div class="a-input-model">
+                <div class="a-input-title">邮箱</div>
+                <input class="a-input-input" v-model="email" placeholder="请输入邮箱"/>
+              </div>
+            </div>
+            <div class="a-input">
+              <div class="a-input-err">{{errMessage.password}}</div>
+              <div class="a-input-model">
+                <div class="a-input-title">密码</div>
+                <input class="a-input-input" type="password" v-model="password" placeholder="请输入密码"/>
+              </div>
+            </div>
+            <i-button @click="login">登录</i-button>
+          </i-panel>
+        </swiper-item>
         <swiper-item>
           <i-panel title="注册">
             <div class="a-input">
@@ -49,26 +69,6 @@
             <i-button @click="register">注册</i-button>
           </i-panel>
         </swiper-item>
-        <swiper-item>
-          <i-panel title="登录">
-            <div class="a-input">
-              <div class="a-input-err">{{errMessage.username}}</div>
-              <div class="a-input-err">{{errMessage.non_field_errors}}</div>
-              <div class="a-input-model">
-                <div class="a-input-title">邮箱</div>
-                <input class="a-input-input" v-model="email" placeholder="请输入邮箱"/>
-              </div>
-            </div>
-            <div class="a-input">
-              <div class="a-input-err">{{errMessage.password}}</div>
-              <div class="a-input-model">
-                <div class="a-input-title">密码</div>
-                <input class="a-input-input" type="password" v-model="password" placeholder="请输入密码"/>
-              </div>
-            </div>
-            <i-button @click="login">登录</i-button>
-          </i-panel>
-        </swiper-item>
       </swiper>
     </div>
   </div>
@@ -84,7 +84,7 @@ export default {
       email: '',
       password: '',
       username: '',
-      activeIndex: 1,
+      activeIndex: 0,
       emailCode: '',
       errMessage: '',
     }

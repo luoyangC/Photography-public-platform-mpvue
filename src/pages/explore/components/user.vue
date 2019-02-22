@@ -47,19 +47,13 @@ export default {
     },
   },
   methods: {
-    getmodelList(search) {
-      getUserInfo({approve:"model", search:search}).then((res) => {
-        this.modelList = res.data
-      }).catch((err) => {
-        console.log(err)
-      })
+    async getmodelList(search) {
+      let {data} = await getUserInfo({approve:"model", search:search})
+      this.modelList = data.results
     },
-    getphotographerList(search) {
-      getUserInfo({approve:"photographer", search:search}).then((res) => {
-        this.photographerList = res.data
-      }).catch((err) => {
-        console.log(err)
-      })
+    async getphotographerList(search) {
+      let {data} = await getUserInfo({approve:"photographer", search:search})
+      this.photographerList = data.results
     },
     toUserInfo(id) {
       let url = `/pages/user-info/main?id=${id}`

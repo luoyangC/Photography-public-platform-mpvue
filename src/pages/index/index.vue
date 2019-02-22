@@ -13,15 +13,15 @@
       <div class="nav-bar-slider" :class="navBarSliderClass"></div>
     </div>
     <div class="swiper-content">
-      <swiper class="content" duration="500" :style="{height:contentHeight}" :current="currentTab" @change="swiperChange" @animationfinish="onAnimationFinish">
+      <swiper class="content" duration="500" :style="{height:contentHeight + 'px'}" :current="currentTab" @change="swiperChange" @animationfinish="onAnimationFinish">
         <swiper-item>
-          <index-attention :winHeight="winHeight"></index-attention>
+          <index-attention :winHeight="contentHeight"></index-attention>
         </swiper-item>
         <swiper-item>
-          <index-recommend :winHeight="winHeight"></index-recommend>
+          <index-recommend :winHeight="contentHeight"></index-recommend>
         </swiper-item>
         <swiper-item>
-          <index-agreement :winHeight="winHeight"></index-agreement>
+          <index-agreement :winHeight="contentHeight"></index-agreement>
         </swiper-item>
       </swiper>
     </div>
@@ -50,8 +50,6 @@ export default {
       ],
       activeIndex: 1,
       currentTab: 1,
-      winWidth: 0,
-      winHeight: 0,
     };
   },
   computed: {
@@ -69,7 +67,7 @@ export default {
     },
     // 动态设置滑动区域的高度
     contentHeight() {
-      return this.winHeight + "px";
+      return this.$store.getters.systemInfo.windowHeight
     },
   },
   methods: {
@@ -88,15 +86,6 @@ export default {
         type: 'success'
       });
     },
-    // 获取系统信息，主要是获取窗口的高度
-    getSystemInfo() {
-      let that = this;
-      wx.getSystemInfo({
-        success(res) {
-          that.winHeight = res.windowHeight;
-        }
-      })
-    },
     // 导航栏点击的回调函数
     tabClick(e) {
       this.activeIndex = e.currentTarget.id;
@@ -113,12 +102,20 @@ export default {
     },
   },
   onLoad() {
-    this.getSystemInfo();
-    // this.pushIndexMessage(this.$store.state.msgNums)
-    // let messageSocket = this.$store.state.webSocket
-    // messageSocket.onMessage((res) => {
-    //   this.pushNewMessage()
-    // })
+    this.pushIndexMessage(this.$store.state.msgNums)
+    let messageSocket = this.$store.state.webSocket
+    messageSocket.onMessage((res) => {
+      this.pushNewMessage()
+    })
+  },
+  onPullDownRefresh() {
+    wx.showNavigationBarLoading()
+    this.$mp.page.onLoad()
+    console.log('下拉')
+    setTimeout(function() {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+    },1000);
   },
 };
 </script>

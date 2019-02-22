@@ -67,88 +67,57 @@ export default {
   computed: {
     actions() {
       if (this.activity.is_author){
-        return [{name: '删除'},{name: '修改'},{name: '分享',icon: 'share',openType: 'share'}]
+        return [{name: '删除'},{name: '修改'},{name: '去分享',icon: 'share',openType: 'share'}]
       } else {
-        if (this.activity.is_keep) {
-          return [{name: '取消收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
-        } else {
-          return [{name: '收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
-        }
+        if (this.activity.is_keep) return [{name: '取消收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
+        else return [{name: '收藏'},{name: '举报'},{name: '分享',icon: 'share',openType: 'share'}]
       }
     },
   },
   methods: {
-    changeKeepType() {
+    // 改变收藏状态
+    async changeKeepType() {
       if (this.activity.is_keep) {
-        delKeep(this.activity.is_keep)
-          .then((res) => {
-            console.log(res)
-            this.activity.is_keep == false
-            this.activity.Keep_nums --
-          }).catch((err) => {
-            console.log(err)
-          })
+        await delKeep(this.activity.is_keep)
+        this.activity.is_keep = false
+        this.activity.Keep_nums --
       } else {
-        addKeep({activity: this.activity.id})
-          .then((res) => {
-            console.log(res)
-            this.activity.is_Keep = res.data.id
-            this.activity.keep_nums ++
-          }).catch((err) => {
-            console.log(err)
-          })
+        let {data} = await addKeep({activity: this.activity.id})
+        this.activity.is_keep = data.id
+        this.activity.keep_nums ++
       }
     },
-    changeLikeType() {
+    // 改变点赞状态
+    async changeLikeType() {
       if (this.activity.is_like) {
-        delLike(this.activity.is_like)
-          .then((res) => {
-            console.log(res)
-            this.activity.is_like = false
-            this.activity.like_nums --
-          }).catch((err) => {
-            console.log(err)
-          })
+        await delLike(this.activity.is_like)
+        this.activity.is_like = false
+        this.activity.like_nums --
       } else {
-        addLike({activity: this.activity.id})
-          .then((res) => {
-            console.log(res)
-            this.activity.is_like = res.data.id
-            this.activity.like_nums ++
-          }).catch((err) => {
-            console.log(err)
-          })
+        let {data} = await addLike({activity: this.activity.id})
+        this.activity.is_like = data.id
+        this.activity.like_nums ++
       }
     },
-    addReport() {
-      addMessage({to_user:1,message_type:'report', activity:this.activity.id}).then((res) => {
-        wx.showToast({
-          title: '举报成功',
-          icon: 'success',
-          duration: 2000
-        })
+    // 举报
+    async addReport() {
+      await addMessage({to_user:1,message_type:'report', activity:this.activity.id})
+      wx.showToast({
+        title: '举报成功',
+        icon: 'success',
+        duration: 2000
       })
     },
     handleClickItem(e) {
       let index = e.mp.detail.index
       // 判断是否为作者
       if (this.activity.is_author) {
-        if (index == 0) {
-          // 删除操作
-          this.actions[0].loading = true
-          this.delActivity()
-        } else if (index == 1 ) {
-          // 修改操作
-          toActivityEdit(this.activity.id, 'activity')
-        }
-      } else {
-        if (index == 0) {
-          // 收藏操作
-          this.changeKeepType()
-        } else if (index == 1 ) {
-          // 举报操作
-          this.addReport()
-        }
+        if (index == 0) this.delActivity()
+        else if (index == 1 ) toActivityEdit(this.activity.id, 'activity')
+      } 
+      else {
+        if (index == 0) this.changeKeepType()
+        else if (index == 1 ) this.addReport()
       }
       this.visible = false
     },
@@ -156,28 +125,25 @@ export default {
       this.visible = false
     },
     openAction() {
-      console.log('click')
       this.visible = true
     },
-    delActivity() {
-      delActivity(this.activity.id)
-        .then((res) => {
-          console.log(res)
-          this.activity = null
-        }).catch((err) => {
-          console.log(err)
-        })
+    // 删除动态
+    async delActivity() {
+      await delActivity(this.activity.id)
+      this.activity = null
     },
-    toShare(id, type) { toActivityEdit(id, type) },
-    toUserInfo(id) { toUserDetail(id)},
+    toShare(id, type) { 
+      toActivityEdit(id, type)
+    },
+    toUserInfo(id) { 
+      toUserDetail(id)
+    },
     toTopicDetail(id) {
-      let url = `/pages/topic-detail/main?id=${id}`;
-      console.log(url);
+      let url = `/pages/topic-detail/main?id=${id}`
       wx.navigateTo({ url })
     },
     toActivityDetail(id, comment) {
-      let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`;
-      console.log(url);
+      let url = `/pages/activity-detail/main?id=${id}&comment=${comment}`
       wx.navigateTo({ url })
     },
   }

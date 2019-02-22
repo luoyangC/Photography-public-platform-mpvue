@@ -54,11 +54,20 @@ export const uploadimg = (data) => {
     complete: () => {
       i++;
       if (i == data.path.length) {   //当图片传完时，停止调用
-        wx.showToast({
-          title: '上传成功',
-          duration: 1500,
-          mask: 'false'
-        })
+        // wx.showToast({
+        //   title: '上传成功',
+        //   duration: 1500,
+        //   mask: 'false'
+        // })
+        wx.navigateBack({
+          delta: 1,
+          success: () => {
+            wx.showToast({
+              title: '转发成功',
+              icon: 'success',
+              duration: 2000
+            })
+          } })
       } else {//若图片还没有传完，则继续调用函数
         data.i = i;
         data.success = success;

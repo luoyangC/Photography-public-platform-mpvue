@@ -6,17 +6,13 @@ export default {
     // 获取系统信息
     getSystemInfo() {
       wx.getSystemInfo({
-        success: (res) => {
-          this.$store.commit('SET_SYSTEM', res)
-          }
+        success: (res) => { this.$store.commit('SET_SYSTEM', res)}
       })
     },
     // 获取用户信息
-    getUserInfo() {
-      getUserInfo({self:2}).then((res) => {
-        console.log(res)
-        this.$store.commit('SET_INFO', res.data[0])
-        }).catch((err) => {console.log(err)})
+    async getUserInfo() {
+      let {data} = await getUserInfo({self:2})
+      this.$store.commit('SET_INFO', data.results[0])
     },
     // 获取定位信息
     getLocation() {
@@ -42,38 +38,39 @@ export default {
       })
     },
     // 建立WebSocket连接
-    // connectSocket() {
-    //   let messageSocket = wx.connectSocket({
-    //     url: 'ws://www.luoyangc.cn/:8080/get/message/',
-    //     header:{
-    //       'content-type': 'application/json',
-    //       'authorization': wx.getStorageSync('token'),
-    //     },
-    //     method:"GET",
-    //     success: (e) => {
-    //       console.log(e)
-    //     },
-    //     fail: (e) => {
-    //       console.log(e)
-    //     }
-    //   })
-    //   messageSocket.onMessage((res) => {
-    //     let messageList = JSON.parse(res.data)
-    //     this.$store.commit('SET_MSGNUMS', messageList.length)
-    //   })
-    //   this.$store.commit('SET_WEBSOCKET', messageSocket)
-    // },
+    connectSocket() {
+      let messageSocket = wx.connectSocket({
+        url: 'ws://www.luoyangc.cn:8080/get/message/',
+        header:{
+          'content-type': 'application/json',
+          'authorization': wx.getStorageSync('token'),
+        },
+        method:"GET",
+        success: (e) => {
+          console.log('webSocket连接',e)
+        },
+        fail: (e) => {
+          console.log(e)
+        }
+      })
+      messageSocket.onMessage((res) => {
+        let messageList = JSON.parse(res.data)
+        this.$store.commit('SET_MSGNUMS', messageList.length)
+      })
+      this.$store.commit('SET_WEBSOCKET', messageSocket)
+    },
   },
-  created() {
+  onLaunch() {
     // 调用API从本地缓存中获取数据
-    const logs = wx.getStorageSync('logs') || [];
-    logs.unshift(Date.now());
-    wx.setStorageSync('logs', logs);
-    console.log('app created and cache logs by setStorageSync');
+    const logs = wx.getStorageSync('logs') || []
+    logs.unshift(Date.now())
+    wx.setStorageSync('logs', logs)
+    console.log('app created and cache logs by setStorageSync')
+
     this.getSystemInfo()
     this.getUserInfo()
     this.getLocation()
-    // this.connectSocket()
+    this.connectSocket()
   },
 };
 </script>
