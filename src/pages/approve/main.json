@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "用户认证",
+  "usingComponents": {
+    "i-icon": "../../../static/iview/icon/index",
+    "i-message": "../../../static/iview/message/index"
+  }
+}

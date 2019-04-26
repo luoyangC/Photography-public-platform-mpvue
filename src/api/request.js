@@ -1,8 +1,8 @@
 import Fly from 'flyio/dist/npm/wx'
 
 const fly = new Fly()
-// const host = 'http://127.0.0.1:8000/api/v1'
-const host = 'https://www.luoyangc.cn/api/v1'
+const host = 'http://127.0.0.1:8000/api/v1'
+// const host = 'https://www.luoyangc.cn/api/v1'
 
 
 fly.interceptors.request.use((config,promise)=>{

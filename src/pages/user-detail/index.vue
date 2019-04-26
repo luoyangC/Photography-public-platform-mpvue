@@ -19,10 +19,10 @@
         <div class="user-name">{{user.nick_name}}</div>
         <div class="user-info">{{user.simple_info || "该用户很懒，什么也没留下"}}</div>
         <div class="user-tags">
-          <m-tag text="男" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
-          <m-tag text="摄影师" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
-          <m-tag text="重庆市" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
-          <m-tag text="天秤座" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
+          <m-tag :text="user.gender" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
+          <m-tag :text="user.approve" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
+          <!-- <m-tag text="重庆市" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag>
+          <m-tag text="天秤座" type="fill" type-color="rgba(250,76,69, 0.2)"></m-tag> -->
         </div>
       </div>
       <div class="user-nums">
@@ -83,6 +83,12 @@ export default {
     // 获取用户信息
     async getUserInfo(id) {
       let {data} = await getUserInfoById(id)
+      if (data.gender == 0) data.gender = "未知"
+      else if (data.gender == 1) data.gender = "男"
+      else if (data.gender == 2) data.gender = "女"
+      if (data.approve == 'photographer') data.approve = '摄影师'
+      else if (data.approve == 'model') data.approve = '模特'
+      else if (data.approve == 'general') data.approve = '未认证'
       this.user = data
     },
     // 获取用户动态
@@ -91,12 +97,6 @@ export default {
       this.activityList = data.results
       this.articleNums = data.count
       this.nextPage = data.next
-    },
-    tabClick(e) {
-      this.activeIndex = e.currentTarget.id
-    },
-    swiperChange(e) {
-      this.activeIndex = e.mp.detail.current
     },
     // 滑动完成的回调函数
     onAnimationFinish() {

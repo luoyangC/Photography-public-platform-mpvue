@@ -19,9 +19,8 @@ export default {
       wx.getLocation({
       type: 'wgs84',
       success: (res) => {
-        console.log(res)
         wx.request({
-          url: 'http://api.map.baidu.com/geocoder/v2/',
+          url: 'https://api.map.baidu.com/geocoder/v2/',
           data: {
             ak: 'DRF3LymHPGDm78IgIifgHqzH9t7ItZBM',
             location: `${res.latitude},${res.longitude}`,
@@ -39,25 +38,31 @@ export default {
     },
     // 建立WebSocket连接
     connectSocket() {
-      let messageSocket = wx.connectSocket({
-        url: 'ws://www.luoyangc.cn:8080/get/message/',
-        header:{
-          'content-type': 'application/json',
-          'authorization': wx.getStorageSync('token'),
-        },
-        method:"GET",
-        success: (e) => {
-          console.log('webSocket连接',e)
-        },
-        fail: (e) => {
-          console.log(e)
-        }
-      })
-      messageSocket.onMessage((res) => {
-        let messageList = JSON.parse(res.data)
-        this.$store.commit('SET_MSGNUMS', messageList.length)
-      })
-      this.$store.commit('SET_WEBSOCKET', messageSocket)
+      let token = wx.getStorageSync('token')
+      if (token) {
+        let messageSocket = wx.connectSocket({
+          // url: 'wss://www.luoyangc.cn/wss/get/message/',
+          url: 'ws://127.0.0.1:8000/get/message/',
+          header:{
+            'content-type': 'application/json',
+            'authorization': token,
+          },
+          method:"GET",
+          success: (e) => {
+            console.log('webSocket连接',e)
+          },
+          fail: (e) => {
+            console.log(e)
+          }
+        })
+        messageSocket.onMessage((res) => {
+          let messageList = JSON.parse(res.data)
+          this.$store.commit('SET_MSGNUMS', messageList.length)
+        })
+        this.$store.commit('SET_WEBSOCKET', messageSocket)
+      } else {
+        console.log('请登陆')
+      }
     },
   },
   onLaunch() {

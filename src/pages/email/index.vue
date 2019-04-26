@@ -126,7 +126,7 @@ export default {
       let _login = await loginEmail({username:this.email, password:this.password})
       wx.setStorageSync('token', _login.data.token)
       let _user = await getUserInfo({self:2})
-      this.$store.commit('SET_INFO', _user.data[0])
+      this.$store.commit('SET_INFO', _user.data.results[0])
       wx.switchTab({ url: '/pages/user/main' })
     },
     tabClick(e) {

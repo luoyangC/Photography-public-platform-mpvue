@@ -104,9 +104,11 @@ export default {
   onLoad() {
     this.pushIndexMessage(this.$store.state.msgNums)
     let messageSocket = this.$store.state.webSocket
-    messageSocket.onMessage((res) => {
-      this.pushNewMessage()
-    })
+    if (messageSocket) {
+      messageSocket.onMessage((res) => {
+        this.pushNewMessage()
+      })
+    }
   },
   onPullDownRefresh() {
     wx.showNavigationBarLoading()

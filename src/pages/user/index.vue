@@ -40,12 +40,8 @@
           <i-cell title="账户设置" is-link url="/pages/account/main">
             <i slot="icon" class="iconfont">&#xe61d;</i>
           </i-cell>
-          <i-cell title="开启认证">
+          <i-cell title="开启认证" is-link url="/pages/approve/main">
             <i slot="icon" class="iconfont">&#xe982;</i>
-          </i-cell>
-          <i-cell title="夜间模式">
-            <i slot="icon" class="iconfont">&#xe6c1;</i>
-            <i-switch slot="footer" :value="night" @change="onNight" />
           </i-cell>
           <i-cell title="帮助反馈" is-link url="/pages/help/main">
             <i slot="icon" class="iconfont">&#xe60b;</i>
@@ -91,8 +87,8 @@ export default {
             let _login = await loginWeixin({code:code, encryptedData:encryptedData, iv:iv})
             wx.setStorageSync('token', _login.data.token)
             let _user = await getUserInfo({self:2})
-            this.user = _user.data[0]
-            this.$store.commit('SET_INFO', _user.data[0])
+            this.user = _user.data.results[0]
+            this.$store.commit('SET_INFO', _user.data.results[0])
             console.log('get user info is success')
             } })
           }})
@@ -101,7 +97,7 @@ export default {
       }
     },
     handleOpen() {
-      this.visible = true;
+      this.visible = true
     },
     getData() {
       getActivity()

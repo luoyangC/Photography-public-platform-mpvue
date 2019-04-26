@@ -72,7 +72,7 @@ export default {
     // 加载更多
     async loadMore() {
       if (this.nextPage) {
-        let {data} = await this.$fly.get(this.nextPage)
+        let {data} = await this.$fly.get('https' + this.nextPage.slice(4))
         this.nextPage = data.next
         data.results.forEach(element => {
           this.activityList.push(element)

@@ -42,6 +42,7 @@ export default {
     // 加载更多
     async loadMore() {
       if (this.nextPage) {
+        // let {data} = await this.$fly.get('https' + this.nextPage.slice(4))
         let {data} = await this.$fly.get(this.nextPage)
         this.nextPage = data.next
         data.results.forEach(element => {

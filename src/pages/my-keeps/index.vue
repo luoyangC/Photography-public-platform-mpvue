@@ -10,27 +10,20 @@
 </template>
 
 <script>
-import ActivityCard from "../../common/activity-card";
+import ActivityCard from "@/common/activity-card";
 import { getActivity } from '@/api'
 export default {
   name: 'index',
-  data() {
-    return {
-      keepActivityList: [],
-    }
-  },
+  data: () => ({
+    keepActivityList: [],
+  }),
   components: {
     ActivityCard,
   },
   methods: {
-    getkeepActivityList() {
-      getActivity({keep:2})
-        .then((res) => {
-          this.keepActivityList = res.data
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    async getkeepActivityList() {
+      let {data} = await getActivity({keep:2})
+      this.keepActivityList = data.results
     }
   },
   onLoad() {
@@ -38,7 +31,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
